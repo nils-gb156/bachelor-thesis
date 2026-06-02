@@ -266,12 +266,6 @@
 \usepackage[printonlyused]{acronym}
 
 %-----------------------------------
-% Symbolverzeichnis
-%-----------------------------------
-% Quelle: https://www.namsu.de/Extra/pakete/Listofsymbols.pdf
-\usepackage[final]{listofsymbols}
-
-%-----------------------------------
 % Glossar
 %-----------------------------------
 \usepackage{glossaries}
@@ -396,17 +390,6 @@
 % dann folgende Zeile auskommentieren.
 \addcontentsline{toc}{section}{\abbreHeadingName}
 \input{abkuerzungen/acronyms}
-\newpage
-
-%-----------------------------------
-% Symbolverzeichnis
-%-----------------------------------
-% In Overleaf führt der Einsatz des Symbolverzeichnisses zu einem Fehler, der aber ignoriert werdne kann
-% Falls das Symbolverzeichnis nicht im Inhaltsverzeichnis angezeigt werden soll
-% dann folgende Zeile auskommentieren.
-\phantomsection\addcontentsline{toc}{section}{\symheadingname}
-\input{skripte/symbolDef}
-\listofsymbols
 \newpage
 
 %-----------------------------------
