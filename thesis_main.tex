@@ -266,14 +266,6 @@
 \usepackage[printonlyused]{acronym}
 
 %-----------------------------------
-% Glossar
-%-----------------------------------
-\usepackage{glossaries}
-\glstoctrue %Auskommentieren, damit das Glossar nicht im Inhaltsverzeichnis angezeigt wird.
-\makenoidxglossaries
-\input{abkuerzungen/glossar}
-
-%-----------------------------------
 % PDF Meta Daten setzen
 %-----------------------------------
 \usepackage[hyperfootnotes=false]{hyperref} %hyperfootnotes=false deaktiviert die Verlinkung der Fußnote. Ansonsten inkompaibel zum Paket "footmisc"
@@ -393,12 +385,6 @@
 \newpage
 
 %-----------------------------------
-% Glossar
-%-----------------------------------
-\printnoidxglossaries
-\newpage
-
-%-----------------------------------
 % Sperrvermerk
 %-----------------------------------
 %\input{kapitel/anhang/sperrvermerk}
@@ -489,7 +475,7 @@
 %\printbibliography[type=online,heading=bibintoc,title={\headingNameInternetSources}]
 \printbibliography[type=online,heading=subbibliography,title={\headingNameInternetSources}]
 
-\input{kapitel/anhang/erklaerung}
+%\input{kapitel/anhang/erklaerung}
 \end{document}
 
 %TC:endignore - benötigt für Wordcount in Overleaf
