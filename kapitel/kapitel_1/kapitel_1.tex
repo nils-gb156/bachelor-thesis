@@ -1,11 +1,31 @@
 \newpage
 \section{Grundlagen}
 
-\subsection{ Large Language Models}
+\subsection{Large Language Models}
+
+ \acp{LLM} sind maschinelle Lernmodelle, die auf sehr großen Textmengen trainiert werden, um natürliche Sprache zu verarbeiten und zu erzeugen. Das Attribut \enquote{large} bezieht sich dabei sowohl auf den Umfang der Trainingsdaten als auch auf die Anzahl der Modellparameter, die häufig im Bereich mehrerer Milliarden liegt. Technisch beruhen sie auf künstlichen neuronalen Netzen, genauer gesagt auf der Transformer-Architektur \cite{hou_large_2024}. Der folgende Abschnitt erläutert zunächst das Funktionsprinzip und die Rolle des bereitgestellten Kontexts, bevor der Einsatz im Software Engineering betrachtet wird.
 
 \subsubsection{Funktionsprinzip und Kontext als Qualitätsfaktor}
 
+Moderne LLMs basieren auf der Transformer-Architektur, die von \cite{vaswani_attention_2017} eingeführt wurde. Ihr zentraler Bestandteil ist der Self-Attention-Mechanismus. Er erlaubt es dem Modell, die Beziehungen zwischen allen Elementen einer Eingabe unabhängig von ihrer Position zu gewichten. Anders als bei früheren rekurrenten Ansätzen wird die Eingabe dadurch nicht sequentiell, sondern weitgehend parallel verarbeitet, was das Training auf sehr großen Textmengen erst praktikabel gemacht hat \cite{vaswani_attention_2017}. Vor der Verarbeitung wird der Text in sogenannte Tokens zerlegt, in der Regel keine ganzen Wörter, sondern Teilwörter oder einzelne Zeichen. Das Modell arbeitet anschließend ausschließlich auf diesen Tokens.
+
+Die Texterzeugung erfolgt autoregressiv. Auf Basis der bereits vorliegenden Tokens berechnet das Modell für das nächste Token eine Wahrscheinlichkeitsverteilung über das gesamte Vokabular. Aus dieser Verteilung wird ein Token ausgewählt und an die Eingabe angehängt. Der Vorgang wiederholt sich, bis die Ausgabe abgeschlossen ist. Wie stark die Auswahl vom jeweils wahrscheinlichsten Token abweichen darf, steuert unter anderem der Temperatur-Parameter. Ein niedriger Wert führt zu deterministischeren, ein hoher zu variableren Ausgaben. Das ist für diese Arbeit relevant, denn nur eine über alle Versuche konstant gehaltene Konfiguration erlaubt einen aussagekräftigen Vergleich der Generierungsergebnisse.
+
+Alle Tokens, die das Modell für eine Generierung berücksichtigt, befinden sich im sogenannten Kontextfenster. Dieses umfasst die Eingabe (den Prompt) und die bereits erzeugte Ausgabe und ist in seiner Größe begrenzt. Wissen, das nicht in den Modellgewichten verankert ist, also nicht während des Trainings gelernt wurde, muss dem Modell zur Laufzeit über dieses Fenster bereitgestellt werden.
+
+Eng damit verbunden ist die Fähigkeit zum In-Context Learning. \cite{brown_language_2020} zeigten, dass große Sprachmodelle Aufgaben allein anhand von Anweisungen oder Beispielen im Prompt lösen können, ohne dass die Modellgewichte angepasst werden. Das Modell \enquote{lernt} hierbei nicht im klassischen Sinne, sondern nutzt die im Kontext bereitgestellten Informationen direkt als Grundlage für seine Vorhersage. Welche Inhalte im Prompt stehen, bestimmt damit maßgeblich die Ausgabe.
+
+Daraus folgt ein zentraler Punkt für diese Arbeit. Ein LLM hat kein konkretes Wissen über eine individuell entwickelte Benutzeroberfläche. Informationen über die tatsächlich vorhandenen UI-Elemente, deren Selektoren und Zustände stehen weder in den Trainingsdaten noch sind sie zur Laufzeit zugänglich, solange sie nicht explizit im Prompt bereitgestellt werden. Die Qualität des generierten Testcodes hängt damit unmittelbar von Qualität und Umfang des bereitgestellten Kontexts ab.
+
 \subsubsection{Einsatz im Software Engineering}
+
+LLMs werden zunehmend im Software Engineering eingesetzt, insbesondere zur Generierung von Quellcode. Sichtbar wird das an Werkzeugen wie GitHub Copilot, das auf Grundlage des umgebenden Quellcode-Kontexts Vorschläge zur Codevervollständigung erzeugt und direkt in die Entwicklungsumgebung integriert ist. Der systematische Literaturüberblick von \cite{hou_large_2024} zeigt, dass der Einsatz von LLMs im Software Engineering inzwischen breit erforscht wird und deutlich über die reine Codevervollständigung hinausreicht.
+
+Ein für diese Arbeit zentrales Anwendungsfeld ist die automatisierte Testgenerierung. LLMs werden hier eingesetzt, um aus natürlichsprachlichen oder strukturierten Beschreibungen Unit-Tests, Akzeptanztests und \ac{E2E}-Tests zu erzeugen. Bestehende Ansätze beziehen sich überwiegend auf generische Webanwendungen \cite{celik_review_2025, ferreira_acceptance_2025}. GIS-spezifische Anwendungen werden aktuell kaum berücksichtigt. Eine ausführliche Betrachtung des Forschungsstands folgt in Kapitel 3.
+
+Diesem Potential stehen bekannte Grenzen gegenüber. Da LLMs ihre Ausgaben auf Basis von Wahrscheinlichkeiten erzeugen, können sie plausibel wirkende, faktisch aber nicht existierende Inhalte produzieren, bei der Testgenerierung etwa erfundene Selektoren oder Aufrufe nicht vorhandener Funktionen. Dieses Phänomen wird als Halluzination bezeichnet \cite{hou_large_2024}. Hinzu kommt das fehlende Wissen über die konkrete Anwendung und der Umstand, dass das Modell keinen Zugriff auf den tatsächlichen Laufzeitzustand der Oberfläche hat. Gerade für E2E-Tests, die gezielt auf konkrete \ac{UI}-Elemente zugreifen müssen, sind diese Einschränkungen besonders relevant.
+
+Grundsätzlich lassen sich Sprachmodelle auf zwei Wegen an eine spezifische Aufgabe anpassen: durch Fine-Tuning, also das Nachtrainieren der Modellgewichte auf aufgabenspezifischen Daten, oder durch Prompting, bei dem das Verhalten allein über die Gestaltung der Eingabe gesteuert wird. Prompting beruht auf dem in Abschnitt 2.1.1 beschriebenen In-Context Learning \cite{brown_language_2020}. Diese Arbeit verfolgt durchgängig den Prompting-Ansatz, da er gegenüber Fine-Tuning sowohl einen geringeren Ressourcenaufwand erfordert als auch eine bessere Generalisierbarkeit bietet. Ein prompt-basierter Workflow lässt sich ohne erneutes Training auf andere Anwendungen und Use Cases übertragen, während ein feinjustiertes Modell weitgehend auf seinen Trainingskontext beschränkt bliebe.
 
 \subsection{E2E-Testautomatisierung mit Playwright}
 
