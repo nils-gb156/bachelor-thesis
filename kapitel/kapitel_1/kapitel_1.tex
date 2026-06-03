@@ -29,9 +29,32 @@ Grundsätzlich lassen sich Sprachmodelle auf zwei Wegen an eine spezifische Aufg
 
 \subsection{E2E-Testautomatisierung mit Playwright}
 
+Softwaretests lassen sich nach ihrem Umfang und ihrer Nähe zum Nutzerverhalten in verschiedene Stufen einteilen. Dieser Abschnitt ordnet E2E-Tests darin ein und stellt anschließend Playwright vor, das in dieser Arbeit zur Generierung und Ausführung der Tests verwendet wird.
+
 \subsubsection{Teststufen und Einordnung von E2E-Tests}
 
+Eine verbreitete Einteilung von Softwaretests ist die Testpyramide, die von \cite{poenisch_testpyramide_2022} beschrieben wird. Sie unterscheidet drei Ebenen, wie in Abbildung~\ref{fig:testpyramide} dargestellt. Ganz unten stehen Unit-Tests, die einzelne Funktionen oder Komponenten einzeln prüfen. Sie laufen schnell und werden in großer Anzahl geschrieben. Darüber liegen die Integrationstests, die das Zusammenspiel mehrerer Komponenten betrachten. An der Spitze stehen E2E-Tests, die die Anwendung als Ganzes aus Sicht der Nutzer prüfen.
+
+\begin{figure}[H]
+    \centering
+    \caption[Testpyramide nach Mike Cohn]{Die Testpyramide nach Mike Cohn (Quelle: \cite{poenisch_testpyramide_2022})}
+    \label{fig:testpyramide}
+    \includegraphics[width=0.7\textwidth]{testpyramide}
+\end{figure}
+
+Ein E2E-Test steuert dazu einen Browser und führt dieselben Schritte aus wie ein Mensch. Dazu gehören auf Schaltflächen klicken, Felder ausfüllen und durch die Oberfläche navigieren. Geprüft wird, ob am Ende das erwartete Ergebnis eintritt. Dadurch geben E2E-Tests die beste Auskunft darüber, ob eine fachliche Anforderung tatsächlich umgesetzt ist. Allerdings sind sie langsam und vergleichweise anfällig und können schon bei kleinen Änderungen an der UI fehlschlagen. Deshalb wird empfohlen, wie nach der Form der Pyramide, die Anzahl gering zu halten.
+
+Für WebGIS-Anwendungen sind E2E-Tests besonders relevant. Viele Probleme zeigen sich erst im Zusammenspiel der Teile. Wenn Geodaten asynchron nachgeladen werden, die Karte gerendert wird oder die Layersteuerung auf die Kartenanzeige wirkt. Solche Abläufe lassen sich mit Unit-Tests kaum abbilden, weil sie den vollständigen, im Browser laufenden Zustand voraussetzen.
+
 \subsubsection{Playwright: Selektoren, Assertions, asynchrone UIs}
+
+Playwright ist ein Open Source Framework von Microsoft zur Automatisierung von Browsern. Es kann die Browser-Engines Chromium, Firefox und WebKit über eine einheitliche Programmierschnittstelle steuern und führt Tests in einem echten Browser aus. Die Tests werden in dieser Arbeit in TypeScript geschrieben, das Playwright unterstützt \cite{microsoft_fast_2026}.
+
+Um mit der Benutzeroberfläche zu interagieren, muss ein Test die jeweiligen Elemente finden. Playwright nutzt dafür sogenannte Lokatoren. Empfohlen wird, Elemente über nutzerseitige Eigenschaften anzusprechen, etwa über ihre ARIA-Rolle oder ihren sichtbaren Text (\texttt{getByText}, \texttt{getByRole}). Solche Selektoren sind robuster gegenüber Änderungen am Markup als CSS- oder XPath-Ausdrücke, die an die konkrete \ac{DOM}-Struktur gebunden sind. Eine Alternative sind Test-IDs. Über das Attribut \texttt{data-testid} lässt sich ein Element gezielt für Tests markieren und mit \texttt{getByTestId} ansprechen, unabhängig von Darstellung und Position. Welches Attribut als Test-ID gilt, ist konfigurierbar \cite{microsoft_fast_2026}.
+
+Ein wesentliches Merkmal von Playwright ist das automatische Warten. Vor jeder Aktion prüft das Framework, ob das Zielelement sichtbar, stabil und bedienbar ist, ansonsten wird bis zu einem Timeout gewartet. Dadurch müssen nicht für jede Interaktion manuelle Wartezeiten eingebaut werden, was eine häufige Ursache für instabile Tests beseitigt. Dasselbe Prinzip gilt für Assertions. Mit \texttt{expect} formulierte Zusicherungen wie \texttt{expect(locator).toBeVisible()} oder \texttt{toHaveText()} werden so lange wiederholt, bis die Bedingung erfüllt ist oder die Zeit abläuft. Eine Assertion prüft damit nicht einen Momentzustand, sondern einen Zustand, der sich auch verzögert einstellen darf.
+
+Für Fälle, die das automatische Warten nicht abdeckt, stellt Playwright extra Wartemethoden bereit, etwa auf eine bestimmte Netzwerkantwort (\texttt{waitForResponse}) oder einen Ladezustand der Seite (\texttt{waitForLoadState}). Das ist gerade bei WebGIS-Anwendungen wichtig, in denen Kartenkacheln und Geodaten asynchron über das Netz geladen werden und erst danach im sichtbaren Ergebnis auftauchen. Ein Test, der zu früh prüft, würde fehlschlagen, obwohl die Anwendung korrekt arbeitet. Diese Kombination aus automatischem Warten und gezielten Wartepunkten macht Playwright für den asynchronen Aufbau von WebGIS-Anwendungen gut geeignet.
 
 \subsection{Open Pioneer Trails}
 
