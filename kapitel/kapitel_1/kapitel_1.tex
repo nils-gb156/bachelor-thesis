@@ -60,6 +60,23 @@ Für Fälle, die das automatische Warten nicht abdeckt, stellt Playwright extra 
 
 \subsubsection{Framework-Überblick und Komponentenmodell}
 
+Open Pioneer Trails ist ein Open Source Framework zur Entwicklung webbasierter GeoIT-Anwendungen. Es ist als gemeinsames Projekt der con terra und 52°North im Rahmen der Open-Pioneer-Initiative entstanden und steht unter der Apache 2.0 Lizenz frei auf GitHub zur Verfügung. Trails ist ein Entwicklungsframework und kein fertiges Produkt. Anwendungen werden also nicht konfiguriert, sondern programmiert, wobei das Framework wiederverwendbare Komponenten und Vorlagen bereitstellt \cite{52north_gmbh_conquering_2026}.
+
+Technisch besteht Trails aus modernen Webtechnologien. Die Anwendungen werden in TypeScript mit React geschrieben, das Styling basiert auf Chakra UI, als Kartenkomponente wird OpenLayers verwendet, die Paketverwaltung läuft über \ac{PNPM} und als Build-System wird Vite verwendet \cite{open_pioneer_open_2026}.
+
+Eine Open Pioneer Trails-Anwendung ist auf Paketen aufgebaut. Ein Paket bündelt React-Komponenten, Services, Übersetzungen und Styling. Die Anwendung selbst ist ebenfalls ein Paket und wird zu einer Web Component gebaut, dadurch können diese einfach in bestehende Web-Anwendungen integriert werden. Aktuell werden zwei Gruppen wiederverwendbarer Pakete bereitgestellt. Die Core Packages enthalten kartenlose Basisfunktionen wie Authentifizierung, Notifier, Internationalisierung mit I18n und einen \ac{HTTP}-Service. Die OpenLayers Base Packages bauen darauf auf und liefern die Kartenkomponenten, darunter Layerübersicht, Kartennavigations-Werkzeuge, Legende, Selektion und Ergebnisliste, Suche, Messwerkzeug, Koordinatenanzeige und Kartendruck. Abbildung~\ref{fig:opt_oekosystem} gibt einen Überblick über das Paketökosystem.
+
+\begin{figure}[H]
+    \centering
+    \caption[OPT-Paketökosystem]{Das Open Pioneer Trails Paketökosystem}
+    \label{fig:opt_oekosystem}
+    \includegraphics[width=0.4\textwidth]{opt_oekosystem_pakete}
+\end{figure}
+
+Die Anbindung der Karte erfolgt nicht direkt über OpenLayers, sondern über eine eigene Schnittstelle. Diese erweitert das Datenmodell, vereinfacht den Umgang mit dem Kartenzustand und stellt ihn als TypeScript-Schnittstelle (MapModel) bereit. Der direkte Zugriff auf die OpenLayers-\ac{API} bleibt bei Bedarf möglich \cite{52north_gmbh_open_2025}. Für die Demo-Anwendung relevant sind unter anderem die Pakete für Karte, Layerübersicht, Basemap-Auswahl, Suche, Messen und Druck.
+
+Trails richtet sich explizit an Entwickler und erfordert Programmierkenntnisse. Dafür bietet es volle Flexibilität beim Layout und bringt typische \ac{GIS}-Widgets als fertige Komponenten bereits mit. Somit ist es für die Erstellung einer spezifischen Demo WebGIS-Anwendung im Rahmen dieser Arbeit sehr gut geeignet.
+
 \subsubsection{data-testid-Konventionen und Testbarkeit}
 
 \subsection{WebGIS-Anwendungen und Testkomplexität}
