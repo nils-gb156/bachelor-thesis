@@ -1,0 +1,22 @@
+\begin{table}[htbp]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabularx}{\textwidth}{@{}c >{\hsize=1.25\hsize}X c >{\hsize=0.75\hsize}X@{}}
+        \toprule
+        \textbf{ID} & \textbf{Titel} & \textbf{Komplexität} & \textbf{Kernfunktion} \\
+        \midrule
+        1  & Layer Switcher ein-/ausblenden          & easy   & Panel-Sichtbarkeit   \\
+        2  & Hintergrundkarte wechseln               & easy   & Basemap-Wechsel      \\
+        3  & Zoom-Buttons verwenden                  & easy   & Zoom-Steuerung       \\
+        4  & UV-Index-Overlay aktivieren             & medium & Layer-Rendering      \\
+        5  & Niederschlags-Overlay + Legende         & medium & Layer + Legende      \\
+        6  & Wettervorhersage per Kartenklick        & hard   & Kartenklick-Abfrage  \\
+        7  & UVI-Station abfragen                    & hard   & WMS GetFeatureInfo   \\
+        8  & Distanz messen                          & hard   & Messwerkzeug         \\
+        9  & Karte als PNG exportieren               & hard   & Druckfunktion        \\
+        10 & Layer konfigurieren, Suche + Vorhersage & hard   & Geocoder + Workflow  \\
+        \bottomrule
+    \end{tabularx}
+    \caption{Übersicht der Use Cases mit Komplexität und getesteter Kernfunktion}
+    \label{tab:use-cases}
+\end{table}
