@@ -5,6 +5,12 @@
 
 \subsection{Use-Case-Sammlung}
 
+Insgesamt repräsentieren 10 Use-Cases typische Nutzerinteraktionen mit der Demo-WebGIS-Anwendung. Die daraus generierten Tests sollen jeweils ihren Use-Case vollständig abdecken. Um sie auch maschinell verarbeitbar zu machen und eine einheitliche Struktur zu gewährleisten, werden sie im \ac{JSON}-Format erfasst. Jeder Use-Case ist dabei wie folgt aufgebaut: \texttt{id}, \texttt{title}, \texttt{description}, \texttt{preconditions[]}, \texttt{steps[]}, \texttt{expected\_result[]}, \texttt{complexity}. Titel und Beschreibung geben an, welche Nutzerinteraktion der Use-Case beschreibt. Die Vorbedingungen enthalten Informationen, die vor der Ausführung erfüllt sein müssen. Die Schritte beschreiben die durchzuführenden Nutzerinteraktionen, und die erwarteten Ergebnisse definieren, welcher Zustand nach der Ausführung eintreten soll.
+
+Zusätzlich werden die Use-Cases in drei Komplexitätsstufen eingeteilt: easy, medium und hard. Die Einstufung richtet sich dabei nicht nur nach der Anzahl der Schritte, sondern vor allem nach der Art und Tiefe der Interaktionen. Einfache Use-Cases testen einzelne Schaltflächen oder Sichtbarkeiten, während komplexere Use-Cases asynchrone Prozesse, Canvas-Interaktionen oder das Zusammenspiel mehrerer Komponenten erfordern. Der komplexeste Use-Case ist UC-10, da er Layer-Sichtbarkeiten, Geocoder-Suche, Kartennavigation und Wettervorhersage in einem einzigen Ablauf kombiniert. 
+
+Eine Übersicht aller Use-Cases ist in Tabelle~\ref{tab:use-cases} dargestellt. Da es sich hier um eine Demo-Anwendung handelt, sind die Use-Cases bewusst begrenzt. Reale WebGIS-Anwendungen können in der Praxis deutlich umfangreichere Nutzerinteraktionen erfordern.
+
 \input{kapitel/kapitel_4/use_cases_tabelle}
 
 \subsection{Manuell erstellte Referenztests}
