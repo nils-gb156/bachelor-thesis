@@ -3,19 +3,26 @@
 
 \subsection{Demo-WebGIS-Anwendung}
 
-Die Demo-WebGIS-Anwendung soll eine realistische, aber auch kontrollierte Testumgebung für die Evaluierung der Testautomatisierung bereitstellen. Das Thema ist die Erkundung von weltweiten Wetterdaten.
+Die Demo-WebGIS-Anwendung stellt eine realistische, aber kontrollierte Testumgebung für die Evaluation bereit. Als Single-Page-Webanwendung umgesetzt, dient sie der weltweiten Erkundung von Wetterdaten und -vorhersagen. Die Anwendung ist unter \url{https://nils-gb156.github.io/ba-webgis-llm-e2e/} erreichbar und kann auch lokal gestartet werden. Der Quellcode ist auf GitHub unter \url{https://github.com/nils-gb156/ba-webgis-llm-e2e} verfügbar.
 
-Abbildung X zeigt die Oberfläche der Anwendung. Die Karte steht im Mittelpunkt. Zu den Inhalten gehören eine Werkzeugleiste mit Buttons unten in der Mitte zum Ein- und Ausblenden von Inhalten, die im Kartenbereich angezeigt werden. Oben links befindet sich die Layersteuerung, zum Anzeigen verschiedener Hintergrundkarten und Layer. Die Legende zeigt die Symbolerklärungen zu den gerade aktiven Layern. Beide Elemente können über die Werkzeugleiste ein- und ausgeblendet werden.
+Abbildung~\ref{fig:demo_webgis_anwendung} zeigt die Oberfläche der Anwendung. Den Mittelpunkt bildet die Karte. Auf der linken Seite befinden sich die Layersteuerung und die Legende, die über die Buttons in der Werkzeugleiste unten auch optional ein- und ausgeblendet werden können. Die Layersteuerung ermöglicht das Umschalten zwischen Hintergrundkarten sowie das Ein- und Ausblenden von Layern. Die Legende darunter zeigt die Symbolerklärungen der jeweils aktiven Layer. 
 
-Die Anwendung stellt drei verschiedene Hintergrundkarten ebreit.Standardmäßig ist Carto Light aktiv, Der Nutzer kann aber auch zwischen Carto Dark oder OpenStreetMap wechseln. ZU den intial sichtbaren Layern gehören die Punkt Layer für Boden und UI-Index-Stationen, die Beide vom Deutschen Wetterdienst als WMS bereitgestellt werden. Außerdem ist ein lächendekender Layer der aktuellen temperatur sichtbar. Weitere flächendekcende Layer für Niederschlag und Wolkenbedeckung können über die Layersteurung sichtbar geschalten werden. Diese Layer werden als WMS Dienste von OpenWeatherMap bereitgesetllt. Zusätzlich gibt es noch einen Layer mit aktuellen flächendeckendem UV-Index für Europa, der ebenfalls als WMS vom DWD bereitgestllt wird.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{demo_webgis_anwendung}
+    \caption[Demo-WebGIS-Anwendung]{Oberfläche der Demo-WebGIS-Anwendung mit geklickter Koordinate}
+    \label{fig:demo_webgis_anwendung}
+\end{figure}
 
-Bei einem Klick in die Karte öffnet sich oben link ein infopane, der den Ort und eine Wettervorhersage der nächsten drei tage im 3 stunden takt anzeigt. Die Daten werden über die OpenWeatherMAP API bereitgestellt und zeigt eine kurze beschreibung des Wetters, temperatur, Luftfeuchtugkeit, Windrichtung und - geschwindigkeit. Zusätzlich werden bei klick auf eine Bodenstation oder UV-Index-Station die jeweiligen informationen aus dem GetFeatureInfo-Reqesust des WMS-Diensten unter der Wettervorhersage angezeigt.
+Die Anwendung bietet drei verschiedene Hintergrundkarten: Carto Light (Standard), Carto Dark und OpenStreetMap. Initial sichtbar sind zwei Punktlayer des Deutschen Wetterdienstes (\acs{DWD})\acused{DWD} für EUCOS-Bodenstationen und UV-Index-Stationen. Außerdem ist noch ein flächendeckender Layer der aktuellen Temperatur von OpenWeatherMap sichtbar. Über die Layersteuerung können weitere flächendeckende Layer für Niederschlag und Wolkenbedeckung ebenfalls von OpenWeatherMap sowie ein europaweiter UV-Index-Layer des \ac{DWD} eingeblendet werden.
 
-Oben in der Mitte befindet sich eine freitextsuche, die es dem Nutzer ermöglicht über eine Nominatim-Geocoding API nach Orten zusuchen. Bei Klick auf eine Suchergebnis wird die Karte auf den Ort zentriert und der Infopanel mit der Wettervorhersage geöffnet.
+Ein Klick auf die Karte öffnet ein Infopanel, das den Ort und die Wettervorhersage für die nächsten drei Tage im Drei-Stunden-Takt anzeigt. Die insgesamt 24 Einträge werden über die OpenWeatherMap API abgerufen und enthalten jeweils eine kurze Beschreibung des Wetters, Temperatur, Luftfeuchtigkeit sowie Windrichtung und -geschwindigkeit. Wird zusätzlich auf eine Bodenstation oder UV-Index-Station geklickt, werden die Stationsinformationen aus der \ac{WMS}-GetFeatureInfo-Anfrage unterhalb der Wettervorhersage angezeigt.
 
-Über die Werkzeugleiste kann man auch zur initialen Ausdehnung zoomen oder den Kartenausschnitt vergrößern und verkleinern. Zusätzlich gibt es Buttons, um Fenster für Messfunktionen oder Druckfunktionen zu öffnen. Die Messfunktionen erlauben es dem Nutzer, Linien oder Flächen direkt in der Karte zu vermessen. Mit der Druckfunktion kann der aktuelle Kartenausschnitt mit aktiven Layern als PNG oder PDF einfach exportiert werden.
+Oben in der Mitte der Karte befindet sich ein Feld für eine Freitextsuche, die über die Nominatim-Geocoding-API nach Orten sucht. Bei Auswahl eines Suchergebnisses wird die Karte auf den Ort zentriert und das Infopanel mit der Wettervorhersage angezeigt.
 
+Über die Werkzeugleiste lässt sich außerdem zur initialen Ausdehnung zurücknavigieren sowie der Kartenausschnitt vergrößern oder verkleinern. Zwei weitere Buttons rechts daneben öffnen verschiebbare Floating-Panels für Mess- und Druckfunktion. Das Messwerkzeug ermöglicht das direkte Messen von Linien und Flächen in der Karte. Mit der Druckfunktion kann der aktuelle Kartenausschnitt mit allen aktiven Layern als \ac{PDF} oder \ac{PNG} exportiert werden. Im Footer werden die aktuellen Kartenkoordinaten in \ac{WGS84} sowie eine Maßstabsleiste und der Maßstab angezeigt.
 
+Die Anwendung wurde mit Open Pioneer Trails entwickelt und basiert auf OpenLayers, React, Chakra UI und TypeScript. Sie nutzt die verfügbaren OPT-Pakete für Layersteuerung, Kartennavigation, Legende, Messung, Druck und Koordinatenanzeige. Die Kartenprojektion ist \ac{EPSG}:3857, die Koordinatenanzeige im Footer transformiert diese zu \ac{EPSG}:4326.
 
 \subsection{Use-Case-Sammlung}
 
