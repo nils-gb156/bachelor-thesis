@@ -36,8 +36,16 @@ Eine Übersicht aller Use-Cases ist in Tabelle~\ref{tab:use-cases} dargestellt. 
 
 \subsection{Manuell erstellte Referenztests}
 
+Für jeden Use Case wurde manuell ein Playwright-Test erstellt. Die Erstellung erfolgte vor der LLM-Generierung, um eine Beeinflussung zu vermeiden. Wären die Referenztests nach den generierten Tests geschrieben, bestünde die Gefahr, sich unbewusst an deren Lösungen zu orientieren. Die Referenztests haben zwei Funktionen. Zum einen dienen sie als fachlich korrekte Referenzimplementierung, die zeigt, wie ein Use Case sauber umgesetzt aussieht. Zum anderen bilden sie den Vergleichsmaßstab für die LLM-generierten Tests in der Evaluation (Kapitel~6).
+
+Die Tests sind mit Playwright in TypeScript umgesetzt. Pro Use Case gibt es eine eigene Spec-Datei nach dem Namensschema \texttt{uc-01-*.spec.ts} bis \texttt{uc-10-*.spec.ts}. Jeder Test folgt demselben Aufbau, der die Struktur des Use Cases widerspiegelt: Zuerst wird geprüft, ob die Vorbedingungen erfüllt sind, dann werden die Schritte ausgeführt und zuletzt die erwarteten Ergebnisse überprüft. Listing~\ref{lst:uc-04-uv-index-overlay} zeigt diesen Aufbau am Beispiel von Use Case~4.
+
+Bevor ein Test mit der Webanwendung interagiert, muss sichergestellt sein, dass die Anwendung vollständig geladen ist. Statt einer festen Wartezeit (Timeout), die unzuverlässig ist, wird mit \texttt{page.waitForFunction(() => globalThis.\_\_openPioneerMap != null)} gewartet, bis das Kartenmodell verfügbar ist. Sobald das Objekt existiert, ist die Karte einsatzbereit. Der Test wartet damit auf ein deterministisches Signal und nicht auf eine geschätzte Dauer. Dieses Muster ist in jedem Test enthalten.
+
 \lstinputlisting[
     language=JavaScript,
-    caption={UseCase-1: Layer-Switcher ein-/ausblenden (Playwright-Test)},
-    label={lst:uc-01-layer-switcher-toggle}
-]{Quellcode/uc-01-layer-switcher-toggle.spec.ts}
+    caption={UseCase-4: UV-Index Layer einblenden und prüfen, ob es auf der Karte angezeigt wird (Playwright-Test)},
+    label={lst:uc-04-uv-index-overlay}
+]{Quellcode/uc-04-uv-index-overlay.spec.ts}
+
+Die Locator-Strategie basiert auf der in Kapitel~2 beschriebenen Hierarchie und nutzt bevorzugt \texttt{getByTestId}, dann \texttt{getByRole} und dann \texttt{getByText}. \ac{CSS}-Selektoren und XPath werden vermieden, da sie an die \ac{DOM}-Struktur gebunden und damit fragil sind. Die Selektoren müssen zudem bewusst präzise gewählt werden, da es sonst zu Fehlzugriffen kommen kann. Zum Beispiel wird in Use Case~4 der UV-Index Layer über \lstinline[language=JavaScript]|getByRole("checkbox", { name: "UV-Index", exact: true })| angesprochen. Die Option \texttt{exact} ist hier notwendig, weil sonst auch der Layer "UV-Index Stations" mitgetroffen werden würde, was im Rahmen des Use Cases falsch wäre. Eine Ausnahme ist Use Case~9. Dort werden zwei Elemente über \ac{CSS}-Klassen angesprochen, weil die betreffenden internen Elemente der Druckfunktion von Open Pioneer Trails keine eigene Test-ID besitzen.
