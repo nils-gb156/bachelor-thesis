@@ -97,24 +97,25 @@
 % sauber formatierter Quelltext
 %-----------------------------------
 \usepackage{listings}
-% JavaScript als Sprache definieren:
-\lstdefinelanguage{JavaScript}{
-	keywords={break, super, case, extends, switch, catch, finally, for, const, function, try, continue, if, typeof, debugger, var, default, in, void, delete, instanceof, while, do, new, with, else, return, yield, enum, let, await},
+% TypeScript als Sprache definieren:
+\lstdefinelanguage{TypeScript}{
+	keywords={break, super, case, extends, switch, catch, finally, for, const, function, try, continue, if, typeof, debugger, var, default, in, of, from, as, void, delete, instanceof, while, do, new, with, else, return, yield, enum, let, await, async, true, false},
 	keywordstyle=\color{blue}\bfseries,
-	ndkeywords={class, export, boolean, throw, implements, import, this, interface, package, private, protected, public, static},
+	ndkeywords={class, export, throw, implements, import, this, interface, package, private, protected, public, static, readonly, abstract, declare, namespace, module, type, keyof, infer, satisfies, is, asserts, override, boolean, string, number, bigint, any, unknown, never, undefined, null, symbol, object, Promise},
 	ndkeywordstyle=\color{darkgray}\bfseries,
 	identifierstyle=\color{black},
-	sensitive=false,
+	sensitive=true,
 	comment=[l]{//},
 	morecomment=[s]{/*}{*/},
 	commentstyle=\color{purple}\ttfamily,
 	stringstyle=\color{red}\ttfamily,
 	morestring=[b]',
-	morestring=[b]"
+	morestring=[b]",
+	morestring=[b]`
 }
 
 \lstset{
-	%language=JavaScript,
+	%language=TypeScript,
 	numbers=left,
 	numberstyle=\tiny,
 	numbersep=5pt,
@@ -129,6 +130,10 @@
   	commentstyle=\color{dkgreen},       % comment style
   	stringstyle=\color{mauve}         % string literal style
 }
+
+% Inline-Code im Stil der Listings (verbatim, kein manuelles Escapen noetig).
+% Verwendung: \code|getByRole("checkbox")|  (Trennzeichen frei waehlbar)
+\newcommand{\code}{\lstinline[language=TypeScript,basicstyle=\ttfamily]}
 
 %-----------------------------------
 %Literaturverzeichnis Einstellungen
