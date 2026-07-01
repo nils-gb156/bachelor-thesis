@@ -19,7 +19,15 @@ Die vier Stufen bilden einen Verlauf von minimalem zu maximalem \ac{UI}-Kontext.
 
 Abbildung~ zeigt den Ablauf eines Generierungsvorgangs. Use Case, OPT-Playwright-Skill und der \ac{UI}-Kontext der jeweiligen Stufen bilden zusammen den Prompt für das \ac{LLM}. Das \ac{LLM} erzeugt daraus einen Playwright-Test, der ausgeführt und anhand der Kriterien aus Kapitel~4.5 bewertet wird. Die manuellen Referenztests aus Kapitel~5.3 dienen dabei als Vergleichsmaßstab.
 
-\subsection{Use Cases: Definition und JSON-Format}
+\subsection{Use Cases: Definition und Format}
+
+Die Use Cases sind die fachliche Eingabe, aus der die Tests generiert werden. Sie sind über alle vier Stufen identisch und gehören damit zu den konstant gehaltenen Faktoren.
+
+Jeder Use Case beschreibt eine Nutzerinteraktion mit der WebGIS-Anwendung auf fachlicher Ebene aus Sicht des Anwenders. Die Schritte enthalten bewusst keine Selektoren oder andere technischen Details der Oberfläche, damit das Wissen allein aus dem \ac{UI}-Kontext der jeweiligen Stufe kommt. Zudem macht es keinen Sinn in einer Nutzerinteraktion  technische Details der Anwednung festzuhalten, da dies auch keine Voraussetzung der Anwender ist.
+
+Die Use Cases werden im Markdown-Format erfasst. So sind sie für \acp{LLM} einfach zuverarbeiten und folgen einer einheitlichen Struktur, die für alle Stufen gleich verwendet wird. Jeder Use Case besteht aus Informationen zu \texttt{id}, \texttt{title}, \texttt{description}, \texttt{preconditions}, \texttt{steps}, \texttt{expected results} und \texttt{complexity}. Titel und Beschreibung geben an welche Interaktion der Use Case abbildet. Die Vorbedingungen halten fest, was vor der Ausführung erfüllt sein muss. Die Schritte beschreiben die duchzuführende Interaktion des Anwenders und die erwarteten Ergenisse legen fest, welcher Zustand danach eintreten soll.
+
+Die Eigenschaft \texttt{complexity} gruppiert die Use Cases in drei Schwierigkeitsstufen: easy, medium, hard. Die Einstufung basiert nicht allein auf der Anzahl der Schritte, sondern vor allem nach der Art und Tiefe der Interaktionen. Einfache Use Cases prüfen einzelne Schaltflächen oder Sichtbarkeiten, komplexere fordern hingegen asynchrone Prozesse, Karteninteraktionen oder das Zusammenspiel mehrerer Komponenten. Die Abstufung stellt sicher, dass bei der Untersuchung verschiedene Komplexitäten typischer WebGIS-Interaktionen abgedeckt und nicht nur einfache Fälle betrachtet werden. Ausführliche Informationen zum Inhalt der Use Cases gibt es in Kapitel~5.2
 
 \subsection{Versuchsaufbau: Die vier Kontextstufen}
 
