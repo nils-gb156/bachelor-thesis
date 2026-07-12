@@ -19,6 +19,20 @@ Die vier Stufen bilden einen Verlauf von minimalem zu maximalem \ac{UI}-Kontext.
 
 Abbildung~ zeigt den Ablauf eines Generierungsvorgangs. Use Case, OPT-Playwright-Skill und der \ac{UI}-Kontext der jeweiligen Stufen bilden zusammen den Prompt für das \ac{LLM}. Das \ac{LLM} erzeugt daraus einen Playwright-Test, der ausgeführt und anhand der Kriterien aus Kapitel~4.5 bewertet wird. Die manuellen Referenztests aus Kapitel~5.3 dienen dabei als Vergleichsmaßstab.
 
+\begin{figure}[H]
+    \centering
+    \caption[Generierungs- und Evaluationspipeline]{Generierungs- und Evaluationspipeline. Der UI-Kontext variiert als unabhängige Variable (Stufen 1–4), alle übrigen Eingaben sind konstant}
+    \label{fig:testpyramide}
+    \includegraphics[width=1\textwidth]{methodik_pipeline}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \caption[Ausprägungen der Variable UI-Kontext]{Die vier Ausprägungen der Variable UI-Kontext mit steigendem Informationsgehalt}
+    \label{fig:testpyramide}
+    \includegraphics[width=0.6\textwidth]{ui_kontext_stufen}
+\end{figure}
+
 \subsection{Use Cases: Definition und Format}
 
 Die Use Cases sind die fachliche Eingabe, aus der die Tests generiert werden. Sie sind über alle vier Stufen identisch und gehören damit zu den konstant gehaltenen Faktoren.
@@ -38,6 +52,15 @@ Die Eigenschaft \texttt{complexity} gruppiert die Use Cases in drei Schwierigkei
 \subsubsection{Stufe 3 - Automatisch generierte UI-Map}
 
 \subsubsection{Stufe 4 - Manuell erstellte UI-Map}
+
+\subsubsection{Bonus-Stufe 5 - Self-Improvement-Loop}
+
+\begin{figure}[H]
+    \centering
+    \caption[Self-Improvement-Loop (Stufe 5)]{Self-Improvement-Loop der Bonus-Stufe 5: Fehlermeldung und Failure-Snapshot fließen in den nächsten Generierungsprompt zurück (max. 5 Iterationen)}
+    \label{fig:testpyramide}
+    \includegraphics[width=0.9\textwidth]{stufe_5_loop}
+\end{figure}
 
 \subsection{LLM-Konfiguration (Modell, Temperatur, Prompt-Struktur)}
 
