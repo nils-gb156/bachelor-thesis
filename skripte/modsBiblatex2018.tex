@@ -230,10 +230,43 @@
     {\printtext[bibhyperref]{\ifthenelse{\ifnameundef{labelname}\OR\iffieldundef{labelyear}}
        {\usebibmacro{cite:label}%
         \setunit{\printdelim{nonameyeardelim}}}
-      {\toggletrue{abx@bool@giveninits}%
-        \printnames[family-given]{labelname}%
+      {\printnames[familyonly]{labelname}%
         \setunit{\printdelim{nameyeardelim}}}%
       \printfield{usera}%
       \setunit{\printdelim{titleyeardelim}}%
      \usebibmacro{cite:labeldate+extradate}}}}
    {\usebibmacro{cite:shorthand}}}
+
+% ----------------------------------------------------------------------
+% Narrative Zitate im Fliesstext mit \textcite ergeben "Nachname (Jahr)",
+% z. B. "Celik & Mahmoud (2025) systematisieren ...". Es werden nur die
+% Nachnamen ausgegeben und mit & verbunden. Parenthetische Zitate mit
+% \cite bleiben unveraendert (z. B. "(Hou, X. et al., 2024)").
+% ----------------------------------------------------------------------
+\DeclareNameFormat{familyonly}{%
+  \usebibmacro{name:family}%
+    {\namepartfamily}%
+    {\namepartgiven}%
+    {\namepartprefix}%
+    {\namepartsuffix}%
+  \usebibmacro{name:andothers}}
+
+% Wie familyonly, aber als klickbarer Verweis auf das Literaturverzeichnis.
+% Wird fuer \textcite genutzt, da dessen Ausgabe nicht ohnehin schon in
+% \printtext[bibhyperref]{...} gewrappt ist (anders als bei \cite).
+\DeclareNameFormat{familyonlyhyper}{%
+  \printtext[bibhyperref]{%
+    \usebibmacro{name:family}%
+      {\namepartfamily}%
+      {\namepartgiven}%
+      {\namepartprefix}%
+      {\namepartsuffix}%
+    \usebibmacro{name:andothers}}}
+
+\let\fomorigtextcite\textcite
+\renewrobustcmd*{\textcite}{%
+  \AtNextCite{%
+    \DeclareNameAlias{labelname}{familyonlyhyper}%
+    \DeclareDelimFormat{finalnamedelim}{\addspace\&\addspace}%
+  }%
+  \fomorigtextcite}
