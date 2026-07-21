@@ -3,41 +3,39 @@
 
 \subsection{Überblick und Forschungsdesign}
 
-Im Folgenden werden die Methodik und das Forschungskonzept zur Beantwortung der Forschungsfrage dargestellt, welchen Einfluss der \ac{UI}-Kontext auf die Qualität \ac{LLM}-generierter Playwright-\ac{E2E}-Tests für \ac{OPT}-basierte WebGIS-Anwendungen hat. Die in der Einleitung formulierten Teilfragen werden dabei mit in das Untersuchungsdesign einbezogen. Bei der Methodik handelt es sich um einen experimentellen, vergleichenden Aufbau in einer kontrollierten Demo-Umgebung.
+Im Folgenden werden die Methodik und das Forschungskonzept zur Beantwortung der Forschungsfrage dargestellt, welchen Einfluss der \ac{UI}-Kontext auf die Qualität \ac{LLM}-generierter Playwright-\ac{E2E}-Tests für \ac{OPT}-basierte WebGIS-Anwendungen hat. Die in der Einleitung formulierten Teilfragen werden dabei mit in das Untersuchungsdesign einbezogen.
 
 Der \ac{UI}-Kontext ist die einzige unabhängige Variable. Alle anderen Faktoren wie Use Cases, LLM und dessen Konfiguration, OPT-Playwright-Skill sowie die manuell erstellten Referenztests werden konstant gehalten. Nur unter diesen Bedingungen sind die Qualitätsunterschiede der generierten Tests dem Kontext zurechenbar und werden nicht durch andere Einflüsse verfälscht. Dieses Vorgehen knüpft an das in Kapitel~2.1.1 beschriebene In-Context Learning an, bei dem der Kontext im Prompt die Ausgabe maßgeblich bestimmt.
 
 Von der unabhängigen Variable abzugrenzen sind die technischen Eigenschaften, die die Anwendung selbst zur Überprüfbarkeit bereitstellt. Während der \ac{UI}-Kontext beschreibt, was dem \ac{LLM} im Prompt mitgeteilt wird, bezeichnen Maßnahmen wie die Vergabe von data-testid-Attributen und der Zugriff auf das Kartenmodell über \texttt{\_\_openPioneerMap} (siehe Kapitel~5), was die Anwendung unabhängig vom Prompt für Tests bereitstellt. Diese Möglichkeiten bestehen bereits ab Stufe~1 und bleiben über alle vier Stufen unverändert. Variabel ist nur, ob und in welcher Form dem \ac{LLM} im Prompt mitgeteilt wird, dass sie existieren. Die Bereitstellung dieser technischen Möglichkeiten ist damit keine eigene Stufe des Experiments, sondern eine über alle Stufen geltende Voraussetzung, ohne die der \ac{UI}-Kontext nicht die einzige unabhängige Variable wäre.
 
-Generiert werden die Tests aus den fachlichen Anforderungen des jeweiligen Use Case und nicht aus dem Quellcode der Anwendung. Diese Abgrenzung ist wichtig im Hinblick auf editorbasierte Werkzeuge wie GitHub Copilot, die direkt aus dem umgebenden Code-Kontext Antworten generieren (siehe Kapitel~2.1.2).
+Generiert werden die Tests aus den fachlichen Anforderungen des jeweiligen Use Case und nicht aus dem Quellcode der Anwendung. Die Struktur des Prompts wird dabei über alle vier Stufen konstant gehalten. Es ändert sich nur der enthaltene \ac{UI}-Kontext. Verschiedene Prompting-Strategien sind nicht Teil dieser Untersuchung. Da die Generierung nicht deterministisch erfolgt, wird jeder Use Case pro Stufe mehrfach generiert (N=50). Verglichen werden dadurch Verteilungen der Testqualität je nach Stufe, nicht einzelne Ausgaben.
 
-Die Struktur des Prompts wird dabei über alle vier Stufen konstant gehalten. Es ändert sich nur der enthaltene \ac{UI}-Kontext. Verschiedene Prompting-Strategien sind nicht Teil dieser Untersuchung.
+Als kontrollierte Konstante im Prompt wird ein OPT-Playwright-Skill verwendet. Als OPT-Playwright-Skill wird im Rahmen dieser Arbeit ein feste, appunabhängige Fähigkeit bezeichnet, die dem \ac{LLM} bei jeder Generierung als Teil des Prompts mitgegeben wird. Sie legt allgemeine Umgangsweisen für den erzeugten Testcode fest, darunter die Verwendung von Playwright mit TypeScript, den Umgang mit \code|async|, \code|await|, \ac{OPT}-spezifische Besonderheiten sowie das erwartete Ausgabeformat. App-spezifische Selektoren enthält der Skill bewusst nicht, damit es hier zu keiner Vermischung mit dem UI-Kontext kommt, sondern unabhängig davon über alle vier Stufen unverändert angewendet wird. Die genaue Ausgestaltung des Skills wird in Kapitel~4.4 beschrieben.
 
-Als kontrollierte Konstante im Prompt wird ein OPT-Playwright-Skill verwendet. Als OPT-Playwright-Skill wird im Rahmen dieser Arbeit ein feste, appunabhängige Anleitung bezeichnet, die dem \ac{LLM} bei jeder Generierung als Teil des Prompts mitgegeben wird. Sie legt allgemeine Umgangsweisen für den erzeugten Testcode fest, darunter die Verwendung von React mit TypeScript, den Umgang mit \code|async|, \code|await|, \ac{OPT}-spezifische Besonderheiten sowie das erwartete Ausgabeformat. App-spezifische Selektoren enthält der Skill bewusst nicht, damit es hier zu keiner Vermischung mit dem UI-Kontext kommt, sondern unabhängig davon über alle vier Stufen unverändert angewendet wird. Die genaue Ausgestaltung des Skills wird in Kapitel~4.4 beschrieben.
-
-Die vier Stufen bilden einen Verlauf von minimalem zu maximalem \ac{UI}-Kontext. Stufe~1 gibt dem \ac{LLM} keine Informationen über die Oberfläche, während die höheren Stufen den Kontext schrittweise erweitern und strukturieren.
-
-Abbildung~ zeigt den Ablauf eines Generierungsvorgangs. Use Case, OPT-Playwright-Skill und der \ac{UI}-Kontext der jeweiligen Stufen bilden zusammen den Prompt für das \ac{LLM}. Das \ac{LLM} erzeugt daraus einen Playwright-Test, der ausgeführt und anhand der Kriterien aus Kapitel~4.5 bewertet wird. Die manuellen Referenztests aus Kapitel~5.3 dienen dabei als Vergleichsmaßstab.
-
-\begin{figure}[H]
-    \centering
-    \caption[Generierungs- und Evaluationspipeline]{Generierungs- und Evaluationspipeline. Der UI-Kontext variiert als unabhängige Variable (Stufen 1–4), alle übrigen Eingaben sind konstant}
-    \label{fig:testpyramide}
-    \includegraphics[width=1\textwidth]{methodik_pipeline}
-\end{figure}
+Die vier Stufen bilden einen Verlauf von minimalem zu maximalem \ac{UI}-Kontext. Stufe~1 gibt dem \ac{LLM} keine Informationen über die Oberfläche, während die höheren Stufen den Kontext schrittweise erweitern und strukturieren. Abbildung~\ref{fig:ui_kontext_stufen} stellt die vier Ausprägungen mit steigendem Informationsgehalt gegenüber.
 
 \begin{figure}[H]
     \centering
     \caption[Ausprägungen der Variable UI-Kontext]{Die vier Ausprägungen der Variable UI-Kontext mit steigendem Informationsgehalt}
-    \label{fig:testpyramide}
+    \label{fig:ui_kontext_stufen}
     \includegraphics[width=0.6\textwidth]{ui_kontext_stufen}
+\end{figure}
+
+Wie ein einzelner Generierungsvorgang abläuft, zeigt Abbildung~\ref{fig:methodik_pipeline}. Use Case, OPT-Playwright-Skill und der \ac{UI}-Kontext der jeweiligen Stufe bilden zusammen den Prompt für das \ac{LLM}. Die daraus erzeugten Playwright-Tests durchlaufen ein zweiphasiges Evaluationsverfahren: In der ersten Phase werden sie gegen die laufende Demo-Anwendung ausgeführt und ihr Ausführungsergebnis klassifiziert. In der zweiten Phase bewertet ein zweites \ac{LLM} die Testqualität anhand fester Kriterien, wobei die manuellen Referenztests aus Kapitel~5.3 als Referenz dienen. Beide Phasen werden in Kapitel~4.5 beschrieben.
+
+\begin{figure}[H]
+    \centering
+    \caption[Generierungs- und Evaluationspipeline]{Generierungs- und Evaluationspipeline. Der UI-Kontext variiert als unabhängige Variable (Stufen 1-4), alle übrigen Eingaben sind konstant}
+    \label{fig:methodik_pipeline}
+    \includegraphics[width=1\textwidth]{methodik_pipeline}
 \end{figure}
 
 \subsection{Use Cases: Definition und Format}
 
 Die Use Cases sind die fachliche Eingabe, aus der die Tests generiert werden. Sie sind über alle vier Stufen identisch und gehören damit zu den konstant gehaltenen Faktoren.
 
-Jeder Use Case beschreibt eine Nutzerinteraktion mit der WebGIS-Anwendung auf fachlicher Ebene aus Sicht des Anwenders. Die Schritte enthalten bewusst keine Selektoren oder andere technischen Details der Oberfläche, damit das Wissen allein aus dem \ac{UI}-Kontext der jeweiligen Stufe kommt. Zudem macht es keinen Sinn in einer Nutzerinteraktion  technische Details der Anwednung festzuhalten, da dies auch keine Voraussetzung der Anwender ist.
+Jeder Use Case beschreibt eine Nutzerinteraktion mit der WebGIS-Anwendung auf fachlicher Ebene aus Sicht des Anwenders. Die Schritte enthalten bewusst keine Selektoren oder andere technischen Details der Oberfläche, damit das Wissen allein aus dem \ac{UI}-Kontext der jeweiligen Stufe kommt. Zudem macht es keinen Sinn in einer Nutzerinteraktion  technische Details der Anwendung festzuhalten, da dies auch keine Voraussetzung der Anwender ist.
 
 Die Use Cases werden im Markdown-Format erfasst. So sind sie für \acp{LLM} einfach zuverarbeiten und folgen einer einheitlichen Struktur, die für alle Stufen gleich verwendet wird. Jeder Use Case besteht aus Informationen zu \texttt{id}, \texttt{title}, \texttt{description}, \texttt{preconditions}, \texttt{steps}, \texttt{expected results} und \texttt{complexity}. Titel und Beschreibung geben an welche Interaktion der Use Case abbildet. Die Vorbedingungen halten fest, was vor der Ausführung erfüllt sein muss. Die Schritte beschreiben die duchzuführende Interaktion des Anwenders und die erwarteten Ergenisse legen fest, welcher Zustand danach eintreten soll.
 
@@ -55,10 +53,12 @@ Die Eigenschaft \texttt{complexity} gruppiert die Use Cases in drei Schwierigkei
 
 \subsubsection{Bonus-Stufe 5 - Self-Improvement-Loop}
 
+Anders als die vier Kontextstufen erweitert die Bonus-Stufe~5 nicht den \ac{UI}-Kontext, sondern lässt das \ac{LLM} den erzeugten Test iterativ selbst verbessern. Schlägt ein Test fehl, fließen die Fehlermeldung und ein Failure-Snapshot in den nächsten Generierungsprompt zurück, bis der Test erfolgreich ist oder die Obergrenze von fünf Iterationen erreicht ist. Abbildung~\ref{fig:stufe5_loop} zeigt diesen Ablauf.
+
 \begin{figure}[H]
     \centering
     \caption[Self-Improvement-Loop (Stufe 5)]{Self-Improvement-Loop der Bonus-Stufe 5: Fehlermeldung und Failure-Snapshot fließen in den nächsten Generierungsprompt zurück (max. 5 Iterationen)}
-    \label{fig:testpyramide}
+    \label{fig:stufe5_loop}
     \includegraphics[width=0.9\textwidth]{stufe_5_loop}
 \end{figure}
 
