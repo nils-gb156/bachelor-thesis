@@ -5,7 +5,7 @@
 
 Im Folgenden werden die Methodik und das Forschungskonzept zur Beantwortung der Forschungsfrage dargestellt, welchen Einfluss der \ac{UI}-Kontext auf die Qualität \ac{LLM}-generierter Playwright-\ac{E2E}-Tests für \ac{OPT}-basierte WebGIS-Anwendungen hat. Die in der Einleitung formulierten Teilfragen werden dabei in das Untersuchungsdesign einbezogen.
 
-Der \ac{UI}-Kontext ist die einzige unabhängige Variable. Alle anderen Faktoren wie Use Cases, LLM und dessen Konfiguration, OPT-Playwright-Skill sowie die manuell erstellten Referenztests werden konstant gehalten. Nur unter diesen Bedingungen sind die Qualitätsunterschiede der generierten Tests dem Kontext zurechenbar und werden nicht durch andere Einflüsse verfälscht. Dieses Vorgehen knüpft an das in Kapitel~2.1.1 beschriebene In-Context Learning an, bei dem der Kontext im Prompt die Ausgabe maßgeblich bestimmt.
+Der \ac{UI}-Kontext ist die einzige unabhängige Variable. Alle anderen Faktoren wie Use Cases, LLM und dessen Konfiguration, OPT-Playwright-Skill sowie die manuell erstellten Referenztests werden konstant gehalten. Nur unter diesen Bedingungen sind die Qualitätsunterschiede der generierten Tests dem Kontext zurechenbar und werden nicht durch andere Einflüsse verfälscht. Dieses Vorgehen knüpft an das in Kapitel~2.1.1 beschriebene In-Context Learning an, bei dem der Kontext im Prompt die Ausgabe hauptsächlich bestimmt.
 
 Von der unabhängigen Variable abzugrenzen sind die technischen Eigenschaften, die die Anwendung selbst zur Überprüfbarkeit bereitstellt. Während der \ac{UI}-Kontext beschreibt, was dem \ac{LLM} im Prompt mitgeteilt wird, bezeichnen Maßnahmen wie die Vergabe von data-testid-Attributen und der Zugriff auf das Kartenmodell über \texttt{\_\_openPioneerMap} (siehe Kapitel~5), was die Anwendung unabhängig vom Prompt für Tests bereitstellt. Diese Möglichkeiten bestehen bereits ab Stufe~1 und bleiben über alle vier Stufen unverändert. Variabel ist nur, ob und in welcher Form dem \ac{LLM} im Prompt mitgeteilt wird, dass sie existieren. Die Bereitstellung dieser technischen Möglichkeiten ist damit keine eigene Stufe des Experiments, sondern eine über alle Stufen geltende Voraussetzung, ohne die der \ac{UI}-Kontext nicht die einzige unabhängige Variable wäre.
 
@@ -13,7 +13,7 @@ Generiert werden die Tests aus den fachlichen Anforderungen des jeweiligen Use C
 
 Als kontrollierte Konstante im Prompt wird ein OPT-Playwright-Skill verwendet. Als OPT-Playwright-Skill wird im Rahmen dieser Arbeit eine feste, appunabhängige Fähigkeit bezeichnet, die dem \ac{LLM} bei jeder Generierung als Teil des Prompts mitgegeben wird. Sie legt allgemeine Umgangsweisen für den erzeugten Testcode fest, darunter die Verwendung von Playwright mit TypeScript, den Umgang mit \code|async|, \code|await|, \ac{OPT}-spezifische Besonderheiten sowie das erwartete Ausgabeformat. App-spezifische Selektoren enthält der Skill bewusst nicht, um eine Vermischung mit dem UI-Kontext zu vermeiden. Er wird unabhängig davon über alle vier Stufen unverändert angewendet. Die genaue Ausgestaltung des Skills wird in Kapitel~4.4 beschrieben.
 
-Die vier Stufen bilden einen Verlauf von minimalem zu maximalem \ac{UI}-Kontext. Stufe~1 gibt dem \ac{LLM} keine Informationen über die Oberfläche, während die höheren Stufen den Kontext schrittweise erweitern und strukturieren. Abbildung~\ref{fig:ui_kontext_stufen} stellt die vier Ausprägungen mit steigendem Informationsgehalt gegenüber.
+Die vier Stufen bilden einen Verlauf von minimalem zu maximalem \ac{UI}-Kontext. Stufe~1 gibt dem \ac{LLM} keine Informationen über die Oberfläche, während die höheren Stufen den Kontext schrittweise erweitern und strukturieren. Abbildung~\ref{fig:ui_kontext_stufen} stellt die vier Ausprägungen mit steigendem Informationsgehalt dar.
 
 \begin{figure}[H]
     \centering
@@ -22,7 +22,7 @@ Die vier Stufen bilden einen Verlauf von minimalem zu maximalem \ac{UI}-Kontext.
     \includegraphics[width=0.6\textwidth]{ui_kontext_stufen}
 \end{figure}
 
-Wie ein einzelner Generierungsvorgang abläuft, zeigt Abbildung~\ref{fig:methodik_pipeline}. Use Case, OPT-Playwright-Skill und der \ac{UI}-Kontext der jeweiligen Stufe bilden zusammen den Prompt für das \ac{LLM}. Die daraus erzeugten Playwright-Tests durchlaufen ein zweiphasiges Evaluationsverfahren: In der ersten Phase werden sie gegen die laufende Demo-Anwendung ausgeführt und ihr Ausführungsergebnis klassifiziert. In der zweiten Phase bewertet ein zweites \ac{LLM} die Testqualität anhand fester Kriterien, wobei die manuellen Referenztests aus Kapitel~5.3 als Vergleichsmaßstab dienen. Beide Phasen werden in Kapitel~4.5 beschrieben.
+Wie ein einzelner Generierungsvorgang abläuft, zeigt Abbildung~\ref{fig:methodik_pipeline}. Use Case, OPT-Playwright-Skill und der \ac{UI}-Kontext der jeweiligen Stufe bilden zusammen den Prompt für das \ac{LLM}. Die daraus erzeugten Playwright-Tests durchlaufen ein zweiphasiges Evaluationsverfahren. In der ersten Phase werden sie gegen die laufende Demo-Anwendung ausgeführt und ihr Ausführungsergebnis klassifiziert. In der zweiten Phase bewertet ein zweites \ac{LLM} die Testqualität anhand fester Kriterien, wobei die manuellen Referenztests aus Kapitel~5.3 als Vergleichsmaßstab dienen. Beide Phasen werden in Kapitel~4.5 beschrieben.
 
 \begin{figure}[H]
     \centering
@@ -45,11 +45,25 @@ Die Eigenschaft \texttt{complexity} gruppiert die Use Cases in drei Schwierigkei
 
 \subsubsection{Stufe 1: Baseline (kein UI-Kontext)}
 
+In Stufe~1 bleibt der \ac{UI}-Kontext-Block des Prompts leer. Das \ac{LLM} erhält nur den Use Case und den OPT-Playwright-Skill, sonst nichts. Selektoren und Verifikationsstrategien muss es aus allgemeinem Wissen über Webanwendungen ableiten, z.\,B. durch das Raten plausibler Beschriftungen oder \ac{ARIA}-Rollen. Diese Stufe ist der Referenzpunkt des Experiments und soll zeigen, was ohne Informationen über die konkrete Oberfläche erreichbar ist. Die in Kapitel~4.1 beschriebenen Testbarkeitsmaßnahmen der Anwendungen existieren auch hier schon, dem \ac{LLM} wird ihre Existenz aber nicht mitgeteilt.
+
 \subsubsection{Stufe 2: Automatischer Accessibility-Snapshot}
+
+Stufe~2 erhält den \ac{UI}-Kontext automatisch aus der laufenden Anwendung. Ein Headless-Browser lädt die Demo-App und erfasst alle vergebenen data-testid-Werte und den Accessibility-Snapshot von Playwright, der Rollen, Namen und Zustände der Elemente als Baumstruktur ausgibt. Der Snapshot wird einmal vor dem Generierungslauf erfasst und für alle Use Cases identisch verwendet.
+
+Der Ansatz benötigt keinen manuellen Pflegeaufwand und wäre damit in der Praxis ein günstiges Szenario. Erfasst wird allerdings nur der initiale Seitenzustand. Elemente, die erst nach Interaktionen erscheinen, fehlen im Snapshot. Auch das Kartenmodell taucht in diesem Kontext nicht auf, da \texttt{\_\_openPioneerMap} ein globales JavaScript-Objekt ist und weder im \ac{DOM} noch im Accessibility-Baum erscheint.
 
 \subsubsection{Stufe 3: Automatisch generierte UI-Map}
 
+Den gesamten Quellcode der Anwendung in den Prompt zu übernehmen ist wegen der begrenzten Kontextlänge des \ac{LLM} nicht praktikabel. Stufe~3 verwendet deshalb eine automatisch aus dem Quellcode generierte \ac{UI}-Map. Die regexbasierte Extraktion erfasst data-testids, Beziehungen zwischen Komponenten, \ac{UI}-Zustände, Sichtbarkeitsbedingungen und Interaktionsabhängigkeiten. Informationen zur Sichtbarkeit der Layer und Hintergrundkarten aus dem Layer Switcher sind darin auch enthalten. Zusätzlich enthält der Prompt erstmals die Datei \texttt{map-model-helpers.ts}. Deren Funktionen helfen beim Zugriff auf das Kartenmodell und geben dem \ac{LLM} damit ein Mittel, den Kartenzustand in Assertions zu prüfen.
+
+Der Kontext in dieser Stufe stammt aus dem Quellcode statt aus der laufenden Seite. Er enthält deshalb auch Elemente, die im initialen Zustand nicht sichtbar sind. Der Ansatz bleibt automatisiert, setzt aber Zugriff auf den Quellcode voraus, und seine Qualität hängt davon ab, wie zuverlässig die regexbasierte Extraktion die relevanten Informationen findet.
+
 \subsubsection{Stufe 4: Manuell erstellte UI-Map}
+
+Stufe~4 folgt dem Aufbau von Stufe~3, ersetzt die generierte \ac{UI}-Map allerdings durch eine manuell erstellte Fassung. Sie wurde mit vollständiger Kenntnis der Anwendung erfasst und enthält alle Informationen zu Selektoren sowie Hinweise zu Interaktionen und Zuständen einzelner Komponenten. Damit diese Beziehungen effizient dargestellt werden können, werden die Informationen im \ac{JSON}-Format gespeichert. Die Map-Model-Helfer sind identisch zu Stufe~3.
+
+Diese Stufe bildet die theoretische Obergrenze des untersuchten Ansatzes ab. Sie soll zeigen, welche Testqualität erreichbar ist, wenn der Kontext vollständig und geprüft vorliegt. Dem steht allerdings der Aufwand für Erstellung und Pflege gegenüber. Jede Änderung an der Oberfläche muss in der \ac{UI}-Map nachgezogen werden, sonst enthält sie veraltete Selektoren oder falsche Informationen zu Sichtbarkeiten und Interaktionen. In der Evaluation wird sich zeigen, ob der Qualitätsgewinn diesen Aufwand im Vergleich zu den Testergebnissen der anderen Stufen rechtfertigt.
 
 \subsubsection{Bonus-Stufe 5: Self-Improvement-Loop}
 
