@@ -67,12 +67,20 @@ Diese Stufe bildet die theoretische Obergrenze des untersuchten Ansatzes ab. Sie
 
 \subsubsection{Bonus-Stufe 5: Self-Improvement-Loop}
 
+Ergänzend zum Vergleich der vier Stufen wird in der Bonus-Stufe~5 eine Selbstverbesserungsschleife untersucht. Sie dient als Erweiterung der anderen Stufen und verfolgt einen etwas anderen Ansatz. Statt den statischen \ac{UI}-Kontext im Prompt weiter zu verbessern, erhält das \ac{LLM} Rückmeldung aus der Ausführung seines eigenen Tests, um diesen weiter zu optimieren.
+
+Als Ausgangspunkt dient der Kontext aus dem automatischen Snapshot des initialen Seitenzustands aus Stufe~2, ergänzt um einen Screenshot der Anwendung und den Map-Model-Helfer aus Stufe~3 und 4. Den Ablauf der Schleife zeigt Abbildung~\ref{fig:stufe5_loop}. Zuerst wird ähnlich wie bei Stufe~2 aus dem initialen Kontext ein Test generiert und mit Playwright direkt gegen die laufende Anwendung ausgeführt. Besteht er, endet die Schleife. Schlägt er fehl, wird der nächste Prompt um den fehlgeschlagenen Testcode, die Playwright-Fehlermeldung und den Failure-Snapshot inklusive Screenshot ergänzt. Das Modell erhält damit die Anweisung, den vorhandenen Test zu korrigieren, statt einen neuen zu erzeugen. Nach spätestens 10 Iterationen bricht die Schleife ab.
+
 \begin{figure}[H]
     \centering
-    \caption[Self-Improvement-Loop (Stufe 5)]{Self-Improvement-Loop der Bonus-Stufe 5: Fehlermeldung und Failure-Snapshot fließen in den nächsten Generierungsprompt zurück (max. 5 Iterationen)}
+    \caption[Self-Improvement-Loop (Stufe 5)]{Self-Improvement-Loop der Bonus-Stufe 5: Fehlermeldung und Failure-Snapshot inkl. Screenshot fließen in den nächsten Generierungsprompt zurück (max. 10 Iterationen)}
     \label{fig:stufe5_loop}
-    \includegraphics[width=0.9\textwidth]{stufe_5_loop}
+    \includegraphics[width=0.8\textwidth]{stufe_5_loop}
 \end{figure}
+
+Der Failure-Snapshot hält den Zustand der Anwendung zum Zeitpunkt des Fehlschlags fest und besteht wie in Stufe~2 aus Accessibility-Snapshot und data-testids. Der Unterschied liegt im Zeitpunkt der Aufnahme. Hier wird nicht der initiale Zustand, sondern die Seite nach den bereits ausgeführten Testschritten erfasst. Das \ac{LLM} sieht damit, wie die Oberfläche aussah, als der Test scheiterte. Zusätzlich erhält das \ac{LLM} in der initialen und jeder weiteren Iteration einen Screenshot der Anwendung als Bildeingabe. Dadurch bekommt es auch erstmals visuelle Informationen über den gerenderten Kartenzustand und sieht optisch, welche Elemente sichtbar sind. Als Pass-Kriterium dient der Screenshot nicht. Die Schleife endet nur über das Ausführungsergebnis des Tests. Schlägt der Test beispielsweise fehl, obwohl der Layer im Screenshot sichtbar ist, liegt der Fehler in der Prüflogik des Tests, und die Iteration wird fortgesetzt. Der Screenshot ist nur ein Hilfsmittel für die Korrektur.
+
+Jede Iteration verwendet einen eigenständigen Prompt ohne Konversationshistorie. Alle Informationen aus dem vorherigen Durchlauf werden ausschließlich über den vorherigen Testcode, die Fehlermeldung und den Snapshot übergeben. Für die Aufnahme des Failure-Snapshots wird eine Playwright-Fixture benötigt, die in einer Ausführungskopie des Tests eingebunden wird. Die vom \ac{LLM} generierte Originaldatei bleibt dabei unverändert und ist Grundlage der Bewertung.
 
 \subsection{LLM-Konfiguration (Modell, Temperatur, Prompt-Struktur)}
 
