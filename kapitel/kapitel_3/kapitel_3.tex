@@ -82,6 +82,8 @@ Der Failure-Snapshot hält den Zustand der Anwendung zum Zeitpunkt des Fehlschla
 
 Jede Iteration verwendet einen eigenständigen Prompt ohne Konversationshistorie. Alle Informationen aus dem vorherigen Durchlauf werden ausschließlich über den vorherigen Testcode, die Fehlermeldung und den Snapshot übergeben. Für die Aufnahme des Failure-Snapshots wird eine Playwright-Fixture benötigt, die in einer Ausführungskopie des Tests eingebunden wird. Die vom \ac{LLM} generierte Originaldatei bleibt dabei unverändert und ist Grundlage der Bewertung.
 
+\subsubsection{Erwartungen}
+
 \subsection{LLM-Konfiguration (Modell, Temperatur, Prompt-Struktur)}
 
 Für alle Generierungen wird das Qwen3.6-35B-A3B als \ac{LLM} verwendet. Es ist ein offenes Sprachmodell des Qwen-Teams von Alibaba und wird in der FP8-quantisierten Variante eingesetzt. Das Modell verwendet eine Sparse-Mixture-of-Experts-Architektur mit 35 Milliarden Parametern insgesamt, von denen pro Token nur etwa 3 Milliarden aktiv sind. Zudem ist es multimodal, verarbeitet also neben Text auch Bilder. Insgesamt unterstützt es eine Kontextlänge von 262.144 Token (\cite{hugging_face_qwenqwen36-35b-a3b_2026, qwen_team_alibaba_qwen36-35b-a3b_2026}).
@@ -94,4 +96,8 @@ Der Prompt besteht aus zwei Teilen. Der User-Prompt enthält die Anweisung, aus 
 
 Der Skill legt fest, wie der erzeugte Testcode auszusehen hat. Er schreibt die Verwendung von Playwright mit TypeScript vor, verlangt die durchgängige Nutzung von \code|async| und \code|await|, priorisiert \code|getByTestId| gegenüber anderen Locator-Strategien und definiert das Ausgabeformat. Die Ausgabe soll eine einzelne, vollständige Testdatei ohne erläuternden Text sein. Außerdem enthält der Skill weitere technische Vorgaben, etwa zum Umgang mit Lokatoren, Assertions, Wartebedingungen und Chakra-UI-Elementen. Der Skill ist so aufgebaut, dass er auch für andere WebGIS-Anwendungen wiederverwendet werden kann, die mit Open Pioneer Trails erstellt wurden. Informationen über App-spezifische Selektoren oder Elemente enthält er daher bewusst nicht.
 
-\subsection{Bewertungskriterien}
+\subsection{Evaluationsverfahren}
+
+\subsubsection{Phase 1: Deterministische Ausführung}
+
+\subsubsection{Phase 2: LLM-as-a-judge}
