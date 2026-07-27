@@ -84,4 +84,14 @@ Jede Iteration verwendet einen eigenständigen Prompt ohne Konversationshistorie
 
 \subsection{LLM-Konfiguration (Modell, Temperatur, Prompt-Struktur)}
 
+Für alle Generierungen wird das Qwen3.6-35B-A3B als \ac{LLM} verwendet. Es ist ein offenes Sprachmodell des Qwen-Teams von Alibaba und wird in der FP8-quantisierten Variante eingesetzt. Das Modell verwendet eine Sparse-Mixture-of-Experts-Architektur mit 35 Milliarden Parametern insgesamt, von denen pro Token nur etwa 3 Milliarden aktiv sind. Zudem ist es multimodal, verarbeitet also neben Text auch Bilder. Insgesamt unterstützt es eine Kontextlänge von 262.144 Token (\cite{hugging_face_qwenqwen36-35b-a3b_2026, qwen_team_alibaba_qwen36-35b-a3b_2026}).
+
+Das Modell wird auf einem Spark im Netzwerk der con terra GmbH betrieben und dort über LM~Studio bereitgestellt. Die Generierungsskripte greifen über die OpenAI-kompatible \ac{REST}-\ac{API} von LM~Studio darauf zu.
+
+Die Temperatur ist auf 0.6 gesetzt, da dieser Wert vom Hersteller für präzise Coding-Aufgaben empfohlen wird (\cite{hugging_face_qwenqwen36-35b-a3b_2026}). Qwen3.6 arbeitet standardmäßig im Thinking-Mode, der auch hier verwendet wird. Die maximale Ausgabelänge beträgt 64k Token, damit Reasoning und Testcode zusammen ausreichend Platz haben. Diese Konfiguration ist über alle Stufen und Use Cases identisch. Da die Generierung bei einer Temperatur über null nicht deterministisch ist, wird der vollständige Generierungsdurchlauf pro Stufe 50-mal wiederholt. Jeder Durchlauf erzeugt alle zehn Use Cases in einem eigenen Verzeichnis, sodass pro Stufe 500 Tests generiert werden.
+
+Der Prompt besteht aus zwei Teilen. Der User-Prompt enthält die Anweisung, aus dem Use Case mit dem jeweiligen \ac{UI}-Kontext einen Playwright-\ac{E2E}-Test zu generieren, den Use Case selbst, die \ac{URL} der Anwendung und den \ac{UI}-Kontext-Block der jeweiligen Stufe. Zwischen den Stufen variiert ausschließlich der \ac{UI}-Kontextblock. Im System-Prompt wird der OPT-Playwright-Skill hinzugefügt.
+
+Der Skill legt fest, wie der erzeugte Testcode auszusehen hat. Er schreibt die Verwendung von Playwright mit TypeScript vor, verlangt die durchgängige Nutzung von \code|async| und \code|await|, priorisiert \code|getByTestId| gegenüber anderen Locator-Strategien und definiert das Ausgabeformat. Die Ausgabe soll eine einzelne, vollständige Testdatei ohne erläuternden Text sein. Außerdem enthält der Skill weitere technische Vorgaben, etwa zum Umgang mit Lokatoren, Assertions, Wartebedingungen und Chakra-UI-Elementen. Der Skill ist so aufgebaut, dass er auch für andere WebGIS-Anwendungen wiederverwendet werden kann, die mit Open Pioneer Trails erstellt wurden. Informationen über App-spezifische Selektoren oder Elemente enthält er daher bewusst nicht.
+
 \subsection{Bewertungskriterien}
