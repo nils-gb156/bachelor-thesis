@@ -1,13 +1,34 @@
-\section{Beispielanhang}\label{Beispielanhang}
-Dieser Abschnitt dient nur dazu zu demonstrieren, wie ein Anhang aufgebaut seien kann.
-\subsection{Weitere Gliederungsebene}
-Auch eine zweite Gliederungsebene ist möglich.
-\section{Bilder}
-Auch mit Bildern.
-Diese tauchen nicht im Abbildungsverzeichnis auf.
-\begin{figure}[H]
-    \centering
-    \caption[]{Beispielbild}
-	\label{fig:Beispielbild}
-    \includegraphics[width=1\textwidth]{verzeichnisStruktur}
-\end{figure}
+\section{Bewertungsrubrik der Phase 2}
+\label{app:judge-rubrik}
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Skalenstufen der vier Bewertungsdimensionen}
+\begin{tabular}{@{}lcp{9.5cm}@{}}
+\toprule
+Dimension & Stufe & Beschreibung \\
+\midrule
+coverage & 1 & Testet den Use Case nicht oder etwas völlig anderes \\
+         & 2 & Deckt weniger als die Hälfte der Schritte ab \\
+         & 3 & Deckt die wesentlichen Schritte ab, einzelne Lücken \\
+         & 4 & Alle Schritte und erwarteten Ergebnisse abgedeckt \\
+\midrule
+selector & 1 & Selektoren überwiegend erfunden oder falsch \\
+         & 2 & Mischung aus korrekten und erfundenen Selektoren \\
+         & 3 & Selektoren überwiegend korrekt, kleinere Abweichungen \\
+         & 4 & Alle Selektoren korrekt \\
+\midrule
+map\_interaction & n/a & Use Case erfordert keine kartenspezifische Interaktion  \\
+         & 1 & Keine kartenspezifische Aktion oder Prüfung, obwohl der Use Case sie erfordert; ausschließlich DOM-basiert \\
+         & 2 & Interaktion versucht, aber fehlerhaft (erfundene Map-Model-Aufrufe, falsche Koordinaten- oder Pixellogik) oder ohne Warten auf den Kartenzustand \\
+         & 3 & Im Wesentlichen korrekt, kleinere Abweichungen \\
+         & 4 & Funktional gleichwertig zum Referenztest \\
+\midrule
+assertion & 1 & Keine oder ausschließlich triviale Assertions \\
+         & 2 & Assertions vorhanden, prüfen aber nicht die Erwartungen \\
+         & 3 & Erwartungen im Wesentlichen geprüft, kleinere Lücken \\
+         & 4 & Erwartungen exakt geprüft; der Test würde bei defekter Funktion zuverlässig fehlschlagen \\
+\bottomrule
+\end{tabular}
+\end{table}
