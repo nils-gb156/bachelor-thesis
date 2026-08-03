@@ -135,6 +135,20 @@
 % Verwendung: \code|getByRole("checkbox")|  (Trennzeichen frei waehlbar)
 \newcommand{\code}{\lstinline[language=TypeScript,basicstyle=\ttfamily]}
 
+% Schlichter Stil fuer Markdown-Prompts (verbatim, Umlaute via literate).
+\lstdefinelanguage{Markdown}{
+	sensitive=true,
+	morestring=[b]`,                 % Inline-Code
+	stringstyle=\color{mauve}\ttfamily,
+	morecomment=[l]{>},              % Zitat-/Blockquote-Zeilen
+	commentstyle=\color{dkgreen}\ttfamily,
+	literate=%
+		{ä}{{\"a}}1 {ö}{{\"o}}1 {ü}{{\"u}}1
+		{Ä}{{\"A}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1
+		{ß}{{\ss}}1 {–}{{--}}1 {—}{{---}}1
+		{„}{{\glqq}}1 {“}{{\grqq}}1 {…}{{\ldots}}1
+}
+
 %-----------------------------------
 %Literaturverzeichnis Einstellungen
 %-----------------------------------
