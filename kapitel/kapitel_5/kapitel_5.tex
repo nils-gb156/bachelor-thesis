@@ -1,9 +1,25 @@
 \newpage
 \section{Durchführung und Evaluation}
 
+\subsection{Durchführung des Experiments}
+
+Die Generierungsabläufe aller Stufen fanden zwischen dem 25. und 27. Juli 2026 statt. Modellkonfiguration und Stand der Demo-Anwendung blieben über diesen Zeitraum unverändert, sodass Unterschiede zwischen den Stufen nicht auf zwischenzeitliche Änderungen an Modell oder Anwendung zurückgehen können. Verwendet wurden exakt die Parameter aus Kapitel~4.4.
+
+Vorgesehen waren pro Stufe 500 Testdateien, also 50 Durchläufe mit jeweils zehn Use Cases. Diese Anzahl wurde in den Stufen 1, 2, 4 und 5 erreicht. Stufe~3 umfasst nur 499 Dateien, da im Durchlauf run\_20 der Test zu UC-02 fehlt. Da weder die Testdatei noch der zugehörige Prompt oder die Rohantwort des Modells geschrieben wurde, lässt sich der Fehler auf den Aufruf des Modells eingrenzen, denn erst nach Rückgabe der Antwort werden alle drei Dateien angelegt. Nach einem fehlgeschlagenen Aufruf fährt das Skript mit dem nächsten Use Case fort, statt den gesamten Durchlauf abzubrechen. Die genaue Ursache ist nachträglich nicht mehr bestimmbar, da die Konsolenausgabe nicht gespeichert wurde.
+
+Ausgeführt wurden die Tests mit Playwright 1.60.0 und dem darin enthaltenen Chromium unter Node.js 26.5.0 und pnpm 11.1.2. Die Konfiguration verwendet ein einzelnes Browser-Projekt im Headless-Modus mit einem Viewport von $1920 \times 1080$ Pixeln und einem Timeout von 30 Sekunden pro Test. Alle Tests liefen nacheinander gegen die unter \url{http://localhost:5173/ba-webgis-llm-e2e/} laufende Demo-Anwendung.
+
+Zehn Dateien entsprachen keinem Muster der regelbasierten Zuordnung, weil sie wegen Syntaxfehlern nicht richtig ausgeführt werden konnten, und wurden daher vorläufig als \texttt{TIMEOUT} klassifiziert. Die manuelle Prüfung ergab in neun Fällen einen Syntaxfehler (\texttt{COMPILE\_ERROR}) und in einem Fall eine Wiederholung ganzer Codeblöcke (\texttt{GENERATION\_ERROR}).
+
+Die semantische Bewertung nach Kapitel~4.5.2 wurde zwischen dem 31. Juli und dem 3. August 2026 mit Claude Opus 5 über Claude Code 2.1.220 durchgeführt.
+
+Zusätzlich wurde der komplette Generierungsablauf mit GPT-5.4 statt Qwen3.6 durchgeführt. Die Ergebnisse dazu stehen im Anhang.
+
 \subsection{Ergebnisse der Ausführung (Phase 1)}
 
 \subsection{Ergebnisse der Qualitätsbewertung (Phase 2)}
+
+\subsubsection{Kontrolle der maschinellen Bewertung}
 
 \subsection{Ergebnisse der Bonus-Stufe 5}
 
