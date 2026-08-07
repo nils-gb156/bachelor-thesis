@@ -9,13 +9,66 @@ Vorgesehen waren pro Stufe 500 Testdateien, also 50 Durchläufe mit jeweils zehn
 
 Ausgeführt wurden die Tests mit Playwright 1.60.0 und dem darin enthaltenen Chromium unter Node.js 26.5.0 und pnpm 11.1.2. Die Konfiguration verwendet ein einzelnes Browser-Projekt im Headless-Modus mit einem Viewport von $1920 \times 1080$ Pixeln und einem Timeout von 30 Sekunden pro Test. Alle Tests liefen nacheinander gegen die unter \url{http://localhost:5173/ba-webgis-llm-e2e/} laufende Demo-Anwendung.
 
-Zehn Dateien entsprachen keinem Muster der regelbasierten Zuordnung, weil sie wegen Syntaxfehlern nicht richtig ausgeführt werden konnten, und wurden daher vorläufig als \texttt{TIMEOUT} klassifiziert. Die manuelle Prüfung ergab in neun Fällen einen Syntaxfehler (\texttt{COMPILE\_ERROR}) und in einem Fall eine Wiederholung ganzer Codeblöcke (\texttt{GENERATION\_ERROR}).
-
 Die semantische Bewertung nach Kapitel~4.5.2 wurde zwischen dem 31. Juli und dem 3. August 2026 mit Claude Opus 5 über Claude Code 2.1.220 durchgeführt.
 
 Zusätzlich wurde der komplette Generierungsablauf mit GPT-5.4 statt Qwen3.6 durchgeführt. Die Ergebnisse dazu stehen im Anhang.
 
 \subsection{Ergebnisse der Ausführung (Phase 1)}
+
+Grundlage der Auswertung sind 1.999 Testdateien der Stufen 1 bis 4. Die Ergebnisse der Bonus-Stufe~5 werden wegen des abweichenden Ausführungsmodells getrennt in Kapitel~6.4 dargestellt. Jede Datei wurde einer der sechs Kategorien aus Kapitel~4.5.1 zugeordnet. Zehn Dateien entsprachen keinem Muster der regelbasierten Zuordnung, weil sie wegen Syntaxfehlern nicht richtig ausgeführt werden konnten, und wurden daher vorläufig als \texttt{TIMEOUT} klassifiziert. Die manuelle Prüfung ergab in neun Fällen einen Syntaxfehler (\texttt{COMPILE\_ERROR}) und in einem Fall eine Wiederholung ganzer Codeblöcke (\texttt{GENERATION\_ERROR}).
+
+Tabelle~\ref{tab:phase1_kategorien} zeigt die Ausführungsergebnisse. Die PASS-Rate steigt monoton von 20,0 \% in Stufe~1 auf 38,6 \% in Stufe~4. Der größte Einzelschritt liegt mit 13,7 Prozentpunkten zwischen Stufe~2 und Stufe~3, also bei der Einführung der \ac{UI}-Map mit Informationen über die gesamte Web-Anwendung und der Map-Model-Helfer. Die Übergänge von Stufe~1 zu 2 (+2,0 Prozentpunkte) und von Stufe~3 zu 4 (+2,9 Prozentpunkte) verändern die PASS-Rate dagegen kaum.
+
+\begin{table}[H]
+    \centering
+    \caption[Ausführungsergebnisse je Stufe]{Ausführungsergebnisse der Stufen 1 bis 4 nach Kategorien (Phase 1), absolut und in Prozent der Stufengrundmenge}
+    \label{tab:phase1_kategorien}
+    \begin{tabular}{lrrrr}
+        \toprule
+        Kategorie & Stufe 1 & Stufe 2 & Stufe 3 & Stufe 4 \\
+        \midrule
+        \textsc{pass}             & 100 (20{,}0\,\%) & 110 (22{,}0\,\%) & 178 (35{,}7\,\%) & 193 (38{,}6\,\%) \\
+        \textsc{infra\_fail}     & 345 (69{,}0\,\%) & 211 (42{,}2\,\%) & 133 (26{,}7\,\%) & 145 (29{,}0\,\%) \\
+        \textsc{assertion\_fail}  & 43 (8{,}6\,\%)   & 166 (33{,}2\,\%) & 184 (36{,}9\,\%) & 154 (30{,}8\,\%) \\
+        \textsc{compile\_error}  & 3 (0{,}6\,\%)    & 1 (0{,}2\,\%)    & 3 (0{,}6\,\%)    & 4 (0{,}8\,\%)    \\
+        \textsc{generation\_error} & 9 (1{,}8\,\%)  & 12 (2{,}4\,\%)   & 1 (0{,}2\,\%)    & 4 (0{,}8\,\%)    \\
+        \textsc{timeout}         & 0                & 0                & 0                & 0                \\
+        \midrule
+        $n$                      & 500              & 500              & 499              & 500              \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Zwischen Stufe~1 und 2 sinkt der \texttt{INFRA\_FAIL}-Anteil von 69,0 \% auf 42,2 \%, während der \texttt{ASSERTION\_FAIL}-Anteil im selben Schritt von 8,6 \% auf 33,2 \% steigt. Der Accessibility-Snapshot verbessert demnach das Auffinden der Elemente, sodass die Tests nicht mehr am Selektor scheitern, sondern erst an der inhaltlichen Prüfung. Über die Use Cases verteilt sich dieser Effekt ungleich (Abbildung~\ref{fig:exec_by_uc}). Bei UC-06, UC-07 und UC-08 wandelt sich der in Stufe~1 fast vollständige \texttt{INFRA\_FAIL}-Anteil bis Stufe~2 überwiegend in \texttt{ASSERTION\_FAIL} um, bei UC-09 und UC-10 fällt diese Verschiebung deutlich geringer aus.
+
+Auch die absolute PASS-Rate verteilt sich ungleich über die Use Cases. Innerhalb der Stufe~4 reicht sie von 2 \% (UC-07) bis 98 \% (UC-01). Use Cases mit einfachen Sichtbarkeitsprüfungen wie UC-01 und UC-05 erreichen bereits in den unteren Stufen hohe Werte, während die karteninteraktiven UC-06, UC-07 und UC-08 in allen vier Stufen unter 25 \% bleiben.
+
+Über die Stufen hinweg steigt die PASS-Rate bei den meisten Use Cases an. UC-03 ist der einzige Use Case, dessen PASS-Rate dabei durchgehend schlechter wird: 62 \% in Stufe~1, 32 \% in Stufe~2, 4 \% in Stufe~3 und 14 \% in Stufe~4. UC-04 bricht von Stufe~3 auf Stufe~4 von 66 \% auf 12 \% ein, obwohl die Gesamtrate in diesem Schritt steigt. UC-02 erreicht in Stufe~3 keinen einzigen PASS.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{exec_category_by_uc_grid}
+    \caption[Ausführungskategorien je Use Case und Stufe]{Ausführungskategorien je Use Case, Stufen 1 bis 4 (Phase 1)}
+    \label{fig:exec_by_uc}
+\end{figure}
+
+Der Rückgang bei UC-03 lässt sich auf einen Fehler bei der Prüfung des Zoomverhaltens zurückführen. Ab Stufe~3 fragen die Tests den numerischen Zoomwert über \code|getMapZoomLevel| ab. In Stufe~3 entfallen 58,3 \% der Fehlschläge dieses Use Cases auf denselben Match-Fehler (\enquote{expected value must be a number or bigint}), in Stufe~4 sind es 53,5 \%. Die Ursache zeigt der generierte Code in Listing~\ref{lst:uc03_generated}: Die Tests weisen den Rückgabewert von \code|expect.poll(...)| einer Variablen zu, um ihn im nächsten Schritt als Vergleichswert zu verwenden. Da \code|expect.poll| als Assertion aber keinen Wert zurückgibt, erhält die Variable \code|undefined|, und der Vergleich scheitert. Der manuelle Referenztest in Listing~\ref{lst:uc03_reference} fragt den Zoomwert vor der Interaktion direkt über \code|getMapZoomLevel(page)| ab und setzt \code|expect.poll| nur zum Warten auf die Zustandsänderung ein, ohne dessen Rückgabewert weiterzuverwenden.
+
+\begin{lstlisting}[language=TypeScript, caption={Fehlerhaftes Muster in den generierten Tests (gekürzt, Stufe 4, run\_01)}, label=lst:uc03_generated]
+const initialZoom = await expect.poll(() => getMapZoomLevel(page)).toBeTruthy();
+await page.getByTestId('zoom-in-button').click();
+const zoomedInLevel = await expect.poll(() => getMapZoomLevel(page)).toBeGreaterThan(initialZoom);
+\end{lstlisting}
+
+\begin{lstlisting}[language=TypeScript, caption={Korrektes Muster im manuellen Referenztest (gekürzt)}, label=lst:uc03_reference]
+const initialZoom = await getMapZoomLevel(page);
+await page.getByTestId("zoom-in-button").click();
+await expect.poll(() => getMapZoomLevel(page)).toBeGreaterThan(initialZoom as number);
+\end{lstlisting}
+
+In den Stufen~1 und 2, in denen die Map-Model-Helfer nicht im Kontext stehen, prüfen die generierten Tests für UC-03 stattdessen nur Sichtbarkeiten im \ac{DOM} und laufen dadurch häufiger durch. Die hohe PASS-Rate in Stufe~1 bei diesem Use Case belegt also keine höhere Testqualität. Die Tests müssen daher zusätzlich bewertet werden, ob sie das geforderte Verhalten auch tatsächlich prüfen.
+
+Die übrigen Kategorien machen nur einen geringen Anteil aus. \texttt{COMPILE\_ERROR} und \texttt{GENERATION\_ERROR} machen zusammen je Stufe zwischen 0,8 \% und 2,6 \% aus. Abgeschnittene oder degenerierte Modellausgaben (\texttt{GENERATION\_ERROR}) treten fast nur in den Stufen 1 und 2 auf (9 und 12 Fälle) und gehen danach auf 1 (Stufe~3) und 4 (Stufe~4) zurück. Die vier Kompilierfehler in Stufe~4 gehen alle auf einen falschen relativen Importpfad der Helferdatei in UC-06 zurück.
 
 \subsection{Ergebnisse der Qualitätsbewertung (Phase 2)}
 
