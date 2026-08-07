@@ -50,10 +50,7 @@ assertion & 1 & Keine oder ausschließlich triviale Assertions \\
 \subsection{Stufe 5 (Self-Improvement-Loop)}
 \label{app:judge-prompt-stage5}
 
-Der Judge-Prompt für Stufe~5 (Self-Improvement-Loop) ist mit dem Prompt der
-Stufen~1--4 (Anhang~\ref{app:judge-prompt-base}) identisch; die
-Bewertungsskalen und der Output bleiben unverändert. Abweichend sind lediglich
-die folgenden Punkte:
+Der Judge-Prompt für Stufe~5 (Self-Improvement-Loop) ist mit dem Prompt der Stufen~1 bis 4 (Anhang~\ref{app:judge-prompt-base}) identisch; die Bewertungsskalen und der Output bleiben unverändert. Abweichend sind lediglich die folgenden Punkte:
 
 \begin{itemize}
 	\item In der Rolle wird der Ausführungskontext angepasst: Die Ausführung erfolgte während des Self-Improvement-Loops und wurde über \code|stage5_to_phase1.py| in die \code|exec_category|-Taxonomie überführt.
@@ -62,21 +59,9 @@ die folgenden Punkte:
 \end{itemize}
 
 \begin{lstlisting}[language=Markdown,caption={Neuer Abschnitt ``Besonderheit dieser Stufe''},label={lst:stage5-besonderheit},breaklines=true,columns=fullflexible]
-Die Spalte 'file' enthält den Pfad (relativ zu src/app/llm/) des final_spec —
-des Testcodes der LETZTEN Loop-Iteration. NUR diese Datei wird bewertet.
-Die UC-Ordner enthalten zusätzlich frühere Iterationen (iter-0 bis iter-n-1)
-und *.exec.spec.ts-Dateien: Das sind Harness-Artefakte — NIEMALS öffnen oder
-bewerten. Die Spalten 'passed' und 'iterations_used' sind Metadaten:
-iterations_used ist KEIN Qualitätskriterium — ein PASS nach 4 Iterationen
-wird identisch bewertet wie ein PASS nach 1.
+Die Spalte 'file' enthält den Pfad (relativ zu src/app/llm/) des final_spec — des Testcodes der LETZTEN Loop-Iteration. NUR diese Datei wird bewertet. Die UC-Ordner enthalten zusätzlich frühere Iterationen (iter-0 bis iter-n-1) und *.exec.spec.ts-Dateien: Das sind Harness-Artefakte — NIEMALS öffnen oder bewerten. Die Spalten 'passed' und 'iterations_used' sind Metadaten: iterations_used ist KEIN Qualitätskriterium — ein PASS nach 4 Iterationen wird identisch bewertet wie ein PASS nach 1.
 \end{lstlisting}
 
 \begin{lstlisting}[language=Markdown,caption={Zusatz beim assertion\_score},label={lst:stage5-assertion},breaklines=true,columns=fullflexible]
-BESONDERE AUFMERKSAMKEIT in dieser Stufe: Der Loop optimiert auf PASS.
-Auch wenn der Feedback-Prompt das Abschwächen von Assertions verbietet,
-ist strukturell möglich, dass ein Test über die Iterationen hinweg weniger
-prüft, nur um grün zu werden. Prüfe daher bei exec_category=PASS besonders
-genau gegen die Expected Results des Use Case, ob die Assertions diese
-tatsächlich verifizieren. Die Maßstäbe der Skala bleiben dabei unverändert —
-strengere Aufmerksamkeit bedeutet nicht strengere Bewertung.
+BESONDERE AUFMERKSAMKEIT in dieser Stufe: Der Loop optimiert auf PASS. Auch wenn der Feedback-Prompt das Abschwächen von Assertions verbietet, ist strukturell möglich, dass ein Test über die Iterationen hinweg weniger prüft, nur um grün zu werden. Prüfe daher bei exec_category=PASS besonders genau gegen die Expected Results des Use Case, ob die Assertions diese tatsächlich verifizieren. Die Maßstäbe der Skala bleiben dabei unverändert — strengere Aufmerksamkeit bedeutet nicht strengere Bewertung.
 \end{lstlisting}
