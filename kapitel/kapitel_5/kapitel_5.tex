@@ -11,6 +11,8 @@ Ausgeführt wurden die Tests mit Playwright 1.60.0 und dem darin enthaltenen Chr
 
 Die semantische Bewertung nach Kapitel~4.5.2 wurde zwischen dem 31. Juli und dem 3. August 2026 mit Claude Opus 5 über Claude Code 2.1.220 durchgeführt.
 
+Die Kennzahlen dieses Kapitels wurden skriptgestützt berechnet und beinhalten die Auswertungen der beiden Evaluationsphasen aus den Ergebnisdateien sowie die Auszählung wiederkehrender Codemuster durch reguläre Ausdrücke über alle generierten Testdateien. In dieser Arbeit werden nur die wichtigsten Befunde angesprochen.\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/tree/qwen/test-generation/src/app/llm/eval_extract}} Die vollständigen Auswertungsberichte liegen im Repository.\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/tree/qwen/test-generation/docs/eval}.}
+
 Zusätzlich wurde der komplette Generierungsablauf mit GPT-5.4 statt Qwen3.6 durchgeführt. Die Ergebnisse dazu stehen im Anhang.
 
 \subsection{Ergebnisse der Ausführung (Phase 1)}
@@ -71,6 +73,50 @@ In den Stufen~1 und 2, in denen die Map-Model-Helfer nicht im Kontext stehen, pr
 Die übrigen Kategorien machen nur einen geringen Anteil aus. \texttt{COMPILE\_ERROR} und \texttt{GENERATION\_ERROR} machen zusammen je Stufe zwischen 0,8 \% und 2,6 \% aus. Abgeschnittene oder degenerierte Modellausgaben (\texttt{GENERATION\_ERROR}) treten fast nur in den Stufen 1 und 2 auf (9 und 12 Fälle) und gehen danach auf 1 (Stufe~3) und 4 (Stufe~4) zurück. Die vier Kompilierfehler in Stufe~4 gehen alle auf einen falschen relativen Importpfad der Helferdatei in UC-06 zurück.
 
 \subsection{Ergebnisse der Qualitätsbewertung (Phase 2)}
+
+Grundlage sind je Stufe die 492 bis 499 Dateien, die nach Abzug der \texttt{GENERATION\_ERROR}-Fälle semantisch bewertet wurden. Die Dimension \emph{map\_interaction} ist nur für die kartenrelevanten Use Cases UC-04, UC-06, UC-07, UC-08 und UC-10 anwendbar.
+
+Tabelle~\ref{tab:phase2_dimensionen} zeigt Median und Mittelwert je Dimension und Stufe.
+
+\begin{table}[H]
+    \centering
+    \caption[Bewertungsdimensionen je Stufe]{Median und Mittelwert der vier Bewertungsdimensionen je Stufe (Phase 2, Skala 1--4)}
+    \label{tab:phase2_dimensionen}
+    \setlength{\tabcolsep}{10pt}
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{l !{\color{tabline}\vrule width 0.4pt} rr !{\color{tabline}\vrule width 0.4pt} rr !{\color{tabline}\vrule width 0.4pt} rr !{\color{tabline}\vrule width 0.4pt} rr}
+        \toprule
+        \rowcolor{tabhead}
+        & \multicolumn{2}{c !{\color{tabline}\vrule width 0.4pt}}{coverage} & \multicolumn{2}{c !{\color{tabline}\vrule width 0.4pt}}{selector} & \multicolumn{2}{c !{\color{tabline}\vrule width 0.4pt}}{map\_interaction} & \multicolumn{2}{c}{assertion} \\
+        \rowcolor{tabhead}
+        Stufe & Md & Ø & Md & Ø & Md & Ø & Md & Ø \\
+        \midrule
+        1 & 4 & 3{,}68 & 2 & 2{,}48 & 1 & 1{,}40 & 4 & 3{,}29 \\
+        \rowcolor{tabrow}
+        2 & 4 & 3{,}73 & 3 & 3{,}00 & 2 & 1{,}76 & 4 & 3{,}26 \\
+        3 & 4 & 3{,}72 & 4 & 3{,}13 & 3 & 2{,}85 & 4 & 3{,}56 \\
+        \rowcolor{tabrow}
+        4 & 4 & 3{,}91 & 4 & 3{,}41 & 3 & 3{,}01 & 4 & 3{,}59 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Die Dimensionen \emph{coverage} und \emph{assertion} haben über alle vier Stufen den Median 4. Der Mittelwert steigt bei \emph{coverage} nur geringfügig von 3,68 auf 3,91 und bei \emph{assertion} von 3,29 auf 3,59. Ob ein Test die geforderten Schritte abdeckt und inhaltlich sinnvoll prüft, hängt demnach stärker vom Verständnis des Use Cases ab als vom bereitgestellten \ac{UI}-Kontext.
+
+Ein deutlicher Stufenunterschied zeigt sich dagegen in \emph{selector} und \emph{map\_interaction}. Der Median von \emph{selector} steigt bereits zwischen Stufe~1 und 2 von 2 auf 3 und erreicht ab Stufe~3 den Wert 4. Der größte Sprung liegt hier beim Übergang zum Accessibility-Snapshot in Stufe~2 (Ø +0,52). Der Median von \emph{map\_interaction} bleibt in Stufe~2 noch bei 2 und steigt erst ab Stufe~3 mit der Einführung der Map-Model-Helfer auf 3 (Ø +1,09). Die Nutzung einer Helferfunktion springt im selben Schritt von einer auf 416 Dateien. Beide Dimensionen reagieren also auf unterschiedliche Bestandteile des Kontexts: \emph{selector} auf den erstmals bereitgestellten \ac{UI}-Kontext durch den Accessibility-Snapshot und \emph{map\_interaction} auf die Map-Model-Helfer.
+
+Zusätzlich wird für jede Datei erfasst, ob ein in Phase~1 als \texttt{PASS} eingestufter Test dennoch keine sinnvolle Prüfung enthält (\texttt{vacuous\_pass}, Kapitel~4.5.2). In Stufe~1 betrifft dies 33 der 100 PASS-Fälle (33 \%), davon 31 allein bei UC-03. In den übrigen Stufen liegt der Anteil nur noch zwischen 2,7 und 7,8 \% und tritt vor allem bei UC-08 auf. Der hohe Wert bei UC-03 in Stufe~1 bestätigt den beschriebenen Befund aus Abschnitt~6.2. Ohne Kenntnis der Map-Model-Helfer prüfen die generierten Tests dort nur Sichtbarkeiten im \ac{DOM} und haben dadurch eine höhere PASS-Rate, ohne das im Use Case geforderte Zoomverhalten tatsächlich zu verifizieren. Eigentlich wäre das auch in Ordnung, da sich der Maßstab auch über die Maßstabsanzeige im Footer prüfen lässt. Allerdings tut das in dieser Stufe jedoch kein einziger Test.
+
+Auch innerhalb einer Stufe streuen die Dimensionswerte über die Use Cases (Abbildung~\ref{fig:score_heatmap}). Der Widerspruch aus hohem \emph{selector}- und niedrigem \emph{assertion}-Wert, der bei UC-03 in Stufe~1 auftritt, findet sich in gleicher Form auch in Stufe~4 wieder: \emph{coverage} und \emph{selector} erreichen dort 4,0, \emph{assertion} bleibt bei 2,3. Bei UC-07 schwankt \emph{map\_interaction} über alle Stufen zwischen 1,4 und 2,3; ein Anstieg durch die Map-Model-Helfer ist im Vergleich zu den anderen Use Cases nicht zu erkennen. Vermutlich liegt das daran, dass die Helfer für diesen Fall keine Funktion bereitstellen, da es um einen gezielten Klick auf eine Koordinate in der Karte geht.
+
+Ein hoher \emph{coverage}- oder \emph{selector}-Wert belegt demnach noch keine inhaltlich verlässliche Prüfung. Erst das Zusammenspiel aller vier Dimensionen zeigt, ob ein Test das im Use Case geforderte Verhalten tatsächlich verifiziert.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{score_heatmap_grid}
+    \caption[Mittlerer Judge-Score je Use Case und Dimension]{Mittlerer Judge-Score je Use Case und Dimension, Stufen 1 bis 4 (Phase 2)}
+    \label{fig:score_heatmap}
+\end{figure}
 
 \subsubsection{Kontrolle der maschinellen Bewertung}
 
