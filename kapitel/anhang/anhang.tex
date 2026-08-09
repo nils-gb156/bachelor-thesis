@@ -65,3 +65,82 @@ Die Spalte 'file' enthält den Pfad (relativ zu src/app/llm/) des final_spec —
 \begin{lstlisting}[language=Markdown,caption={Zusatz beim assertion\_score},label={lst:stage5-assertion},breaklines=true,columns=fullflexible]
 BESONDERE AUFMERKSAMKEIT in dieser Stufe: Der Loop optimiert auf PASS. Auch wenn der Feedback-Prompt das Abschwächen von Assertions verbietet, ist strukturell möglich, dass ein Test über die Iterationen hinweg weniger prüft, nur um grün zu werden. Prüfe daher bei exec_category=PASS besonders genau gegen die Expected Results des Use Case, ob die Assertions diese tatsächlich verifizieren. Die Maßstäbe der Skala bleiben dabei unverändert — strengere Aufmerksamkeit bedeutet nicht strengere Bewertung.
 \end{lstlisting}
+
+\section{Stichprobe der manuellen Bewertungskontrolle}
+\label{app:review}
+
+Tabelle~\ref{tab:review_full} führt die Einzelurteile auf. Angegeben sind der vom Bewertungsmodell vergebene Punktwert und das Ergebnis der Kontrolle: $\bullet$ bestätigt, $\circ$ grenzwertig, aber vertretbar, $\times$ abweichend. Die vollständige Fassung mit den Begründungstexten des Modells und den Prüfnotizen liegt im Repository.\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/tests/_review_sample.csv}}
+
+\begin{longtable}{@{}rrrl rrrr@{}}
+\caption{Ergebnis der manuellen Kontrolle je Testdatei und Dimension}
+\label{tab:review_full} \\
+\toprule
+Nr. & Stufe & Lauf & UC & coverage & selector & map\_int. & assertion \\
+\midrule
+\endfirsthead
+\multicolumn{8}{@{}l}{\footnotesize\itshape Fortsetzung von
+  Tabelle~\ref{tab:review_full}} \\
+\toprule
+Nr. & Stufe & Lauf & UC & coverage & selector & map\_int. & assertion \\
+\midrule
+\endhead
+\midrule
+\multicolumn{8}{r@{}}{\footnotesize\itshape Fortsetzung nächste Seite} \\
+\endfoot
+\bottomrule
+\endlastfoot
+1 & 1 & 06 & UC-1 & 4\,$\bullet$ & 4\,$\bullet$ & n/a & 4\,$\bullet$ \\
+2 & 1 & 25 & UC-2 & 3\,$\bullet$ & 2\,$\bullet$ & n/a & 3\,$\circ$ \\
+3 & 1 & 02 & UC-3 & 3\,$\circ$ & 4\,$\bullet$ & n/a & 1\,$\bullet$ \\
+4 & 1 & 07 & UC-4 & 3\,$\bullet$ & 4\,$\bullet$ & 1\,$\bullet$ & 3\,$\circ$ \\
+5 & 1 & 32 & UC-5 & 4\,$\bullet$ & 4\,$\bullet$ & n/a & 4\,$\bullet$ \\
+6 & 1 & 32 & UC-6 & 3\,$\bullet$ & 2\,$\bullet$ & 1\,$\bullet$ & 2\,$\bullet$ \\
+7 & 1 & 34 & UC-7 & 4\,$\bullet$ & 3\,$\circ$ & 2\,$\bullet$ & 4\,$\circ$ \\
+8 & 1 & 08 & UC-8 & 3\,$\bullet$ & 3\,$\bullet$ & 3\,$\circ$ & 2\,$\bullet$ \\
+9 & 1 & 14 & UC-9 & 4\,$\bullet$ & 2\,$\bullet$ & n/a & 4\,$\bullet$ \\
+10 & 1 & 23 & UC-10 & 3\,$\bullet$ & 2\,$\times$ & 1\,$\bullet$ & 2\,$\bullet$ \\
+\midrule
+11 & 2 & 23 & UC-1 & 4\,$\bullet$ & 4\,$\bullet$ & n/a & 4\,$\bullet$ \\
+12 & 2 & 13 & UC-2 & 4\,$\bullet$ & 3\,$\circ$ & n/a & 3\,$\times$ \\
+13 & 2 & 25 & UC-3 & 4\,$\bullet$ & 3\,$\bullet$ & n/a & 4\,$\circ$ \\
+14 & 2 & 49 & UC-4 & 4\,$\circ$ & 3\,$\bullet$ & 1\,$\bullet$ & 4\,$\times$ \\
+15 & 2 & 07 & UC-5 & 4\,$\bullet$ & 4\,$\bullet$ & n/a & 4\,$\bullet$ \\
+16 & 2 & 23 & UC-6 & 3\,$\bullet$ & 3\,$\bullet$ & 2\,$\bullet$ & 1\,$\circ$ \\
+17 & 2 & 49 & UC-7 & 4\,$\bullet$ & 4\,$\bullet$ & 2\,$\bullet$ & 4\,$\bullet$ \\
+18 & 2 & 10 & UC-8 & 4\,$\circ$ & 3\,$\bullet$ & 3\,$\bullet$ & 2\,$\bullet$ \\
+19 & 2 & 21 & UC-9 & 4\,$\bullet$ & 2\,$\bullet$ & n/a & 4\,$\bullet$ \\
+20 & 2 & 34 & UC-10 & 3\,$\bullet$ & 2\,$\bullet$ & 1\,$\bullet$ & 4\,$\bullet$ \\
+\midrule
+21 & 3 & 03 & UC-1 & 4\,$\bullet$ & 4\,$\bullet$ & n/a & 4\,$\bullet$ \\
+22 & 3 & 12 & UC-2 & 3\,$\bullet$ & 1\,$\circ$ & n/a & 3\,$\times$ \\
+23 & 3 & 33 & UC-3 & 4\,$\bullet$ & 4\,$\bullet$ & n/a & 3\,$\bullet$ \\
+24 & 3 & 18 & UC-4 & 4\,$\bullet$ & 4\,$\bullet$ & 4\,$\bullet$ & 4\,$\bullet$ \\
+25 & 3 & 17 & UC-5 & 4\,$\bullet$ & 4\,$\bullet$ & n/a & 4\,$\bullet$ \\
+26 & 3 & 27 & UC-6 & 4\,$\bullet$ & 2\,$\bullet$ & 3\,$\circ$ & 3\,$\bullet$ \\
+27 & 3 & 14 & UC-7 & 4\,$\circ$ & 2\,$\bullet$ & 2\,$\bullet$ & 3\,$\bullet$ \\
+28 & 3 & 39 & UC-8 & 3\,$\times$ & 3\,$\bullet$ & 2\,$\bullet$ & 3\,$\bullet$ \\
+29 & 3 & 05 & UC-9 & 3\,$\circ$ & 2\,$\bullet$ & n/a & 4\,$\bullet$ \\
+30 & 3 & 14 & UC-10 & 4\,$\bullet$ & 4\,$\bullet$ & 3\,$\bullet$ & 4\,$\bullet$ \\
+\midrule
+31 & 4 & 14 & UC-1 & 4\,$\bullet$ & 4\,$\bullet$ & n/a & 4\,$\bullet$ \\
+32 & 4 & 21 & UC-2 & 3\,$\bullet$ & 2\,$\bullet$ & n/a & 3\,$\circ$ \\
+33 & 4 & 16 & UC-3 & 4\,$\bullet$ & 4\,$\bullet$ & n/a & 2\,$\bullet$ \\
+34 & 4 & 32 & UC-4 & 4\,$\bullet$ & 3\,$\times$ & 4\,$\bullet$ & 4\,$\bullet$ \\
+35 & 4 & 34 & UC-5 & 4\,$\bullet$ & 4\,$\bullet$ & n/a & 4\,$\bullet$ \\
+36 & 4 & 23 & UC-6 & 4\,$\bullet$ & 4\,$\bullet$ & 3\,$\bullet$ & 4\,$\bullet$ \\
+37 & 4 & 24 & UC-7 & 4\,$\bullet$ & 4\,$\bullet$ & 2\,$\bullet$ & 4\,$\bullet$ \\
+38 & 4 & 16 & UC-8 & 4\,$\bullet$ & 3\,$\bullet$ & 3\,$\bullet$ & 2\,$\bullet$ \\
+39 & 4 & 34 & UC-9 & 3\,$\bullet$ & 2\,$\bullet$ & n/a & 4\,$\circ$ \\
+40 & 4 & 14 & UC-10 & 4\,$\bullet$ & 4\,$\bullet$ & 3\,$\times$ & 4\,$\circ$ \\
+\midrule
+41 & 5 & 05 & UC-1 & 4\,$\bullet$ & 4\,$\bullet$ & n/a & 4\,$\bullet$ \\
+42 & 5 & 43 & UC-2 & 4\,$\bullet$ & 4\,$\bullet$ & n/a & 4\,$\bullet$ \\
+43 & 5 & 03 & UC-3 & 4\,$\bullet$ & 4\,$\bullet$ & n/a & 3\,$\times$ \\
+44 & 5 & 06 & UC-4 & 4\,$\bullet$ & 4\,$\bullet$ & 4\,$\bullet$ & 4\,$\bullet$ \\
+45 & 5 & 01 & UC-5 & 4\,$\bullet$ & 4\,$\bullet$ & n/a & 4\,$\bullet$ \\
+46 & 5 & 15 & UC-6 & 4\,$\bullet$ & 4\,$\bullet$ & 3\,$\bullet$ & 3\,$\bullet$ \\
+47 & 5 & 50 & UC-7 & 4\,$\bullet$ & 4\,$\bullet$ & 2\,$\bullet$ & 4\,$\bullet$ \\
+48 & 5 & 05 & UC-8 & 4\,$\bullet$ & 4\,$\bullet$ & 3\,$\bullet$ & 4\,$\bullet$ \\
+49 & 5 & 29 & UC-9 & 4\,$\bullet$ & 4\,$\bullet$ & n/a & 4\,$\bullet$ \\
+50 & 5 & 43 & UC-10 & 4\,$\bullet$ & 4\,$\bullet$ & 3\,$\bullet$ & 4\,$\bullet$ \\
+\end{longtable}

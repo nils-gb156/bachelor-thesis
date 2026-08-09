@@ -11,7 +11,7 @@ Ausgeführt wurden die Tests mit Playwright 1.60.0 und dem darin enthaltenen Chr
 
 Die semantische Bewertung nach Kapitel~4.5.2 wurde zwischen dem 31. Juli und dem 3. August 2026 mit Claude Opus 5 über Claude Code 2.1.220 durchgeführt.
 
-Die Kennzahlen dieses Kapitels wurden skriptgestützt berechnet und beinhalten die Auswertungen der beiden Evaluationsphasen aus den Ergebnisdateien sowie die Auszählung wiederkehrender Codemuster durch reguläre Ausdrücke über alle generierten Testdateien. In dieser Arbeit werden nur die wichtigsten Befunde angesprochen.\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/tree/qwen/test-generation/src/app/llm/eval_extract}} Die vollständigen Auswertungsberichte liegen im Repository.\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/tree/qwen/test-generation/docs/eval}.}
+Die Kennzahlen dieses Kapitels wurden skriptgestützt berechnet und beinhalten die Auswertungen der beiden Evaluationsphasen aus den Ergebnisdateien sowie die Auszählung wiederkehrender Codemuster durch reguläre Ausdrücke über alle generierten Testdateien.\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/tree/qwen/test-generation/src/app/llm/eval_extract}} Die Skripte wurden ebenfalls mit einem Prompt\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/phase2_judge_evaluation_prompt.md}} in Claude Code direkt im Repository mit Opus 5 erstellt. In dieser Arbeit werden nur die wichtigsten Befunde angesprochen. Die vollständigen Auswertungsberichte liegen im Repository.\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/tree/qwen/test-generation/docs/eval}}
 
 Zusätzlich wurde der komplette Generierungsablauf mit GPT-5.4 statt Qwen3.6 durchgeführt. Die Ergebnisse dazu stehen im Anhang.
 
@@ -119,6 +119,31 @@ Ein hoher \emph{coverage}- oder \emph{selector}-Wert belegt demnach noch keine i
 \end{figure}
 
 \subsubsection{Kontrolle der maschinellen Bewertung}
+
+Die Kontrolle der 50 Dateien der Stichprobe mit 175 bewertbaren Einzelurteilen ergab, dass 149 (85,1 \%) als bestätigt, 18 als grenzwertig, aber vertretbar, und acht als abweichend eingestuft wurden. Am niedrigsten liegt die Bestätigungsquote in der Dimension \emph{assertion} (38 von 50), am höchsten in \emph{coverage} (44 von 50) und \emph{selector} (45 von 50). Tabelle~\ref{tab:review_by_stage} fasst das Ergebnis je Stufe zusammen und die vollständige Aufstellung der Einzelurteile enthält Anhang~\ref{app:review}.
+
+\begin{table}[H]
+    \centering
+    \caption{Ergebnis der Kontrolle je Stufe (Dimensionen zusammengefasst)}
+    \label{tab:review_by_stage}
+    \begin{tabular}{lrrrr}
+        \toprule
+        Stufe & bestätigt & grenzwertig & abweichend & $n$ \\
+        \midrule
+        1 & 28 & 6 & 1 & 35 \\
+        2 & 28 & 5 & 2 & 35 \\
+        3 & 29 & 4 & 2 & 35 \\
+        4 & 30 & 3 & 2 & 35 \\
+        5 & 34 & 0 & 1 & 35 \\
+        \midrule
+        gesamt & 149 & 18 & 8 & 175 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Auffällig ist, dass die Begründungen auf einen nummerierten Regelkatalog verweisen, der im Prompt nicht vorgegeben wurde. In der Stichprobe betrifft das 18 der 50 Dateien, verteilt auf alle Stufen außer Stufe~3. Bemerkenswert ist dabei, dass dieselbe Nummer stufenübergreifend für den gleichen Sachverhalt steht. So bezeichnet Regel~16 in den Stufen 1, 2, 4 und 5 jeweils eine falsche Koordinatenlogik und taucht nur bei UC-07 auf. Das Modell muss diese Regeln während der Bewertung selbst gebildet und über die einzelnen Läufe hinweg angewendet haben, obwohl die Bewertung jeder Stufe in einem eigenen Kontextfenster stattfand.
+
+Zudem werden gleiche Befunde nicht durchgängig gleich bewertet. Zwei Dateien der Stufe~2 prüfen die im Use Case geforderten 24 Forecast-Einträge über einen Zähler: einmal über beliebige \code|div|-Elemente, einmal über eine Rolle, die die Einträge nicht enthält. Keine der beiden Zählungen erfasst damit die im Use Case geforderte Bedingung. In \emph{assertion} erhält die erste Datei dennoch den Wert 1 und die zweite den Wert 4, mit der Begründung, dass eine Zählprüfung auch mit erfundenem Lokator anzuerkennen sei, während dieselbe Zählprüfung im ersten Fall als Argument für den niedrigsten Wert dient. Im Prompt steht jedoch keine Vorgabe, die erfundene Lokatoren zulässt.
 
 \subsection{Ergebnisse der Bonus-Stufe 5}
 
