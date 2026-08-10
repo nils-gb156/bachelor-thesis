@@ -183,3 +183,40 @@ Von den bestandenen Tests sind 14 (2,8 \%) als \texttt{vacuous\_pass} eingestuft
 Der Ressourcenaufwand unterscheidet sich deutlich gegenüber den anderen Stufen. Über alle Iterationen entstanden 2.154 Generierungsaufrufe gegenüber 500 je Stufe. Zudem ist die Gesamtdauer der Generierung mit 15 h 1 min im Vergleich zu Stufe~2 mit 3 h 46 min deutlich länger und aufwendiger. Angaben zum Token-Verbrauch liegen für alle Stufen leider nicht vor.
 
 \subsection{GIS-spezifische Besonderheiten}
+
+Während Abschnitt~6.3 die Karteninteraktion mit \emph{map\_interaction} semantisch bewertet, wird nun anhand deterministischer Codemuster, wie die generierten Tests mit dem Kartenzustand und Karteninteraktion tatsächlich umgehen. Grundlage sind alle generierten Testdateien der Stufen 1 bis 4.
+
+Ohne \ac{UI}-Kontext erfindet das Modell Selektoren. Sobald ein Kontext vorliegt, geschieht das noch kaum. In Stufe~1 verwenden 197 der 500 Dateien (39,4 \%) mindestens einen \code|getByTestId|-Aufruf mit einem Wert, der in der Anwendung nicht existiert. Bereits in Stufe~2 sinkt dieser Anteil auf 2 Dateien (0,4 \%). In den Stufen 3 und 4 bleibt er mit 1,0 \% bzw. 1,8 \% sehr niedrig. 
+
+Die verbleibenden Fälle der Stufen 2 bis 4 betreffen überwiegend die Druckfunktion in UC-09. Sie ist als fertige \ac{OPT}-Komponente eingebunden, weshalb ihre Elemente keine \code|data-testid| haben. Vergeben sind nur der Toolbar-Toggle für die Umstellung der Sichtbarkeit und das umgebende Panel. Für Titelfeld, Formatauswahl und Export-Button bleibt dem Modell damit nur der Rollen-Selektor oder die Erfindung.
+
+Die Karte wird in ein Canvas gezeichnet, ihr Zustand steht also nicht im \ac{DOM}. Welchen Zugang die Tests wählen, hängt davon ab, was der Kontext anbietet. In Stufe~1 bietet er nichts, weshalb 30,8 \% der Dateien über \ac{CSS} auf das Canvas zugreifen, meistens mit \code|locator('canvas')|. Dieser Selektor ist allerdings mehrdeutig, weil OpenLayers mehrere Canvas-Elemente rendert, was in 70 Dateien unmittelbar zum Fehlschlag führt (\cite{cjhewett_ability_2020}). Stufe~2 liefert mit \code|map-container| erstmals einen Namen für die Karte, sodass der Canvas-Zugriff auf 1,4 \% einbricht, während \code|getByTestId('map-container')| von 13,0 auf 53,4 \% steigt. Die Prüfung bleibt aber \ac{DOM}-basiert, also dass das Kartenelement vorhanden ist, aber nicht, was die Karte zeigt. Erst Stufe~3 öffnet mit den Map-Model-Helfern den Kartenzustand selbst. 83,4 \% der Dateien nutzen sie, in den Stufen~1 und 2 wird keine selbst erstellte Helferfunktion genutzt.\footnote{Die regelbasierte Auszählung weist für die Stufen 1 und 2 je eine Datei (0,2 \%) aus. In beiden wird kein Helfer verwendet: in Stufe~1 steht der Funktionsname nur in einem Kommentar, in Stufe~2 ruft der Test ein selbst erfundenes Global \code|__getMapZoomLevel| auf. Die Suchmuster prüfen den bloßen Funktionsnamen und erfassen daher auch 
+solche Stellen.}
+
+\begin{table}[H]
+    \centering
+    \caption[Prüfung des Kartenzustands je Stufe]{Anteil der Testdateien mit Canvas-Selektor, map-container-Selektor, Canvas-Assertion und Map-Model-Helfer-Nutzung}
+    \label{tab:kartenzustand}
+    \begin{tabular}{lrrrr}
+        \toprule
+        Muster & Stufe 1 & Stufe 2 & Stufe 3 & Stufe 4 \\
+        \midrule
+        \code|locator('canvas'/.ol-viewport)|      & 30{,}8\,\% & 1{,}4\,\%  & 0{,}4\,\%  & 0{,}4\,\% \\
+        \code|getByTestId('map-container')|        & 13{,}0\,\% & 53{,}4\,\% & 50{,}1\,\% & 31{,}8\,\% \\
+        Assertion auf map-container/Canvas         & 35{,}2\,\% & 32{,}2\,\% & 29{,}7\,\% & 7{,}0\,\% \\
+        Nutzung eines Map-Model-Helfers             & 0{,}0\,\% & 0{,}0\,\% & 83{,}4\,\% & 74{,}0\,\% \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+In UC-04 wird erwartet, dass der Layer auf der Karte gerendert wird. Ohne Map-Model weichen die Tests auf Elemente im \ac{DOM} aus. In Stufe~1 prüfen alle 50 UC-04-Dateien den Zustand der Checkbox und sonst nichts. In Stufe~2 kommt in 49 Dateien der Legendeneintrag als zusätzliche Prüfung hinzu. Ab Stufe~3 nutzen alle 50 UC-04-Dateien \code|isLayerRendered| und der Legendeneintrag verschwindet wieder weitestgehend, die Checkbox-Prüfung bleibt aber erhalten.
+
+Der Klick in die Karte bleibt in allen Stufen schwach. UC-06 und UC-07 verlangen beide eine Klick-Interaktion mit der Karte, einmal beliebig und einmal mit vorgegebener Koordinate. Playwright klickt jedoch Pixel relativ zur Elementecke und für die Umrechnung stellt der Kontext keine Funktion bereit. Diese Lücke ist demnach auch in den PASS-Raten der Stufen wiederzuerkennen. In vielen Fällen rechnet das Modell die Koordinate in UC-07 nicht um, sondern übergibt die Kartenkoordinate einfach als Pixelposition. In Stufe~2 betrifft das 41 der 50 UC-07-Tests. Die Tests scheitern dann, da die Klickposition weit außerhalb des Elements liegt. In den bestandenen UC-07-Tests der Stufen~3 und 4 wird die Koordinate über eine Transformation umgerechnet.
+
+UC-06 scheitert aus einem anderen Grund. In Stufe~3 rufen alle 50 UC-06-Dateien \code|getHighlightedCoordinate| auf und prüfen den Rückgabewert auf Existenz. Diese Prüfung schlägt in 32 der 50 Dateien fehl, weil der Wert \code|undefined| ist, was darauf schließen lässt, dass der Klick die Karte nie erreicht hat. Der beliebige Klick ist hier irreführend, da die Bedienpanels jeweils als \code|MapAnchor| auf dem \code|MapContainer| verankert sind. Links oben ist der Layer Switcher, rechts oben das Info Panel usw. 24 der 50 Dateien in Stufe~3 klicken auf die Position (100, 100) und treffen damit das Layer-Switcher-Panel statt die Kartenfläche.
+
+Ähnlich ist das bei UC-08, wo eine Linienmessung auf der Karte verlangt wird. Die Bestehensquote bleibt mit 0, 0, 8 und 12 \% über die Stufen 1 bis 4 sehr niedrig. Die Ursache liegt auch hier schon in der Interaktion und nicht erst in der Prüfung. Die Tests öffnen das richtige Panel, es entsteht aber in vielen Tests keine Messung, da das Messpanel bei Aktivierung an einer festen Position (420, 10) über der Karte gerendert wird und somit zum Hindernis für die Zeichnung wird.
+
+Stufe~5 zeigt, dass der Loop diese Lücke teilweise selbst schließt. Die Karten-Use-Cases starten in der initialen Iteration nahe bei null. UC-06 besteht 1 von 50 Läufen, UC-07 und UC-08 keinen einzigen. In Abbildung\ref{fig:stufe5_loop_ergebnis} ist zu erkennen, dass wenn diese Use Cases erfolgreich sind erst in verschiedenen späteren Iterationen. UC-07 benötigt im Schnitt 7,8 und UC-08 8,5 Iterationen, während die rein \ac{DOM}-basierten UC-01, UC-02 und UC-05 mit 1,0 bis 1,3 Iterationen auskommen.
+
+UC-08 hat nach UC-03 die schlechteste PASS-Rate mit 28 \%. Er verlangt mehrere Klicks und einen Doppelklick zum Abschluss. Der Grund liegt in der Form der Rückmeldung. Bleibt ein Stützpunkt an einem überlagernden Panel hängen, entsteht kein Fehler an der Klickstelle, sondern der Test scheitert erst am erwarteten Textmuster für das Messergebnis der Linie. Das erklärt auch die 30 von 50 \code|ASSERTION_FAIL|-Fälle. Beobachtbar ist, dass das Modell daraufhin die Prüfung umschreibt, die Klickfolge selbst aber unverändert lässt und die eigentliche Ursache damit nicht behebt. Von den 14 bestandenen Läufen sind jedoch auch 7 als \code|vacuous_pass| identifiziert worden.
