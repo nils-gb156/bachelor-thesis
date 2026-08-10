@@ -147,4 +147,39 @@ Zudem werden gleiche Befunde nicht durchgängig gleich bewertet. Zwei Dateien de
 
 \subsection{Ergebnisse der Bonus-Stufe 5}
 
+Von den 500 Läufen erreichen 366 (73,2 \%) ein bestandenes Ausführungsergebnis und damit mit Abstand den höchsten Wert aller Stufen (+34,6 \% zu Stufe~4). Die Kategorie \texttt{INFRA\_FAIL} fällt auf 15 Fälle, \texttt{COMPILE\_ERROR} auf null, \texttt{GENERATION\_ERROR} auf 1, während \texttt{ASSERTION\_FAIL} mit 118 die restlichen Fehlschläge nahezu vollständig ausmacht. Die Use Cases UC-01, UC-02, UC-04 und UC-05 bestehen sogar in allen 50 Läufen, kein Use Case bleibt bei null. Am unteren Ende liegen UC-03 mit 18 \% und UC-08 mit 28 \%. Abbildung~\ref{fig:exec_category_by_uc_stage5} zeigt die Verteilungen der Ausführungskategorien.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{exec_category_by_uc_stage5}
+    \caption[Ausführungskategorien je Use Case der Bonus-Stufe 5]{Ausführungskategorien je Use Case der Bonus-Stufe 5 (Phase 1)}
+    \label{fig:exec_category_by_uc_stage5}
+\end{figure}
+
+Der Zugewinn der PASS-Rate verteilt sich ungleich über die Use Cases und Iterationen (Abbildung~\ref{fig:stufe5_loop_ergebnis}). Bereits in Iteration~0 ohne Korrektur bestehen 146 Läufe (29,2 \%), nach dem ersten Durchlauf (Iteration~1) sind es 274 (54,8 \%). Danach flacht die Kurve ab. Die Iterationen~5 bis 9 tragen zusammen nur noch ein Plus von 4,6 Prozentpunkten bei. 136 Läufe erreichen die letzte Iteration, von denen nur zwei bestehen. Bestandene Läufe benötigen im Mittel 2,22 Iterationen.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{stufe5_loop_grid}
+    \caption[Konvergenz des Self-Improvement-Loops]{Kumulierte PASS-Rate nach Iteration (links) und Iteration des Bestehens je Use Case (rechts), Bonus-Stufe~5}
+    \label{fig:stufe5_loop_ergebnis}
+\end{figure}
+
+Zwischen den Iterationen bleibt die Fehlerklasse überwiegend erhalten. Von den Übergängen der insgesamt 1.654 erzeugten Testdateien mit mindestens zwei Iterationen führen 1.197 (72,4 \%) in dieselbe Klasse zurück. Aus \texttt{ASSERTION\_FAIL} führen 83,3 \% der Übergänge wieder zu \texttt{ASSERTION\_FAIL}, nur 9,2 \% zu \texttt{PASS} und 7,4 \% zu \texttt{INFRA\_FAIL} oder \texttt{COMPILE\_ERROR}. Aus \texttt{INFRA\_FAIL} bestehen die 484 Übergänge zum größten Teil aus einem Wechsel zu \texttt{ASSERTION\_FAIL} (30,8 \%) oder direkt zu einem \texttt{PASS} (22,9 \%). Die restlichen 46,3 \% bleiben in derselben Klasse.
+
+Die schlechte Performance von UC-03 ist auf denselben Fehler zurückzuführen, der schon in Abschnitt~6.2 beschrieben wurde. 40 der 41 Abbrüche gehen auch hier auf die Weiterverwendung von \code|expect.poll| zurück. Bei UC-07 und UC-08 dominieren kartenbezogene Fehler. Abgefangene Pointer-Events treten in 122 fehlgeschlagenen Iterationen auf, davon 74 bei UC-07 und 24 bei UC-08.
+
+In der Qualitätsbewertung erreicht Stufe~5 mit 3,96 in \emph{coverage}, 3,77 in \emph{selector}, 3,62 in \emph{assertion} und 3,06 in \emph{map\_interaction} die besten Mittelwerte aller Stufen. Auffällig dabei ist, dass sich die \emph{map\_interaction}-Werte der einzelnen Use Cases im Vergleich zu den Stufen~3 und 4 kaum verbessert haben. Abbildung~\ref{fig:stufe5_score_heatmap} zeigt die Bewertungen je Dimension und Use Case.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{stufe5_score_heatmap}
+    \caption[Mittlerer Judge-Score je Use Case und Dimension der Bonus-Stufe 5]{Mittlerer Judge-Score je Use Case und Dimension der Bonus-Stufe~5 (Phase~2)}
+    \label{fig:stufe5_score_heatmap}
+\end{figure}
+
+Von den bestandenen Tests sind 14 (2,8 \%) als \texttt{vacuous\_pass} eingestuft. Sie treten ausschließlich bei UC-07 (8) und UC-08 (6) auf und decken sich damit mit den Use Cases mit den angesprochenen kartenbezogenen Fehlern.
+
+Der Ressourcenaufwand unterscheidet sich deutlich gegenüber den anderen Stufen. Über alle Iterationen entstanden 2.154 Generierungsaufrufe gegenüber 500 je Stufe. Zudem ist die Gesamtdauer der Generierung mit 15 h 1 min im Vergleich zu Stufe~2 mit 3 h 46 min deutlich länger und aufwendiger. Angaben zum Token-Verbrauch liegen für alle Stufen leider nicht vor.
+
 \subsection{GIS-spezifische Besonderheiten}
