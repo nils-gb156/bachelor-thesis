@@ -432,15 +432,22 @@
 % Apendix / Anhang
 %-----------------------------------
 \newpage
-\section*{\AppendixName} %Überschrift "Anhang", ohne Nummerierung
-\addcontentsline{toc}{section}{\AppendixName} %Den Anhang ohne Nummer zum Inhaltsverzeichnis hinzufügen
+% Keine freistehende "Anhang"-Überschrift mehr: Der Anhang beginnt direkt mit
+% "Anhang 1". Die einzelnen Anhänge stehen als "Anhang 1/2/3" im Verzeichnis.
 
 \begin{appendices}
 % Nachfolgende Änderungen erfolgten aufgrund von Issue 163
 \makeatletter
 \renewcommand\@seccntformat[1]{\csname the#1\endcsname:\quad}
 \makeatother
-\addtocontents{toc}{\protect\setcounter{tocdepth}{0}} %
+% tocdepth=1: listet die einzelnen Anhänge (\section = "Anhang 1/2/3") im
+% Inhaltsverzeichnis. Auf 2 erhöhen, um auch Unterpunkte ("Anhang 1.1") zu zeigen.
+\addtocontents{toc}{\protect\setcounter{tocdepth}{1}} %
+% Nummern-Box im Inhaltsverzeichnis dynamisch breit machen, damit die breiten
+% Anhang-Nummern ("Anhang 1") nicht mit dem Titel überlappen. Wird per
+% addtocontents nur ab hier (also nur für die Anhang-Einträge) in die .toc
+% geschrieben, damit die normalen Kapitel im Verzeichnis unverändert bleiben.
+\addtocontents{toc}{\protect\DeclareTOCStyleEntry[dynnumwidth]{tocline}{section}}
 	\renewcommand{\thesection}{\AppendixName\ \arabic{section}}
 	\renewcommand\thesubsection{\AppendixName\ \arabic{section}.\arabic{subsection}}
 	\input{kapitel/anhang/anhang}
