@@ -98,7 +98,7 @@ Der Skill legt fest, wie der erzeugte Testcode auszusehen hat. Er schreibt die V
 
 \subsection{Evaluationsverfahren}
 
-Die Evaluation der generierten Tests erfolgt in zwei Phasen. Zuerst werden alle Tests gegen die laufende Demo-Anwendung ausgeführt und anschließend mit einem LLM-as-a-Judge-Verfahren semantisch bewertet. Beide Phasen sollen sich ergänzen. Ein erfolgreich ausgeführter Test prüft nicht zwangsläufig das im Use Case vorgegebene Verhalten, während umgekehrt ein fachlich korrekter Test bereits an einem einzelnen fehlerhaften Selektor scheitern kann. Eine manuelle semantische Bewertung ist aufgrund der Menge von 2.500 Testdateien (50 Generierungen $\times$ 10 Use Cases $\times$ 5 Stufen) ausgeschlossen. Als Bewertungseinheit dient jede einzelne Testdatei; ausgewertet werden die Ergebnisse anschließend je Stufe als Verteilung, nicht als Einzelurteile.
+Die Evaluation der generierten Tests erfolgt in zwei Phasen. Zuerst werden alle Tests gegen die laufende Demo-Anwendung ausgeführt und anschließend mit einem LLM-as-a-Judge-Verfahren semantisch bewertet. Beide Phasen sollen sich ergänzen. Ein erfolgreich ausgeführter Test prüft nicht zwangsläufig das im Use Case vorgegebene Verhalten, während umgekehrt ein fachlich korrekter Test bereits an einem einzelnen fehlerhaften Selektor scheitern kann. Eine manuelle semantische Bewertung ist aufgrund der Menge von 2.500 Testdateien (50 Generierungen $\times$ 10 Use Cases $\times$ 5 Stufen) ausgeschlossen. Als Bewertungseinheit dient jede einzelne Testdatei und ausgewertet werden die Ergebnisse anschließend je Stufe als Verteilung, nicht als Einzelurteile.
 
 \subsubsection{Phase 1: Deterministische Ausführung}
 
