@@ -146,3 +146,136 @@ Nr. & Stufe & Lauf & UC & coverage & selector & map\_int. & assertion \\
 49 & 5 & 29 & UC-9 & 4\,$\bullet$ & 4\,$\bullet$ & n/a & 4\,$\bullet$ \\
 50 & 5 & 43 & UC-10 & 4\,$\bullet$ & 4\,$\bullet$ & 3\,$\bullet$ & 4\,$\bullet$ \\
 \end{longtable}
+
+\section{Ergebnisse des Generierungslaufs mit GPT-5.4}
+
+\subsection{Durchführung}
+
+Der gesamte Generierungsablauf\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/tree/gpt/test-generation/src/app/llm}} wurde ein zweites Mal mit GPT-5.4 anstelle von Qwen3.6-35B-A3B durchgeführt. Verwendet wurde das Modell \texttt{deployment\_gpt-5.4} über die OpenAI-kompatible Schnittstelle von Azure AI Foundry mit \texttt{reasoning\_effort="medium"} und einem Ausgabebudget von 65.536 Token, wie im Hauptlauf. Der Temperatur-Parameter kann bei diesem Modell nicht eingestellt werden. Use Cases, OPT-Playwright-Skill, Prompt-Aufbau, die Zahl von 50 Durchläufen und der Aufbau der Demo-Anwendung sind unverändert übernommen worden.
+
+Insgesamt wurden 2.500 Testdateien generiert, je Stufe 500 aus 50 Durchläufen mit zehn Use Cases. Eine Datei in Stufe~1 wurde als \texttt{GENERATION\_ERROR} klassifiziert und wird für die Phase~2-Bewertung ausgelassen, weshalb die Score-Grundmenge dieser Stufe 499 beträgt.
+
+\subsection{Ergebnisse der Ausführung (Phase 1)}
+
+Tabelle~\ref{tab:anhang_gpt54_phase1_kategorien} zeigt die Ausführungsergebnisse. Die PASS-Rate steigt von 20,4\,\% in Stufe~1 auf 50,8\,\% in Stufe~2 und 72,4\,\% in Stufe~3, fällt in Stufe~4 aber auf 64,4\,\% zurück. Der größte Einzelschritt liegt mit 30,4 Prozentpunkten zwischen Stufe~1 und 2. Der Anteil von \texttt{INFRA\_FAIL} sinkt im gleichen Schritt von 51,8\,\% auf 19,8\,\%, während \texttt{ASSERTION\_FAIL} leicht von 27,6\,\% auf 29,4\,\% steigt. Im Übergang von Stufe~3 zu 4 nehmen beide Fehlerkategorien wieder zu.
+
+\begin{table}[H]
+    \centering
+    \caption[Ausführungsergebnisse je Stufe (GPT-5.4)]{Ausführungsergebnisse der Stufen 1 bis 4 nach Kategorien (Phase 1, GPT-5.4), absolut und in Prozent der Stufengrundmenge}
+    \label{tab:anhang_gpt54_phase1_kategorien}
+    \begin{tabular}{lrrrr}
+        \toprule
+        Kategorie & Stufe 1 & Stufe 2 & Stufe 3 & Stufe 4 \\
+        \midrule
+        \textsc{pass}              & 102 (20{,}4\,\%) & 254 (50{,}8\,\%) & 362 (72{,}4\,\%) & 322 (64{,}4\,\%) \\
+        \textsc{infra\_fail}       & 259 (51{,}8\,\%) & 99 (19{,}8\,\%)  & 77 (15{,}4\,\%)  & 97 (19{,}4\,\%)  \\
+        \textsc{assertion\_fail}   & 138 (27{,}6\,\%) & 147 (29{,}4\,\%) & 61 (12{,}2\,\%)  & 81 (16{,}2\,\%)  \\
+        \textsc{compile\_error}    & 0                & 0                & 0                & 0                \\
+        \textsc{generation\_error} & 1 (0{,}2\,\%)    & 0                & 0                & 0                \\
+        \textsc{timeout}           & 0                & 0                & 0                & 0                \\
+        \midrule
+        $n$                        & 500              & 500              & 500              & 500              \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Über die Use Cases verteilt sich das Ergebnis ungleich (Tabelle~\ref{tab:anhang_gpt54_pass_matrix}). Sechs der 40 Zellen bleiben ohne einen einzigen \texttt{PASS}, zwei davon entfallen auf UC-08 in den Stufen~3 und 4. Im Übergang von Stufe~3 zu 4 fallen zudem UC-05 (100\,\% auf 24\,\%), UC-06 (94\,\% auf 58\,\%) und UC-10 (82\,\% auf 56\,\%) teils deutlich zurück. Den einzigen \texttt{GENERATION\_ERROR} enthält UC-03 in Stufe~1.
+
+\begin{table}[H]
+    \centering
+    \caption[PASS-Rate je Use Case und Stufe (GPT-5.4)]{PASS-Rate je Use Case und Stufe (GPT-5.4), je Zelle 50 Generierungen}
+    \label{tab:anhang_gpt54_pass_matrix}
+    \begin{tabular}{lrrrrr}
+        \toprule
+        UC & Stufe 1 & Stufe 2 & Stufe 3 & Stufe 4 & Stufe 5 \\
+        \midrule
+        UC-01 & 94\,\%  & 100\,\% & 100\,\% & 100\,\% & 100\,\% \\
+        UC-02 & 0\,\%   & 2\,\%   & 0\,\%   & 38\,\%  & 100\,\% \\
+        UC-03 & 0\,\%   & 94\,\%  & 100\,\% & 98\,\%  & 100\,\% \\
+        UC-04 & 78\,\%  & 96\,\%  & 98\,\%  & 100\,\% & 100\,\% \\
+        UC-05 & 4\,\%   & 98\,\%  & 100\,\% & 24\,\%  & 100\,\% \\
+        UC-06 & 10\,\%  & 22\,\%  & 94\,\%  & 58\,\%  & 96\,\%  \\
+        UC-07 & 2\,\%   & 0\,\%   & 56\,\%  & 78\,\%  & 98\,\%  \\
+        UC-08 & 6\,\%   & 64\,\%  & 0\,\%   & 0\,\%   & 100\,\% \\
+        UC-09 & 8\,\%   & 28\,\%  & 94\,\%  & 92\,\%  & 100\,\% \\
+        UC-10 & 2\,\%   & 4\,\%   & 82\,\%  & 56\,\%  & 96\,\%  \\
+        \midrule
+        \textbf{Gesamt} & \textbf{20\,\%} & \textbf{51\,\%} & \textbf{72\,\%} & \textbf{64\,\%} & \textbf{99\,\%} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsection{Ergebnisse der Qualitätsbewertung (Phase 2)}
+
+Median und Mittelwert von \texttt{coverage} und \texttt{assertion} liegen bereits in Stufe~1 nahe am Maximum und bleiben über alle vier Stufen nahezu konstant. \texttt{selector} steigt von einem Mittelwert von 2,55 in Stufe~1 auf 3,28 in Stufe~2 und danach nur noch leicht auf 3,67 in Stufe~4. Der Median liegt ab Stufe~2 bei 4. \texttt{map\_interaction} bleibt in den Stufen~1 und 2 bei 1,82 bzw. 2,00, springt in Stufe~3 auf 3,75 und liegt in Stufe~4 mit 3,78 nahezu unverändert. Die Werte sind in Tabelle~\ref{tab:anhang_gpt54_dimensionen} zusammengefasst. Abbildung~\ref{fig:score_heatmap_gpt} zeigt zusätzlich die mittleren Judge-Scores je Use Case und Dimension. \texttt{vacuous\_pass} tritt nur in Stufe~1 (1 Fall) und Stufe~2 (6 Fälle) auf.
+
+\begin{table}[H]
+    \centering
+    \caption[Median und Mittelwert je Dimension und Stufe (GPT-5.4)]{Median und Mittelwert der vier Bewertungsdimensionen je Stufe (Phase 2, GPT-5.4, Skala 1--4)}
+    \label{tab:anhang_gpt54_dimensionen}
+    \begin{tabular}{lrrrrrrrr}
+        \toprule
+        & \multicolumn{2}{c}{coverage} & \multicolumn{2}{c}{selector} & \multicolumn{2}{c}{map\_interaction} & \multicolumn{2}{c}{assertion} \\
+        Stufe & Md & Ø & Md & Ø & Md & Ø & Md & Ø \\
+        \midrule
+        1 & 4 & 3{,}56 & 2 & 2{,}55 & 1 & 1{,}82 & 4 & 3{,}71 \\
+        2 & 4 & 3{,}69 & 4 & 3{,}28 & 2 & 2{,}00 & 4 & 3{,}75 \\
+        3 & 4 & 3{,}65 & 4 & 3{,}58 & 4 & 3{,}75 & 4 & 3{,}79 \\
+        4 & 4 & 3{,}70 & 4 & 3{,}67 & 4 & 3{,}78 & 4 & 3{,}90 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{score_heatmap_grid_gpt}
+    \caption[Mittlerer Judge-Score je Use Case und Dimension (GPT-5.4)]{Mittlerer Judge-Score je Use Case und Dimension, Stufen 1 bis 4 (Phase 2, GPT-5.4)}
+    \label{fig:score_heatmap_gpt}
+\end{figure}
+
+\subsection{Ergebnisse der Bonus-Stufe 5}
+
+Von den 500 Läufen bestehen 495 (99,0\,\%), 4 (0,8\,\%) enden als \texttt{ASSERTION\_FAIL} und 1 (0,2\,\%) als \texttt{INFRA\_FAIL}. 299 Läufe (59,8\,\%) bestehen bereits in der initialen Iteration~0. Kumuliert sind es nach Iteration~1 441 Läufe (88,2\,\%) und nach Iteration~3 97,4\,\%. Danach steigt die Rate nur noch langsam. Die 5 Läufe ohne \texttt{PASS} verteilen sich auf die drei Use Cases UC-06 (2 Läufe), UC-07 (1 Lauf) und UC-10 (2 Läufe).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{stufe5_loop_grid_gpt}
+    \caption[Loop-Konvergenz und PASS-Iteration je Use Case (GPT-5.4)]{Kumulierte PASS-Rate nach Iteration (links) und Iteration des Bestehens je Use Case (rechts), Bonus-Stufe~5, GPT-5.4}
+    \label{fig:anhang_gpt54_loop_konvergenz}
+\end{figure}
+
+In der Qualitätsbewertung erreicht Stufe~5 in allen vier Dimensionen die höchsten Mittelwerte des gesamten Laufs: 3,97 in \texttt{selector}, 3,88 in \texttt{assertion}, 3,80 in \texttt{coverage} und 3,65 in \texttt{map\_interaction}. Der Median liegt in allen vier Dimensionen bei 4. Über die Use Cases hinweg weicht allein UC-08 deutlich ab, mit 2,64 in \texttt{map\_interaction} und 3,12 in \texttt{coverage}. Alle übrigen Use Cases liegen in jeder Dimension bei mindestens 3,30. Als \texttt{vacuous\_pass} sind 7 der 495 bestandenen Tests eingestuft (1,4\,\%).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{stufe5_score_heatmap_gpt}
+    \caption[Judge-Score je Use Case und Dimension (GPT-5.4, Stufe 5)]{Mittlerer Judge-Score je Use Case und Dimension der Bonus-Stufe~5 (Phase 2, GPT-5.4)}
+    \label{fig:anhang_gpt54_stufe5_heatmap}
+\end{figure}
+
+\subsection{GIS-spezifische Besonderheiten}
+
+Die Auswertung basiert auf demselben Vorgehen wie in Abschnitt~6.5. In Stufe~1 verwenden 30 Dateien (6,0\,\%) mindestens eine Test-ID, der in der Webanwendung nicht existiert. Ab Stufe~2 wird keine einzige Test-ID mehr halluziniert. \texttt{page.locator} mit \ac{CSS}-Ausdrücken sinkt von 52,0\,\% in Stufe~1 auf 2,2\,\% in Stufe~2 und wird ab Stufe~3 gar nicht mehr verwendet. Die Nutzung der Map-Model-Helfer liegt ab Stufe~3 bei mindestens 90\,\%. Ein direkter Zugriff auf \texttt{\_\_openPioneerMap} bleibt in Stufe~1 und 2 bei 0\,\% und liegt ab Stufe~3 zwischen 9,8 und 10,2\,\%.
+
+\begin{table}[H]
+    \centering
+    \caption[Kartenbezogene Codemuster je Stufe (GPT-5.4)]{Anteil der Testdateien mit CSS-Locator, Assertion auf \texttt{map-container}, Map-Model-Helfer-Nutzung und halluzinierten Test-IDs (GPT-5.4)}
+    \label{tab:anhang_gpt54_codemuster}
+    \begin{tabular}{lrrrrr}
+        \toprule
+        Muster & Stufe 1 & Stufe 2 & Stufe 3 & Stufe 4 & Stufe 5 \\
+        \midrule
+        \texttt{page.locator(CSS)}              & 52{,}0\,\% & 2{,}2\,\%  & 0{,}0\,\%  & 0{,}0\,\%  & 0{,}0\,\%  \\
+        Assertion auf \texttt{map-container}    & 0{,}0\,\%  & 66{,}4\,\% & 49{,}2\,\% & 78{,}6\,\% & 51{,}2\,\% \\
+        Nutzung eines Map-Model-Helfers         & 0{,}0\,\%  & 0{,}0\,\%  & 90{,}0\,\% & 90{,}6\,\% & 92{,}0\,\% \\
+        direkter Zugriff \texttt{\_\_openPioneerMap} & 0{,}0\,\% & 0{,}0\,\% & 9{,}8\,\% & 10{,}0\,\% & 10{,}2\,\% \\
+        Datei mit halluzinierter Test-ID        & 6{,}0\,\%  & 0{,}0\,\%  & 0{,}0\,\%  & 0{,}0\,\%  & 0{,}0\,\%  \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+UC-08 erreicht in den Stufen 3 und 4 keinen einzigen \texttt{PASS}, obwohl das Zeichnen der Messlinie gelingt. Die betrachteten Dateien berechnen ihre Klickpunkte aus \texttt{boundingBox()} und schließen mit genau einem Doppelklick ab. Sie scheitern erst an der Überprüfung des Messergebnisses. 74\,\% bzw. 66\,\% der Dateien prüfen das Messergebnis über einen Regex auf Zahl und Einheit \texttt{m} oder \texttt{km}, wobei viele davon im Mess-Panel erfolgen. Allerdings wird das Messergebnis als OpenLayers-Overlay an der gezeichneten Linie angezeigt und nicht im Mess-Panel. Das erklärt auch die 100\,\% bzw. 96\,\% \texttt{ASSERTION\_FAIL}-Anteile. In Stufe~2 suchen 31 der 32 erfolgreichen Dateien den Regex seitenweit und treffen damit das Overlay.
+
+Bei UC-07 in Stufe~2 übernehmen 94\,\% der Dateien die Zielkoordinate aus dem Use Case und rechnen sie über den Koordinatenanzeiger in Bildschirmpixel um. Die Elemente werden korrekt adressiert, der Fehler liegt in der Umrechnung auf die Kartenposition. Ab Stufe~3 steigt die \texttt{PASS}-Rate auf 56\,\% und in Stufe~4 auf 78\,\%. Der Import der Helfer-Funktion \texttt{getHighlightedCoordinate} erklärt dies allein nicht. Über die zusätzliche Information zum Zugriff auf \texttt{\_\_openPioneerMap} wird die Zielkoordinate über \texttt{map.olMap.getPixelFromCoordinate} korrekt in Pixel umgerechnet. Der in Tabelle~\ref{tab:anhang_gpt54_codemuster} aufgeführte Anteil von rund 10\,\% direkter Kartenzugriffe geht damit fast vollständig auf UC-07 zurück.
+
+Die übrigen Auffälligkeiten gehen nicht auf die Bedienung der Karte, sondern auf falsche Annahmen in den Bedienelementen zurück. UC-02 prüft die Hintergrundkartenwechsel in Stufe~2 durchgängig als Combobox mit der Annahme, dahinter stehe ein einfaches \texttt{<select>}. Es handelt sich aber um einen Auswahl-Trigger, auf dem weder \texttt{selectOption} noch \texttt{selectedOptions} funktioniert. In Stufe~3 wird stattdessen eine Radiogruppe angenommen, was in 82\,\% der Fälle zu einem nicht gefundenen Element führt und den \texttt{selector}-Score auf 1,12 drückt. In Stufe~4 rufen alle 50 Dateien \texttt{selectOption} auf, und bestanden haben genau die 19, die zusätzlich einen Klick auf \texttt{getByRole('option')} durchführen. Der Einbruch von UC-05 in Stufe~4 geht darauf zurück, dass die Tests den Legendeneintrag über eine exakte Textgleichheit mit \enquote{Precipitation} prüfen. In der Legende steht jedoch \enquote{Precipitation (mm)} mit der Einheit dahinter.
