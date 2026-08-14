@@ -448,10 +448,14 @@
 % addtocontents nur ab hier (also nur für die Anhang-Einträge) in die .toc
 % geschrieben, damit die normalen Kapitel im Verzeichnis unverändert bleiben.
 \addtocontents{toc}{\protect\DeclareTOCStyleEntry[dynnumwidth]{tocline}{section}}
-	\renewcommand{\thesection}{\AppendixName\ \arabic{section}}
-	\renewcommand\thesubsection{\AppendixName\ \arabic{section}.\arabic{subsection}}
+% \Alph erzeugt einen Buchstaben; KOMA haengt bei nicht-numerischen Nummern
+% automatisch einen Punkt an ("Anhang A."). Fuer die Anhang-Eintraege abschalten.
+\addtocontents{toc}{\protect\renewcommand*{\protect\autodot}{}}
+	\renewcommand{\thesection}{\AppendixName\ \Alph{section}}
+	\renewcommand\thesubsection{\Alph{section}.\arabic{subsection}}
 	\input{kapitel/anhang/anhang}
 \end{appendices}
+\addtocontents{toc}{\protect\renewcommand*{\protect\autodot}{}}
 \addtocontents{toc}{\protect\setcounter{tocdepth}{2}}
 
 %-----------------------------------
