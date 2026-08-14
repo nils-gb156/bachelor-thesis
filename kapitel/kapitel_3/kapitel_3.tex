@@ -19,7 +19,7 @@ Die vier Stufen bilden einen Verlauf von minimalem zu maximalem \ac{UI}-Kontext.
     \centering
     \caption[Ausprägungen der Variable UI-Kontext]{Die vier Ausprägungen der Variable UI-Kontext mit steigendem Informationsgehalt}
     \label{fig:ui_kontext_stufen}
-    \includegraphics[width=0.6\textwidth]{ui_kontext_stufen}
+    \includegraphics[width=0.5\textwidth]{ui_kontext_stufen}
 \end{figure}
 
 Wie ein einzelner Generierungsvorgang abläuft, zeigt Abbildung~\ref{fig:methodik_pipeline}. Use Case, OPT-Playwright-Skill und der \ac{UI}-Kontext der jeweiligen Stufe bilden zusammen den Prompt für das \ac{LLM}. Die daraus erzeugten Playwright-Tests durchlaufen ein zweiphasiges Evaluationsverfahren. In der ersten Phase werden sie gegen die laufende Demo-Anwendung ausgeführt und ihr Ausführungsergebnis klassifiziert. In der zweiten Phase bewertet ein zweites \ac{LLM} die Testqualität anhand fester Kriterien, wobei die manuellen Referenztests aus Kapitel~5.3 als Vergleichsmaßstab dienen. Beide Phasen werden in Kapitel~4.5 beschrieben.
@@ -28,7 +28,7 @@ Wie ein einzelner Generierungsvorgang abläuft, zeigt Abbildung~\ref{fig:methodi
     \centering
     \caption[Generierungs- und Evaluationspipeline]{Generierungs- und Evaluationspipeline. Der UI-Kontext variiert als unabhängige Variable (Stufen 1-4), alle übrigen Eingaben sind konstant}
     \label{fig:methodik_pipeline}
-    \includegraphics[width=1\textwidth]{methodik_pipeline}
+    \includegraphics[width=0.9\textwidth]{methodik_pipeline}
 \end{figure}
 
 \subsection{Use Cases: Definition und Format}
@@ -75,7 +75,7 @@ Als Ausgangspunkt dient der Kontext aus dem automatischen Snapshot des initialen
     \centering
     \caption[Self-Improvement-Loop (Stufe 5)]{Self-Improvement-Loop der Bonus-Stufe 5: Fehlermeldung und Failure-Snapshot inkl. Screenshot fließen in den nächsten Generierungsprompt zurück (max. 10 Iterationen)}
     \label{fig:stufe5_loop}
-    \includegraphics[width=0.8\textwidth]{stufe_5_loop}
+    \includegraphics[width=0.7\textwidth]{stufe_5_loop}
 \end{figure}
 
 Der Failure-Snapshot hält den Zustand der Anwendung zum Zeitpunkt des Fehlschlags fest und besteht wie in Stufe~2 aus Accessibility-Snapshot und data-testids. Der Unterschied liegt im Zeitpunkt der Aufnahme. Hier wird nicht der initiale Zustand, sondern die Seite nach den bereits ausgeführten Testschritten erfasst. Das \ac{LLM} sieht damit, wie die Oberfläche aussah, als der Test scheiterte. Zusätzlich erhält das \ac{LLM} in der initialen und jeder weiteren Iteration einen Screenshot der Anwendung als Bildeingabe. Dadurch bekommt es auch erstmals visuelle Informationen über den gerenderten Kartenzustand und sieht optisch, welche Elemente sichtbar sind. Als Pass-Kriterium dient der Screenshot nicht. Die Schleife endet nur über das Ausführungsergebnis des Tests. Schlägt der Test beispielsweise fehl, obwohl der Layer im Screenshot sichtbar ist, liegt der Fehler in der Prüflogik des Tests, und die Iteration wird fortgesetzt. Der Screenshot ist nur ein Hilfsmittel für die Korrektur.
