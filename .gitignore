@@ -22,5 +22,12 @@
 *.synctex.gz
 *.toc
 
+# minted (Syntax-Highlighting): Cache-Verzeichnis, Temp-Dateien und die
+# Listing-Verzeichnis-Datei der eigenen "listing"-Gleitumgebung (fileext=lstng)
+_minted/
+_minted-*/
+*.minted
+*.lstng
+
 # IDEs
 .texpadtmp/

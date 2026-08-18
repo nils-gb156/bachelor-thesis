@@ -154,6 +154,36 @@
 }
 
 %-----------------------------------
+% Syntax-Highlighting fuer dargestellte Code-Listings (minted/Pygments)
+% Benoetigt Python + Pygments (im Docker-Image via python3-pygments enthalten)
+% und die Kompilier-Option --shell-escape (in compile.sh/compile.bat gesetzt).
+% Die vielen inline \code|...| bleiben bewusst auf dem listings-Paket, da
+% \lstinline in Captions/Fussnoten/Tabellen robuster ist als \mintinline.
+%-----------------------------------
+\usepackage{minted}
+% Eigene "Listing"-Gleitumgebung mit separater Dateiendung (lstng) deklarieren.
+% Damit wird der Konflikt mit dem listings-Paket vermieden, das die Endung
+% "lol" bereits belegt (sonst: tocbasic-Fehler "lol cannot be used twice").
+\usepackage{newfloat}
+\DeclareFloatingEnvironment[fileext=lstng, name=Listing]{listing}
+% Caption der Listing-Gleitumgebung oben ausgeben (Ueberschrift), damit sie
+% konsistent zu den \captionof-Listings und den Tabellen ist.
+\floatsetup[listing]{capposition=top}
+\setminted{
+	style=vs,          % helles, dezentes Farbschema fuer den Druck
+	fontsize=\scriptsize,
+	breaklines=true,
+	breakanywhere=true,
+	breaksymbolleft={},  % kein Umbruch-Pfeil (Hookrightarrow) am Zeilenanfang
+	tabsize=2,
+	autogobble,
+	frame=leftline,
+	framesep=6pt,
+	linenos,
+	numbersep=6pt
+}
+
+%-----------------------------------
 %Literaturverzeichnis Einstellungen
 %-----------------------------------
 

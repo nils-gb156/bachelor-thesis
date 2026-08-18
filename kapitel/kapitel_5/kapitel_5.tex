@@ -56,17 +56,25 @@ Auch die absolute PASS-Rate verteilt sich ungleich über die Use Cases. Innerhal
 
 Der Rückgang bei UC-03 lässt sich auf einen Fehler bei der Prüfung des Zoomverhaltens zurückführen. Ab Stufe~3 fragen die Tests den numerischen Zoomwert über \code|getMapZoomLevel| ab. In Stufe~3 entfallen 58,3 \% der Fehlschläge dieses Use Cases auf denselben Match-Fehler (\enquote{expected value must be a number or bigint}), in Stufe~4 sind es 53,5 \%. Die Ursache zeigt der generierte Code in Listing~\ref{lst:uc03_generated}: Die Tests weisen den Rückgabewert von \code|expect.poll(...)| einer Variablen zu, um ihn im nächsten Schritt als Vergleichswert zu verwenden. Da \code|expect.poll| als Assertion aber keinen Wert zurückgibt, erhält die Variable \code|undefined|, und der Vergleich scheitert. Der manuelle Referenztest in Listing~\ref{lst:uc03_reference} fragt den Zoomwert vor der Interaktion direkt über \code|getMapZoomLevel(page)| ab und setzt \code|expect.poll| nur zum Warten auf die Zustandsänderung ein, ohne dessen Rückgabewert weiterzuverwenden.
 
-\begin{lstlisting}[language=TypeScript, caption={Fehlerhaftes Muster in den generierten Tests (gekürzt, Stufe 4, run\_01)}, label=lst:uc03_generated]
+\begin{listing}[H]
+\caption{Fehlerhaftes Muster in den generierten Tests (gekürzt, Stufe 4, run\_01)}
+\label{lst:uc03_generated}
+\begin{minted}{typescript}
 const initialZoom = await expect.poll(() => getMapZoomLevel(page)).toBeTruthy();
 await page.getByTestId('zoom-in-button').click();
 const zoomedInLevel = await expect.poll(() => getMapZoomLevel(page)).toBeGreaterThan(initialZoom);
-\end{lstlisting}
+\end{minted}
+\end{listing}
 
-\begin{lstlisting}[language=TypeScript, caption={Korrektes Muster im manuellen Referenztest (gekürzt)}, label=lst:uc03_reference]
+\begin{listing}[H]
+\caption{Korrektes Muster im manuellen Referenztest (gekürzt)}
+\label{lst:uc03_reference}
+\begin{minted}{typescript}
 const initialZoom = await getMapZoomLevel(page);
 await page.getByTestId("zoom-in-button").click();
 await expect.poll(() => getMapZoomLevel(page)).toBeGreaterThan(initialZoom as number);
-\end{lstlisting}
+\end{minted}
+\end{listing}
 
 In den Stufen~1 und 2, in denen die Map-Model-Helfer nicht im Kontext stehen, prüfen die generierten Tests für UC-03 stattdessen nur Sichtbarkeiten im \ac{DOM}. Die Prüfung des Zoomlevels wird nur als Kommentar aufgeführt und dadurch laufen sie häufiger durch. Die hohe PASS-Rate in Stufe~1 bei diesem Use Case belegt also keine höhere Testqualität. Die Tests müssen daher zusätzlich bewertet werden, ob sie das geforderte Verhalten auch tatsächlich prüfen.
 

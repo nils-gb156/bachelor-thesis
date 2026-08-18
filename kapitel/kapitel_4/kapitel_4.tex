@@ -44,11 +44,10 @@ Die Tests sind mit Playwright in TypeScript umgesetzt. Pro Use Case gibt es eine
 
 Bevor ein Test mit der Webanwendung interagiert, muss sichergestellt sein, dass die Anwendung vollständig geladen ist. Statt einer festen Wartezeit (Timeout), die unzuverlässig ist, wird mit \code|page.waitForFunction(() => globalThis.__openPioneerMap != null)| gewartet, bis das Kartenmodell verfügbar ist. Sobald das Objekt existiert, ist die Karte einsatzbereit. Der Test wartet damit auf ein deterministisches Signal und nicht auf eine geschätzte Dauer. Dieses Muster ist in jedem Test enthalten.
 
-\lstinputlisting[
-    language=TypeScript,
-    caption={UseCase-4: UV-Index Layer einblenden und prüfen, ob es auf der Karte angezeigt wird (Playwright-Test)},
-    label={lst:uc-04-uv-index-overlay}
-]{Quellcode/uc-04-uv-index-overlay.spec.ts}
+\captionof{listing}{UseCase-4: UV-Index Layer einblenden und prüfen, ob es auf der Karte angezeigt wird (Playwright-Test)}
+\label{lst:uc-04-uv-index-overlay}
+\nopagebreak
+\inputminted{typescript}{Quellcode/uc-04-uv-index-overlay.spec.ts}
 
 Die Locator-Strategie basiert auf der in Kapitel~2 beschriebenen Hierarchie und nutzt bevorzugt \code|getByTestId|, dann \code|getByRole| und dann \code|getByText|. \ac{CSS}-Selektoren und XPath werden vermieden, da sie an die \ac{DOM}-Struktur gebunden und damit fragil sind. Die Selektoren müssen zudem bewusst präzise gewählt werden, da es sonst zu Fehlzugriffen kommen kann. Zum Beispiel wird in Use Case~4 der UV-Index Layer über \code|getByRole("checkbox", { name: "UV-Index", exact: true })| angesprochen. Die Option \code|exact| ist hier notwendig, weil sonst auch der Layer \enquote{UV-Index Stations} mitgetroffen werden würde, was im Rahmen des Use Cases falsch wäre. Eine Ausnahme ist Use Case~9. Dort werden zwei Elemente über \ac{CSS}-Klassen angesprochen, weil die betreffenden internen Elemente der Druckfunktion von Open Pioneer Trails keine eigene Test-ID besitzen.
 

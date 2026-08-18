@@ -1,14 +1,14 @@
 IF "%1" == "en" (
-    lualatex --jobname=thesis_englisch  "\def\FOMEN{}\input{thesis_main.tex}"
+    lualatex --shell-escape --jobname=thesis_englisch  "\def\FOMEN{}\input{thesis_main.tex}"
     biber thesis_englisch
-    lualatex --jobname=thesis_englisch  "\def\FOMEN{}\input{thesis_main.tex}"
-    lualatex --jobname=thesis_englisch  "\def\FOMEN{}\input{thesis_main.tex}"
+    lualatex --shell-escape --jobname=thesis_englisch  "\def\FOMEN{}\input{thesis_main.tex}"
+    lualatex --shell-escape --jobname=thesis_englisch  "\def\FOMEN{}\input{thesis_main.tex}"
     thesis_englisch.pdf
 ) ELSE (
-    lualatex thesis_main.tex
+    lualatex --shell-escape thesis_main.tex
     biber thesis_main
-    lualatex thesis_main.tex
-    lualatex thesis_main.tex
+    lualatex --shell-escape thesis_main.tex
+    lualatex --shell-escape thesis_main.tex
     thesis_main.pdf
 )
 del *.bbl /f /q
