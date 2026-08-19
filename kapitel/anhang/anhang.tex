@@ -105,6 +105,82 @@ assertion & 1 & Keine oder ausschließlich triviale Assertions \\
 
 \newpage
 
+\section{Vollständige Use-Case-Beschreibungen}
+\label{app:use-cases}
+
+Die Use Cases sind in ihrer originalen englischen Fassung wiedergegeben.\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/gpt/test-generation/src/app/llm/use_cases.md}}
+
+\begingroup
+% Kompakte Listen und tabellarische Use-Case-Darstellung
+\setlist[itemize]{nosep,leftmargin=1.2em,label=\textbullet}
+\setlist[enumerate]{nosep,leftmargin=1.6em}
+\small
+\newcommand{\uc}[6]{%
+    \midrule
+    \multicolumn{2}{@{}p{\linewidth}@{}}{\rule{0pt}{1.25em}\textbf{#1}\hfill\textit{#2}}\\[3pt]
+    Description & #3 \\[3pt]
+    Preconditions & #4 \\[3pt]
+    Steps & #5 \\[3pt]
+    Expected results & #6 \\[3pt]
+}
+\begin{longtable}{@{}>{\bfseries\raggedright\arraybackslash}p{2.9cm}p{\dimexpr\linewidth-2.9cm-2\tabcolsep\relax}@{}}
+\endhead
+\uc{Use Case 1: Show and hide the layer switcher via the toolbar button}{easy}
+{The user toggles the layer switcher (TOC) panel off and on using the toolbar button.}
+{\begin{itemize}\item The app is loaded successfully.\item The layer switcher (TOC) is initially visible.\end{itemize}}
+{\begin{enumerate}\item The user clicks the \enquote{Layer Switcher} button in the toolbar to hide the panel.\item The user clicks the \enquote{Layer Switcher} button again to show the panel.\end{enumerate}}
+{\begin{itemize}\item After the first click, the layer switcher panel is no longer visible.\item After the second click, the layer switcher panel is visible again.\end{itemize}}
+\uc{Use Case 2: Switch the base map from Carto Light to OpenStreetMap}{easy}
+{The user changes the active base map in the layer switcher.}
+{\begin{itemize}\item The app is loaded successfully.\item The Carto Light base map is active by default.\item The layer switcher (TOC) is visible.\end{itemize}}
+{\begin{enumerate}\item The user opens the base map selector in the layer switcher.\item The user selects \enquote{OpenStreetMap} as the base map.\end{enumerate}}
+{\begin{itemize}\item The OpenStreetMap base map is selected.\item The Carto Light base map is no longer selected.\end{itemize}}
+\uc{Use Case 3: Zoom in and out using the zoom buttons}{easy}
+{The user changes the map zoom level using the zoom in and zoom out buttons.}
+{\begin{itemize}\item The app is loaded successfully.\item The zoom in and zoom out buttons are visible on the map.\end{itemize}}
+{\begin{enumerate}\item The user clicks the \enquote{Zoom in} button to increase the zoom level.\item The user clicks the \enquote{Zoom out} button to decrease the zoom level.\end{enumerate}}
+{\begin{itemize}\item After clicking the \enquote{Zoom in} button, the map zoom level is higher than before.\item After clicking the \enquote{Zoom out} button, the map zoom level is lower than after zooming in.\end{itemize}}
+\uc{Use Case 4: Activate the UV-Index overlay and verify it is rendered on the map}{medium}
+{The user activates the initially hidden UV-Index overlay and verifies that the layer is requested and rendered on the map.}
+{\begin{itemize}\item The app is loaded successfully.\item The layer switcher (TOC) is visible.\item The UV-Index overlay layer is initially hidden.\end{itemize}}
+{\begin{enumerate}\item The user clicks the visibility toggle of the UV-Index overlay layer to show it.\item The user waits for the map to load the layer tiles.\end{enumerate}}
+{\begin{itemize}\item The UV-Index overlay layer toggle is in the enabled (checked) state.\item The UV-Index overlay tiles are rendered on the map canvas.\end{itemize}}
+\uc{Use Case 5: Activate the Precipitation overlay and verify the legend updates}{medium}
+{The user activates the Precipitation overlay and checks that the legend reflects the newly active layer.}
+{\begin{itemize}\item The app is loaded successfully.\item The layer switcher (TOC) and legend are visible.\item The Precipitation overlay layer is initially hidden.\end{itemize}}
+{\begin{enumerate}\item The user clicks the visibility toggle of the Precipitation overlay layer to show it.\item The user views the legend.\end{enumerate}}
+{\begin{itemize}\item The Precipitation overlay layer toggle is in the enabled (checked) state.\item The legend displays an entry corresponding to the Precipitation layer.\end{itemize}}
+\uc{Use Case 6: Click a map position to show the weather forecast}{hard}
+{The user clicks a position on the map and checks that the weather forecast appears in the info panel.}
+{\begin{itemize}\item The app is loaded successfully.\item The info panel is visible.\item The map canvas is interactive.\end{itemize}}
+{\begin{enumerate}\item The user clicks on a position on the map canvas.\item The user waits for the info panel to load the forecast.\end{enumerate}}
+{\begin{itemize}\item The clicked position is highlighted on the map.\item The info panel displays a weather forecast section.\item The forecast contains 24 entries.\end{itemize}}
+\uc{Use Case 7: Click both point station layers to show feature info}{hard}
+{The user clicks on a location where both a UV-Index Station (WMS) and an EUCOS Ground Station (WFS) are located and checks that the feature info for both point layers appears in the info panel.}
+{\begin{itemize}\item The app is loaded successfully.\item The info panel is visible.\item The UV-Index Stations layer (WMS) is active.\item The EUCOS Ground Stations layer (WFS) is active.\item Both a UVI station and an EUCOS ground station are located at map coordinates [1188692.84, 6767643.28] (EPSG:3857).\item No measurement tool is active.\end{itemize}}
+{\begin{enumerate}\item The user clicks at map coordinates [1188692.84, 6767643.28] (EPSG:3857) on the map canvas.\item The user waits for the info panel to load the station info for both layers.\end{enumerate}}
+{\begin{itemize}\item The info panel displays a \enquote{UV-Index Station} section with feature information.\item The info panel displays an \enquote{EUCOS Ground Station} section with feature information.\end{itemize}}
+\uc{Use Case 8: Measure a distance by drawing a line on the map}{hard}
+{The user activates the measurement tool, draws a line on the map and checks that a measurement result is shown.}
+{\begin{itemize}\item The app is loaded successfully.\item The measurement tool is accessible via the toolbar.\item The map canvas is interactive.\end{itemize}}
+{\begin{enumerate}\item The user clicks the \enquote{Measurement} button in the toolbar to open the measurement panel.\item The user clicks several points on the map canvas to draw a line.\item The user double-clicks to finish the measurement.\end{enumerate}}
+{\begin{itemize}\item The measurement panel is visible.\item The measurement panel displays a length value with a unit.\end{itemize}}
+\uc{Use Case 9: Print the current map view as a PNG}{hard}
+{The user opens the printing panel, enters a title, selects the PNG format and triggers the export of the current map view.}
+{\begin{itemize}\item The app is loaded successfully.\item The printing tool is accessible via the toolbar.\item At least one base map and one overlay layer are visible on the map.\end{itemize}}
+{\begin{enumerate}\item The user clicks the \enquote{Print Map} button in the toolbar to open the printing panel.\item The user enters a title for the printout.\item The user selects the PNG file format.\item The user clicks the export/print button.\end{enumerate}}
+{\begin{itemize}\item The printing panel is visible.\item A PNG file containing the current map view is generated and downloaded.\item The printed image shows the visible base map and overlay layers as well as the scale bar.\end{itemize}}
+\uc{Use Case 10: Configure layers, search for a location and load the weather forecast}{hard}
+{The user reconfigures the layer visibility, searches for a location using the geocoder, navigates the map to the selected result, and loads the weather forecast for that position.}
+{\begin{itemize}\item The app is loaded successfully.\item The layer switcher (TOC) is visible.\item The Temperature overlay layer is initially visible.\item The Precipitation overlay layer is initially hidden.\item The search field (geocoder) is accessible.\item The info panel is visible.\item No measurement tool is active.\end{itemize}}
+{\begin{enumerate}\item The user clicks the visibility toggle of the Temperature overlay layer to hide it.\item The user clicks the visibility toggle of the Precipitation overlay layer to show it.\item The user clicks the search field and types a place name (e.g. \enquote{Münster}).\item The user waits for the result list to appear and selects the first result.\item The user waits for the map to navigate to the selected location.\item The user waits for the info panel to load the forecast.\end{enumerate}}
+{\begin{itemize}\item The Precipitation overlay layer toggle is in the disabled state.\item The Temperature overlay layer toggle is in the enabled state.\item After selecting the search result, the map navigates to the searched location.\item The info panel displays a weather forecast section with 24 entries.\end{itemize}}
+\bottomrule
+\end{longtable}
+\endgroup
+
+\newpage
+
 \section{Stichprobe der manuellen Bewertungskontrolle}
 \label{app:review}
 
