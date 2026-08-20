@@ -31,18 +31,23 @@ RUN apt-get update \
 # Deshalb den minted-Stack (minted, fvextra, latex2pydata) aus CTAN auf die aktuelle
 # Version heben und die im minted-Paket gebuendelten, zueinander passenden Python-
 # Wheels (latexminted, latexrestricted, latex2pydata, pygments) installieren.
+WORKDIR /tmp
 # hadolint ignore=DL3013
 RUN set -eux; \
-	cd /tmp; \
 	wget -q https://mirrors.ctan.org/macros/latex/contrib/minted.zip; \
 	wget -q https://mirrors.ctan.org/macros/latex/contrib/fvextra.zip; \
 	wget -q https://mirrors.ctan.org/macros/latex/contrib/latex2pydata.zip; \
 	for p in minted fvextra latex2pydata; do \
 		python3 -c "import zipfile; zipfile.ZipFile('/tmp/$p.zip').extractall('/tmp')"; \
-	done; \
-	( cd /tmp/minted && tex -interaction=nonstopmode minted.ins ); \
-	( cd /tmp/fvextra && tex -interaction=nonstopmode fvextra.ins ); \
-	( cd /tmp/latex2pydata && tex -interaction=nonstopmode latex2pydata.ins ); \
+	done
+WORKDIR /tmp/minted
+RUN tex -interaction=nonstopmode minted.ins
+WORKDIR /tmp/fvextra
+RUN tex -interaction=nonstopmode fvextra.ins
+WORKDIR /tmp/latex2pydata
+RUN tex -interaction=nonstopmode latex2pydata.ins
+WORKDIR /tmp
+RUN set -eux; \
 	mkdir -p /usr/local/share/texmf/tex/latex/minted \
 		/usr/local/share/texmf/tex/latex/fvextra \
 		/usr/local/share/texmf/tex/latex/latex2pydata; \
