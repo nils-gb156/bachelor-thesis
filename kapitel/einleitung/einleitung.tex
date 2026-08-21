@@ -2,6 +2,24 @@
 
 \subsection{Motivation und Problemstellung}
 
+\ac{E2E}-Tests prüfen eine Anwendung aus Nutzersicht und sind gerade für komplexe und interaktive Oberflächen wertvoll. Ihre Erstellung ist jedoch aufwendig, da jeder Testfall die Bedienschritte und die zu prüfenden Zustände einzeln nachbilden muss. In der Praxis führt das dazu, dass \ac{E2E}-Tests oft erst spät, unvollständig oder gar nicht geschrieben werden. \acp{LLM} werden zunehmend eingesetzt, um diesen Aufwand zu verringern und Tests direkt aus einer fachlichen Beschreibung zu generieren. Für die Testerstellung ist das ein attraktiver Weg, da für Projekte meistens sowieso Use Cases oder User Storys festgehalten werden, die dann unmittelbar als Eingabe dienen können.
+
+Ein \ac{LLM} kennt die konkrete Benutzeroberfläche einer individuell entwickelten Anwendung jedoch nicht von selbst. Ohne Informationen über die tatsächlich vorhandenen Elemente und ihre Bedienung kann das Modell nur plausibel erscheinende Bezeichnungen raten. Ein generierter Test kann dann syntaktisch korrekt sein, aber trotzdem an der ersten Interaktion scheitern, weil das angesprochene Element in der Anwendung nicht existiert.
+
+Bei WebGIS-Anwendungen verschärft sich dieses Problem zusätzlich. Die Karte als zentraler Bestandteil wird als Pixelgrafik auf einem Canvas-Element gerendert und ist damit nicht wie gewöhnliche Oberflächenelemente über das \ac{DOM} ansprechbar. Ob ein Layer sichtbar ist, welcher Kartenausschnitt gezeigt wird oder wie die Karte auf einen Klick reagiert, ist nicht direkt über die Oberflächenelemente prüfbar. Genau diese Interaktionen sind aber Hauptbestandteil von WebGIS-Anwendungen und müssen von einem aussagekräftigen Test erfasst werden.
+
+Damit stellt sich die Frage, wie viele Informationen über die Oberfläche einem \ac{LLM} zur Testgenerierung bereitgestellt werden müssen und in welcher Form diese Informationen den größten Nutzen bringen.
+
 \subsection{Zielsetzung und Erkenntnisinteresse}
 
-\subsection{Aufbau der Arbeit}
+Ziel dieser Arbeit ist die Untersuchung, welchen Einfluss der im Prompt bereitgestellte \ac{UI}-Kontext auf die Qualität \ac{LLM}-generierter Playwright-\ac{E2E}-Tests aus Use Cases für WebGIS-Anwendungen auf Basis von \ac{OPT} hat. Als Qualität wird dabei sowohl die Ausführbarkeit der Tests als auch die inhaltliche Korrektheit der Prüfung verstanden.
+
+Daraus ergeben sich drei Teilfragen:
+
+\begin{enumerate}
+    \item Führt ein umfangreicherer \ac{UI}-Kontext zu einer höheren Ausführbarkeit der generierten Tests?
+    \item Wirken sich unterschiedliche Formen des Kontexts auf unterschiedliche Qualitätsaspekte der Tests aus?
+    \item In welchem Verhältnis steht der Aufwand für die Erstellung des Kontexts zum erreichten Qualitätsgewinn?
+\end{enumerate}
+
+Ergänzend dazu wird untersucht, ob sich die Grenzen eines einmalig bereitgestellten Kontexts überwinden lassen, wenn das Modell Rückmeldung aus der Ausführung seiner eigenen Tests erhält und diese schrittweise korrigiert. Diese Fragestellung geht über den Kernvergleich hinaus und wird daher als Bonus-Untersuchung behandelt. Zur Einordnung der Übertragbarkeit wird der Generierungsablauf zusätzlich mit einem zweiten \ac{LLM} wiederholt. Ein Vergleich der Modellfähigkeiten ist damit nicht beabsichtigt.
