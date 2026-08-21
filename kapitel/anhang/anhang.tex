@@ -4,7 +4,7 @@
 \subsection{Map-Model-Helfer}
 \label{app:map-model-helpers}
 
-Das folgende Listing zeigt die Map-Model-Helfer für den Zugriff auf den Kartenzustand. Die Kommentare sind zur besseren Lesbarkeit gekürzt, die Funktionslogik ist unverändert.\footnote{Vollständige, unveränderte Originaldatei: \url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/map-model-helpers.ts}}
+Das folgende Listing zeigt die Map-Model-Helfer\footnote{Vollständige, unveränderte Originaldatei: \url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/map-model-helpers.ts}} für den Zugriff auf den Kartenzustand. Die Kommentare sind zur besseren Lesbarkeit gekürzt, die Funktionslogik ist unverändert.
 
 \captionof{listing}[Map-Model-Helfer]{Map-Model-Helfer für den Zugriff auf den Kartenzustand (\texttt{map-model-helpers.ts})}
 \label{lst:map-model-helpers}
@@ -14,101 +14,17 @@ Das folgende Listing zeigt die Map-Model-Helfer für den Zugriff auf den Kartenz
 \subsection{OPT-Playwright-Skill}
 \label{app:opt-playwright-skill}
 
-Das folgende Listing zeigt den OPT-Playwright-Skill, der dem \ac{LLM} im System-Prompt mitgegeben wird.\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/SKILL.md}}
+Das folgende Listing zeigt den OPT-Playwright-Skill\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/SKILL.md}}, der dem \ac{LLM} im System-Prompt mitgegeben wird.
 
 \captionof{listing}[OPT-Playwright-Skill]{OPT-Playwright-Skill im System-Prompt (\texttt{SKILL.md})}
 \label{lst:opt-playwright-skill}
 \nopagebreak
 \inputminted{markdown}{Quellcode/SKILL.md}
 
-\newpage
-
-\section{Evaluierung der Phase 2}
-\label{app:phase2-evaluierung}
-
-\subsection{Judge-Prompt der Phase 2}
-\label{app:judge-prompt}
-
-\subsubsection{Stufen 1--4}
-\label{app:judge-prompt-base}
-
-Das folgende Listing zeigt den Bewertungsprompt der Phase~2 für die Stufen~1 bis~4.\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/phase2_judge_prompt.md}}
-
-\captionof{listing}{Prompt der LLM-Judge-Bewertung (Stufen 1--4)}
-\label{lst:judge-prompt}
-\nopagebreak
-\inputminted{markdown}{Quellcode/phase2_judge_prompt.md}
-
-\subsubsection{Stufe 5 (Self-Improvement-Loop)}
-\label{app:judge-prompt-stage5}
-
-Der Judge-Prompt für Stufe~5 (Self-Improvement-Loop) ist mit dem Prompt der Stufen~1 bis 4 (Anhang~\ref{app:judge-prompt-base}) identisch; die Bewertungsskalen und der Output bleiben unverändert.\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/phase2_judge_prompt_statge5.md}} Abweichend sind lediglich die folgenden Punkte:
-
-\begin{itemize}
-	\item In der Rolle wird der Ausführungskontext angepasst: Die Ausführung erfolgte während des Self-Improvement-Loops und wurde über \code|stage5_to_phase1.py| in die \code|exec_category|-Taxonomie überführt.
-	\item In den \emph{Wichtigen Regeln} wird ergänzt, dass auch der Loop-Verlauf nicht bewertet wird sowie eine Regel zur stufenübergreifenden Vergleichbarkeit der Maßstäbe.
-	\item Neu hinzugefügt werden ein Abschnitt zur Besonderheit der Stufe sowie ein Hinweis zur besonderen Aufmerksamkeit beim \code|assertion_score| (siehe folgende Auszüge).
-\end{itemize}
-
-\begin{listing}[H]
-\caption{Neuer Abschnitt ``Besonderheit dieser Stufe''}
-\label{lst:stage5-besonderheit}
-\begin{minted}{markdown}
-Die Spalte 'file' enthält den Pfad (relativ zu src/app/llm/) des final_spec — des Testcodes der LETZTEN Loop-Iteration. NUR diese Datei wird bewertet. Die UC-Ordner enthalten zusätzlich frühere Iterationen (iter-0 bis iter-n-1) und *.exec.spec.ts-Dateien: Das sind Harness-Artefakte — NIEMALS öffnen oder bewerten. Die Spalten 'passed' und 'iterations_used' sind Metadaten: iterations_used ist KEIN Qualitätskriterium — ein PASS nach 4 Iterationen wird identisch bewertet wie ein PASS nach 1.
-\end{minted}
-\end{listing}
-
-\begin{listing}[H]
-\caption{Zusatz beim assertion\_score}
-\label{lst:stage5-assertion}
-\begin{minted}{markdown}
-BESONDERE AUFMERKSAMKEIT in dieser Stufe: Der Loop optimiert auf PASS. Auch wenn der Feedback-Prompt das Abschwächen von Assertions verbietet, ist strukturell möglich, dass ein Test über die Iterationen hinweg weniger prüft, nur um grün zu werden. Prüfe daher bei exec_category=PASS besonders genau gegen die Expected Results des Use Case, ob die Assertions diese tatsächlich verifizieren. Die Maßstäbe der Skala bleiben dabei unverändert — strengere Aufmerksamkeit bedeutet nicht strengere Bewertung.
-\end{minted}
-\end{listing}
-
-\newpage
-
-\subsection{Bewertungsrubrik der Phase 2}
-\label{app:judge-rubrik}
-
-\begin{table}[htbp]
-\centering
-\small
-\caption{Skalenstufen der vier Bewertungsdimensionen}
-\begin{tabular}{@{}lcp{9.5cm}@{}}
-\toprule
-Dimension & Stufe & Beschreibung \\
-\midrule
-coverage & 1 & Testet den Use Case nicht oder etwas völlig anderes \\
-         & 2 & Deckt weniger als die Hälfte der Schritte ab \\
-         & 3 & Deckt die wesentlichen Schritte ab, einzelne Lücken \\
-         & 4 & Alle Schritte und erwarteten Ergebnisse abgedeckt \\
-\midrule
-selector & 1 & Selektoren überwiegend erfunden oder falsch \\
-         & 2 & Mischung aus korrekten und erfundenen Selektoren \\
-         & 3 & Selektoren überwiegend korrekt, kleinere Abweichungen \\
-         & 4 & Alle Selektoren korrekt \\
-\midrule
-map\_interaction & n/a & Use Case erfordert keine kartenspezifische Interaktion  \\
-         & 1 & Keine kartenspezifische Aktion oder Prüfung, obwohl der Use Case sie erfordert; ausschließlich DOM-basiert \\
-         & 2 & Interaktion versucht, aber fehlerhaft (erfundene Map-Model-Aufrufe, falsche Koordinaten- oder Pixellogik) oder ohne Warten auf den Kartenzustand \\
-         & 3 & Im Wesentlichen korrekt, kleinere Abweichungen \\
-         & 4 & Funktional gleichwertig zum Referenztest \\
-\midrule
-assertion & 1 & Keine oder ausschließlich triviale Assertions \\
-         & 2 & Assertions vorhanden, prüfen aber nicht die Erwartungen \\
-         & 3 & Erwartungen im Wesentlichen geprüft, kleinere Lücken \\
-         & 4 & Erwartungen exakt geprüft; der Test würde bei defekter Funktion zuverlässig fehlschlagen \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\newpage
-
-\section{Vollständige Use-Case-Beschreibungen}
+\subsection{Vollständige Use-Case-Beschreibungen}
 \label{app:use-cases}
 
-Die Use Cases sind in ihrer originalen englischen Fassung wiedergegeben.\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/gpt/test-generation/src/app/llm/use_cases.md}}
+Die Use Cases\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/gpt/test-generation/src/app/llm/use_cases.md}} sind in ihrer originalen englischen Fassung wiedergegeben.
 
 \begingroup
 % Kompakte Listen und tabellarische Use-Case-Darstellung
@@ -181,10 +97,101 @@ Die Use Cases sind in ihrer originalen englischen Fassung wiedergegeben.\footnot
 
 \newpage
 
-\section{Stichprobe der manuellen Bewertungskontrolle}
+\section{Evaluierung der Phase 2}
+\label{app:phase2-evaluierung}
+
+\subsection{Judge-Prompt}
+\label{app:judge-prompt}
+
+\subsubsection{Stufen 1 bis 4}
+\label{app:judge-prompt-base}
+
+Das folgende Listing zeigt den Bewertungsprompt\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/phase2_judge_prompt.md}} der Phase~2 für die Stufen 1 bis 4.
+
+\captionof{listing}{Prompt der LLM-Judge-Bewertung (Stufen 1 bis 4)}
+\label{lst:judge-prompt}
+\nopagebreak
+\inputminted{markdown}{Quellcode/phase2_judge_prompt.md}
+
+\subsubsection{Stufe 5 (Self-Improvement-Loop)}
+\label{app:judge-prompt-stage5}
+
+Der Bewertungsprompt\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/phase2_judge_prompt_stage5.md}} für Stufe~5 (Self-Improvement-Loop) ist mit dem Prompt der Stufen~1 bis 4 (Anhang~\ref{app:judge-prompt-base}) identisch. Die Bewertungsskalen und der Output bleiben unverändert. Abweichend sind lediglich die folgenden Punkte:
+
+\begin{itemize}
+	\item In der Rolle wird der Ausführungskontext angepasst: Die Ausführung erfolgte während des Self-Improvement-Loops und wurde über \code|stage5_to_phase1.py| in die \code|exec_category|-Taxonomie überführt.
+	\item In den \emph{Wichtigen Regeln} wird ergänzt, dass auch der Loop-Verlauf nicht bewertet wird sowie eine Regel zur stufenübergreifenden Vergleichbarkeit der Maßstäbe.
+	\item Neu hinzugefügt werden ein Abschnitt zur Besonderheit der Stufe sowie ein Hinweis zur besonderen Aufmerksamkeit beim \code|assertion_score| (siehe folgende Auszüge).
+\end{itemize}
+
+\begin{listing}[H]
+\caption{Neuer Abschnitt \enquote{Besonderheit dieser Stufe}}
+\label{lst:stage5-besonderheit}
+\begin{minted}{markdown}
+Die Spalte 'file' enthält den Pfad (relativ zu src/app/llm/) des final_spec — des Testcodes der LETZTEN Loop-Iteration. NUR diese Datei wird bewertet. Die UC-Ordner enthalten zusätzlich frühere Iterationen (iter-0 bis iter-n-1) und *.exec.spec.ts-Dateien: Das sind Harness-Artefakte — NIEMALS öffnen oder bewerten. Die Spalten 'passed' und 'iterations_used' sind Metadaten: iterations_used ist KEIN Qualitätskriterium — ein PASS nach 4 Iterationen wird identisch bewertet wie ein PASS nach 1.
+\end{minted}
+\end{listing}
+
+\begin{listing}[H]
+\caption{Zusatz beim assertion\_score}
+\label{lst:stage5-assertion}
+\begin{minted}{markdown}
+BESONDERE AUFMERKSAMKEIT in dieser Stufe: Der Loop optimiert auf PASS. Auch wenn der Feedback-Prompt das Abschwächen von Assertions verbietet, ist strukturell möglich, dass ein Test über die Iterationen hinweg weniger prüft, nur um grün zu werden. Prüfe daher bei exec_category=PASS besonders genau gegen die Expected Results des Use Case, ob die Assertions diese tatsächlich verifizieren. Die Maßstäbe der Skala bleiben dabei unverändert — strengere Aufmerksamkeit bedeutet nicht strengere Bewertung.
+\end{minted}
+\end{listing}
+
+\newpage
+
+\subsection{Bewertungsrubrik}
+\label{app:judge-rubrik}
+
+\begingroup
+\small
+\begin{longtable}{@{}lcp{9.5cm}@{}}
+\caption{Skalenstufen der vier Bewertungsdimensionen}
+\label{tab:judge-rubrik} \\
+\toprule
+Dimension & Stufe & Beschreibung \\
+\midrule
+\endfirsthead
+\multicolumn{3}{@{}l}{\footnotesize\itshape Fortsetzung von
+  Tabelle~\ref{tab:judge-rubrik}} \\
+\toprule
+Dimension & Stufe & Beschreibung \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r@{}}{\footnotesize\itshape Fortsetzung nächste Seite} \\
+\endfoot
+\bottomrule
+\endlastfoot
+coverage & 1 & Testet den Use Case nicht oder etwas völlig anderes \\
+         & 2 & Deckt weniger als die Hälfte der Schritte ab \\
+         & 3 & Deckt die wesentlichen Schritte ab, einzelne Lücken \\
+         & 4 & Alle Schritte und erwarteten Ergebnisse abgedeckt \\
+\midrule
+selector & 1 & Selektoren überwiegend erfunden oder falsch \\
+         & 2 & Mischung aus korrekten und erfundenen Selektoren \\
+         & 3 & Selektoren überwiegend korrekt, kleinere Abweichungen \\
+         & 4 & Alle Selektoren korrekt \\
+\midrule
+map\_interaction & n/a & Use Case erfordert keine kartenspezifische Interaktion  \\
+         & 1 & Keine kartenspezifische Aktion oder Prüfung, obwohl der Use Case sie erfordert; ausschließlich DOM-basiert \\
+         & 2 & Interaktion versucht, aber fehlerhaft (erfundene Map-Model-Aufrufe, falsche Koordinaten- oder Pixellogik) oder ohne Warten auf den Kartenzustand \\
+         & 3 & Im Wesentlichen korrekt, kleinere Abweichungen \\
+         & 4 & Funktional gleichwertig zum Referenztest \\
+\midrule
+assertion & 1 & Keine oder ausschließlich triviale Assertions \\
+         & 2 & Assertions vorhanden, prüfen aber nicht die Erwartungen \\
+         & 3 & Erwartungen im Wesentlichen geprüft, kleinere Lücken \\
+         & 4 & Erwartungen exakt geprüft; der Test würde bei defekter Funktion zuverlässig fehlschlagen \\
+\end{longtable}
+\endgroup
+
+\subsection{Stichprobe der manuellen Bewertungskontrolle}
 \label{app:review}
 
-Tabelle~\ref{tab:review_full} führt die Einzelurteile auf. Angegeben sind der vom Bewertungsmodell vergebene Punktwert und das Ergebnis der Kontrolle: $\bullet$ bestätigt, $\circ$ grenzwertig, aber vertretbar, $\times$ abweichend. Die vollständige Fassung mit den Begründungstexten des Modells und den Prüfnotizen liegt im Repository.\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/tests/_review_sample.csv}}
+Tabelle~\ref{tab:review_full} führt die Einzelurteile auf. Angegeben sind der vom Bewertungsmodell vergebene Punktwert und das Ergebnis der Kontrolle: $\bullet$ bestätigt, $\circ$ grenzwertig, aber vertretbar, $\times$ abweichend. Die vollständige Fassung\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/tests/_review_sample.csv}} mit den Begründungstexten des Modells und den Prüfnotizen liegt im Repository.
 
 \begin{longtable}{@{}rrrl rrrr@{}}
 \caption{Ergebnis der manuellen Kontrolle je Testdatei und Dimension}
