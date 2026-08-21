@@ -1,4 +1,4 @@
-\section{Bestandteile des Generierungsprompts}
+﻿\section{Bestandteile des Generierungsprompts}
 \label{app:bestandteile-generierungsprompt}
 
 \subsection{Map-Model-Helfer}
@@ -6,8 +6,10 @@
 
 Das folgende Listing zeigt die Map-Model-Helfer\footnote{Vollständige, unveränderte Originaldatei: \url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/map-model-helpers.ts}} für den Zugriff auf den Kartenzustand. Die Kommentare sind zur besseren Lesbarkeit gekürzt, die Funktionslogik ist unverändert.
 
+\begingroup
 \captionof{listing}[Map-Model-Helfer]{Map-Model-Helfer für den Zugriff auf den Kartenzustand (\texttt{map-model-helpers.ts})}
 \label{lst:map-model-helpers}
+\endgroup
 \nopagebreak
 \inputminted{typescript}{Quellcode/map-model-helpers.ts}
 
@@ -16,8 +18,10 @@ Das folgende Listing zeigt die Map-Model-Helfer\footnote{Vollständige, unverän
 
 Das folgende Listing zeigt den OPT-Playwright-Skill\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/SKILL.md}}, der dem \ac{LLM} im System-Prompt mitgegeben wird.
 
+\begingroup
 \captionof{listing}[OPT-Playwright-Skill]{OPT-Playwright-Skill im System-Prompt (\texttt{SKILL.md})}
 \label{lst:opt-playwright-skill}
+\endgroup
 \nopagebreak
 \inputminted{markdown}{Quellcode/SKILL.md}
 
@@ -108,8 +112,10 @@ Die Use Cases\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob
 
 Das folgende Listing zeigt den Bewertungsprompt\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/phase2_judge_prompt.md}} der Phase~2 für die Stufen 1 bis 4.
 
+\begingroup
 \captionof{listing}{Prompt der LLM-Judge-Bewertung (Stufen 1 bis 4)}
 \label{lst:judge-prompt}
+\endgroup
 \nopagebreak
 \inputminted{markdown}{Quellcode/phase2_judge_prompt.md}
 
@@ -330,7 +336,7 @@ Tabelle~\ref{tab:anhang_gpt54_phase1_kategorien} zeigt die Ausführungsergebniss
 
 \subsection{Ergebnisse der Qualitätsbewertung (Phase 2)}
 
-Median und Mittelwert von \emph{coverage} und \emph{assertion} liegen bereits in Stufe~1 nahe am Maximum und bleiben über alle vier Stufen nahezu konstant. \emph{selector} steigt von einem Mittelwert von 2,55 in Stufe~1 auf 3,28 in Stufe~2 und danach nur noch leicht auf 3,67 in Stufe~4. Der Median liegt ab Stufe~2 bei 4. \emph{map\_interaction} bleibt in den Stufen~1 und 2 bei 1,82 bzw. 2,00, springt in Stufe~3 auf 3,75 und liegt in Stufe~4 mit 3,78 nahezu unverändert. Die Werte sind in Tabelle~\ref{tab:anhang_gpt54_dimensionen} zusammengefasst. Abbildung~\ref{fig:score_heatmap_gpt} zeigt zusätzlich die mittleren Judge-Scores je Use Case und Dimension. \texttt{vacuous\_pass} tritt nur in Stufe~1 (1 Fall) und Stufe~2 (6 Fälle) auf.
+Median und Mittelwert von \emph{coverage} und \emph{assertion} liegen bereits in Stufe~1 nahe am Maximum und bleiben über alle vier Stufen nahezu konstant. \emph{selector} steigt von einem Mittelwert von 2,55 in Stufe~1 auf 3,28 in Stufe~2 und danach nur noch leicht auf 3,67 in Stufe~4. Der Median liegt ab Stufe~2 bei 4. \emph{map\_interaction} erreicht in den Stufen~1 und 2 nur 1,82 bzw. 2,00, springt in Stufe~3 auf 3,75 und verändert sich in Stufe~4 mit 3,78 kaum noch. Die Werte sind in Tabelle~\ref{tab:anhang_gpt54_dimensionen} zusammengefasst. Abbildung~\ref{fig:score_heatmap_gpt} zeigt zusätzlich die mittleren Judge-Scores je Use Case und Dimension. \texttt{vacuous\_pass} tritt nur in Stufe~1 (1 Fall) und Stufe~2 (6 Fälle) auf.
 
 \begin{table}[H]
     \centering
@@ -358,7 +364,7 @@ Median und Mittelwert von \emph{coverage} und \emph{assertion} liegen bereits in
 
 \subsection{Ergebnisse der Bonus-Stufe 5}
 
-Von den 500 Läufen bestehen 495 (99,0\,\%), 4 (0,8\,\%) enden als \texttt{ASSERTION\_FAIL} und 1 (0,2\,\%) als \texttt{INFRA\_FAIL}. 299 Läufe (59,8\,\%) bestehen bereits in der initialen Iteration~0. Kumuliert sind es nach Iteration~1 441 Läufe (88,2\,\%) und nach Iteration~3 97,4\,\%. Danach steigt die Rate nur noch langsam. Die 5 Läufe ohne \texttt{PASS} verteilen sich auf die drei Use Cases UC-06 (2 Läufe), UC-07 (1 Lauf) und UC-10 (2 Läufe).
+Von den 500 Läufen bestehen 495 (99,0\,\%), 4 (0,8\,\%) enden als \texttt{ASSERTION\_FAIL} und 1 (0,2\,\%) als \texttt{INFRA\_FAIL}. 299 Läufe (59,8\,\%) bestehen bereits in der initialen Iteration~0 (Abbildung~\ref{fig:anhang_gpt54_loop_konvergenz}). Nach Iteration~1 sind es zusammengerechnet 441 Läufe (88,2\,\%), nach Iteration~3 97,4\,\%. Danach steigt die Rate nur noch langsam. Die 5 Läufe ohne \texttt{PASS} verteilen sich auf die drei Use Cases UC-06 (2 Läufe), UC-07 (1 Lauf) und UC-10 (2 Läufe).
 
 \begin{figure}[H]
     \centering
@@ -367,7 +373,7 @@ Von den 500 Läufen bestehen 495 (99,0\,\%), 4 (0,8\,\%) enden als \texttt{ASSER
     \label{fig:anhang_gpt54_loop_konvergenz}
 \end{figure}
 
-In der Qualitätsbewertung erreicht Stufe~5 in allen vier Dimensionen die höchsten Mittelwerte des gesamten Laufs: 3,97 in \emph{selector}, 3,88 in \emph{assertion}, 3,80 in \emph{coverage} und 3,65 in \emph{map\_interaction}. Der Median liegt in allen vier Dimensionen bei 4. Über die Use Cases hinweg weicht allein UC-08 deutlich ab, mit 2,64 in \emph{map\_interaction} und 3,12 in \emph{coverage}. Alle übrigen Use Cases liegen in jeder Dimension bei mindestens 3,30. Als \texttt{vacuous\_pass} sind 7 der 495 bestandenen Tests eingestuft (1,4\,\%).
+In der Qualitätsbewertung erreicht Stufe~5 bei \emph{selector} (3,87) und \emph{coverage} (3,80) die höchsten Mittelwerte des gesamten Laufs. Bei \emph{assertion} (3,88) und \emph{map\_interaction} (3,65) liegt Stufe~5 leicht unter den Werten von Stufe~4 (3,90 bzw. 3,78). Der Median liegt in allen vier Dimensionen bei 4. Über die Use Cases hinweg weicht allein UC-08 deutlich ab, mit 2,64 in \emph{map\_interaction} und 3,12 in \emph{coverage} (Abbildung~\ref{fig:anhang_gpt54_stufe5_heatmap}). Alle übrigen Use Cases liegen in jeder Dimension bei mindestens 3,30. Als \texttt{vacuous\_pass} sind 7 der 495 bestandenen Tests eingestuft (1,4\,\%).
 
 \begin{figure}[H]
     \centering
@@ -378,7 +384,7 @@ In der Qualitätsbewertung erreicht Stufe~5 in allen vier Dimensionen die höchs
 
 \subsection{GIS-spezifische Besonderheiten}
 
-Die Auswertung basiert auf demselben Vorgehen wie in Abschnitt~6.5. In Stufe~1 verwenden 30 Dateien (6,0\,\%) mindestens eine Test-ID, der in der Webanwendung nicht existiert. Ab Stufe~2 wird keine einzige Test-ID mehr halluziniert. \texttt{page.locator} mit \ac{CSS}-Ausdrücken sinkt von 52,0\,\% in Stufe~1 auf 2,2\,\% in Stufe~2 und wird ab Stufe~3 gar nicht mehr verwendet. Die Nutzung der Map-Model-Helfer liegt ab Stufe~3 bei mindestens 90\,\%. Ein direkter Zugriff auf \texttt{\_\_openPioneerMap} bleibt in Stufe~1 und 2 bei 0\,\% und liegt ab Stufe~3 zwischen 9,8 und 10,2\,\%.
+Die Auswertung basiert auf demselben Vorgehen wie in Abschnitt~6.5. In Stufe~1 verwenden 30 Dateien (6,0\,\%) mindestens eine Test-ID, die in der Webanwendung nicht existiert. Ab Stufe~2 wird keine einzige Test-ID mehr halluziniert. Der Anteil der Dateien mit \texttt{page.locator} und \ac{CSS}-Ausdrücken sinkt von 52,0\,\% in Stufe~1 auf 2,2\,\% in Stufe~2; ab Stufe~3 wird dieses Muster gar nicht mehr verwendet. Die Nutzung der Map-Model-Helfer liegt ab Stufe~3 bei mindestens 90\,\%. Ein direkter Zugriff auf \texttt{\_\_openPioneerMap} bleibt in den Stufen~1 und 2 bei 0\,\% und liegt ab Stufe~3 zwischen 9,8 und 10,2\,\%.
 
 \begin{table}[H]
     \centering
@@ -397,8 +403,8 @@ Die Auswertung basiert auf demselben Vorgehen wie in Abschnitt~6.5. In Stufe~1 v
     \end{tabular}
 \end{table}
 
-UC-08 erreicht in den Stufen 3 und 4 keinen einzigen \texttt{PASS}, obwohl das Zeichnen der Messlinie gelingt. Die betrachteten Dateien berechnen ihre Klickpunkte aus \texttt{boundingBox()} und schließen mit genau einem Doppelklick ab. Sie scheitern erst an der Überprüfung des Messergebnisses. 74\,\% bzw. 66\,\% der Dateien prüfen das Messergebnis über einen Regex auf Zahl und Einheit \texttt{m} oder \texttt{km}, wobei viele davon im Mess-Panel erfolgen. Allerdings wird das Messergebnis als OpenLayers-Overlay an der gezeichneten Linie angezeigt und nicht im Mess-Panel. Das erklärt auch die 100\,\% bzw. 96\,\% \texttt{ASSERTION\_FAIL}-Anteile. In Stufe~2 suchen 31 der 32 erfolgreichen Dateien den Regex seitenweit und treffen damit das Overlay.
+UC-08 erreicht in den Stufen 3 und 4 keinen einzigen \texttt{PASS}, obwohl das Zeichnen der Messlinie gelingt. Die betrachteten Dateien berechnen ihre Klickpunkte aus \texttt{boundingBox()} und schließen mit genau einem Doppelklick ab. Sie scheitern erst an der Überprüfung des Messergebnisses. 74\,\% bzw. 66\,\% der Dateien prüfen das Messergebnis über einen Regex auf Zahl und Einheit \texttt{m} oder \texttt{km}, wobei viele dieser Prüfungen im Mess-Panel erfolgen. Allerdings wird das Messergebnis als OpenLayers-Overlay an der gezeichneten Linie angezeigt und nicht im Mess-Panel. Das erklärt auch die \texttt{ASSERTION\_FAIL}-Anteile von 100\,\% bzw. 96\,\%. In Stufe~2 suchen 31 der 32 erfolgreichen Dateien den Regex seitenweit und treffen damit das Overlay.
 
-Bei UC-07 in Stufe~2 übernehmen 94\,\% der Dateien die Zielkoordinate aus dem Use Case und rechnen sie über den Koordinatenanzeiger in Bildschirmpixel um. Die Elemente werden korrekt adressiert, der Fehler liegt in der Umrechnung auf die Kartenposition. Ab Stufe~3 steigt die \texttt{PASS}-Rate auf 56\,\% und in Stufe~4 auf 78\,\%. Der Import der Helfer-Funktion \texttt{getHighlightedCoordinate} erklärt dies allein nicht. Über die zusätzliche Information zum Zugriff auf \texttt{\_\_openPioneerMap} wird die Zielkoordinate über \texttt{map.olMap.getPixelFromCoordinate} korrekt in Pixel umgerechnet. Der in Tabelle~\ref{tab:anhang_gpt54_codemuster} aufgeführte Anteil von rund 10\,\% direkter Kartenzugriffe geht damit fast vollständig auf UC-07 zurück.
+Bei UC-07 in Stufe~2 übernehmen 94\,\% der Dateien die Zielkoordinate aus dem Use Case und rechnen sie über eine eigene Formel in Bildschirmpixel um. Die Elemente werden korrekt adressiert, der Fehler liegt in der Umrechnung auf die Kartenposition. Ab Stufe~3 steigt die \texttt{PASS}-Rate auf 56\,\% und in Stufe~4 auf 78\,\%. Der Import der Helfer-Funktion \texttt{getHighlightedCoordinate} erklärt dies allein nicht. Über die zusätzliche Information zum Zugriff auf \texttt{\_\_openPioneerMap} wird die Zielkoordinate über \texttt{map.olMap.getPixelFromCoordinate} korrekt in Pixel umgerechnet. Der in Tabelle~\ref{tab:anhang_gpt54_codemuster} aufgeführte Anteil von rund 10\,\% direkter Kartenzugriffe geht damit fast vollständig auf UC-07 zurück.
 
-Die übrigen Auffälligkeiten gehen nicht auf die Bedienung der Karte, sondern auf falsche Annahmen in den Bedienelementen zurück. UC-02 prüft die Hintergrundkartenwechsel in Stufe~2 durchgängig als Combobox mit der Annahme, dahinter stehe ein einfaches \texttt{<select>}. Es handelt sich aber um einen Auswahl-Trigger, auf dem weder \texttt{selectOption} noch \texttt{selectedOptions} funktioniert. In Stufe~3 wird stattdessen eine Radiogruppe angenommen, was in 82\,\% der Fälle zu einem nicht gefundenen Element führt und den \emph{selector}-Score auf 1,12 drückt. In Stufe~4 rufen alle 50 Dateien \texttt{selectOption} auf, und bestanden haben genau die 19, die zusätzlich einen Klick auf \texttt{getByRole('option')} durchführen. Der Einbruch von UC-05 in Stufe~4 geht darauf zurück, dass die Tests den Legendeneintrag über eine exakte Textgleichheit mit \enquote{Precipitation} prüfen. In der Legende steht jedoch \enquote{Precipitation (mm)} mit der Einheit dahinter.
+Die übrigen Auffälligkeiten gehen nicht auf die Bedienung der Karte, sondern auf falsche Annahmen in den Bedienelementen zurück. UC-02 prüft den Hintergrundkartenwechsel in Stufe~2 durchgängig als Combobox mit der Annahme, dahinter stehe ein einfaches \texttt{<select>}. Es handelt sich aber um einen Auswahl-Trigger, auf dem weder \texttt{selectOption} noch \texttt{selectedOptions} funktioniert. In Stufe~3 wird stattdessen eine Radiogruppe angenommen, was in 82\,\% der Fälle zu einem nicht gefundenen Element führt und den \emph{selector}-Score auf 1,12 drückt. In Stufe~4 rufen alle 50 Dateien \texttt{selectOption} auf, und bestanden haben genau die 19, die zusätzlich einen Klick auf \texttt{getByRole('option')} durchführen. Der Einbruch von UC-05 in Stufe~4 geht darauf zurück, dass die Tests den Legendeneintrag über eine exakte Textgleichheit mit \enquote{Precipitation} prüfen. In der Legende steht jedoch \enquote{Precipitation (mm)} mit der Einheit dahinter.
