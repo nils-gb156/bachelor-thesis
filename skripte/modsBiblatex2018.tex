@@ -134,12 +134,13 @@
 %% Anzeige des Jahres nach dem Stichwort (usera) in der Fussnote
 %% das Stichwort hat der Aufrufer hier schon ausgegeben.
 %% siehe auch Kommentar zu: \renewbibmacro*{date+extradate}
+%% Online-Quellen geben das Jahr wie alle anderen Typen aus (kein eigener
+%% Komma-Delimiter), damit \textcite die Jahreszahl in Klammern setzt.
 \renewbibmacro*{cite:labeldate+extradate}{%
     \ifentrytype{online}
-       {\setunit*{\addspace\addcomma\addspace}%
-         \iffieldundef{year}
+       {\iffieldundef{year}
            {\bibstring{nodate}}
-       {\printlabeldateextra}}%
+           {\printlabeldateextra}}%
        {\printlabeldateextra}}
 
 
