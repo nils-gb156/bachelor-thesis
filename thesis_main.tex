@@ -531,17 +531,23 @@
 % noch weitere Arten von Zusammenfassungen eines Literaturverzeichnisse zu
 % erzeugen.
 % Beispiel: [type=book,type=article]
-\printbibliography[nottype=online,heading=bibintoc,title={\langde{Literaturverzeichnis}\langen{Bibliography}}]
+% @software (z.B. GitHub-Repositories) zaehlt wie @online zu den Internetquellen
+% und wird daher hier ausgeschlossen.
+\printbibliography[nottype=online,nottype=software,heading=bibintoc,title={\langde{Literaturverzeichnis}\langen{Bibliography}}]
 
 % neue Seite für Internetquellen-Verzeichnis
 \newpage
+
+% Filter fuer Internetquellen: @online ODER @software (GitHub-Repos).
+% Mehrere type= gehen nicht (nur AND); ODER-Verknuepfung braucht \defbibfilter.
+\defbibfilter{internetsources}{\type{online} \or \type{software}}
 
 % Laut Leitfaden 2018, S. 14, Fussnote 44 stehen die Internetquellen NICHT im
 % Inhaltsverzeichnis, sondern gehören zum Literaturverzeichnis.
 % Die Option heading=bibintoc würde die Internetquelle als eigenen Eintrag im
 % Inhaltsverzeicnis anzeigen.
 %\printbibliography[type=online,heading=bibintoc,title={\headingNameInternetSources}]
-\printbibliography[type=online,heading=subbibliography,title={\headingNameInternetSources}]
+\printbibliography[filter=internetsources,heading=subbibliography,title={\headingNameInternetSources}]
 
 %\input{kapitel/anhang/erklaerung}
 \end{document}

@@ -99,7 +99,10 @@
        {\usebibmacro{date}}%
        \setunit*{\addspace}%
        \usebibmacro{urldate}}%
-    {}%
+    {\ifentrytype{software}
+       {\setunit*{\addspace}%
+        \usebibmacro{urldate}}%
+       {}}%
   }
 
 %Verhindern, dass bei mehreren Quellen des gleichen Autors im gleichen Jahr
