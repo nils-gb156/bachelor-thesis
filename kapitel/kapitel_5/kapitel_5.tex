@@ -15,6 +15,8 @@ Die Kennzahlen dieses Kapitels wurden skriptgestützt berechnet\footnote{\url{ht
 
 Zusätzlich wurde der komplette Generierungsablauf mit GPT-5.4 statt Qwen3.6-35B-A3B durchgeführt (Ergebnisse siehe Anhang~\ref{app:results-gpt}).
 
+Die vier Stufen unterscheiden sich, wie in Kapitel~4.3 beschrieben, nicht nur im Informationsgehalt, sondern auch im Aufwand ihrer Vorbereitung. Stufe~1 erfordert keine Vorbereitung. Der Accessibility-Snapshot in Stufe~2 und die generierte \ac{UI}-Map in Stufe~3 werden vor dem Generierungslauf skriptgestützt erzeugt und laufen innerhalb weniger Sekunden durch. Die manuelle \ac{UI}-Map für Stufe~4 wurde in ca. 2 h 15 min erstellt. Dies umfasst das Sichten der Komponenten, das Erfassen der Selektoren sowie die Erstellung der Hierarchie und der bedingten Sichtbarkeiten. Hinzu kommt, dass sie bei jeder Änderung an Selektoren, Komponentenstruktur oder Sichtbarkeitsbedingungen händisch aktualisiert werden muss.
+
 \subsection{Ergebnisse der Ausführung (Phase 1)}
 
 Grundlage der Auswertung sind 1.999 Testdateien der Stufen 1 bis 4. Die Ergebnisse der Bonus-Stufe~5 werden wegen des abweichenden Ausführungsmodells getrennt in Kapitel~6.4 dargestellt. Jede Datei wurde einer der sechs Kategorien aus Kapitel~4.5.1 zugeordnet. Zehn Dateien entsprachen keinem Muster der regelbasierten Zuordnung, weil sie wegen ihrer Fehler nicht richtig ausgeführt werden konnten, und wurden daher vorläufig als \texttt{TIMEOUT} klassifiziert. Die manuelle Prüfung ergab in neun Fällen einen Syntaxfehler (\texttt{COMPILE\_ERROR}) und in einem Fall eine Wiederholung ganzer Codeblöcke (\texttt{GENERATION\_ERROR}).
