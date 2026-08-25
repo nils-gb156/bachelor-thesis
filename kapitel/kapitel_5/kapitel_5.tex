@@ -9,7 +9,7 @@ Vorgesehen waren pro Stufe 500 Testdateien, allerdings wurde diese Anzahl nur in
 
 Ausgeführt wurden die Tests mit Playwright~1.60.0 und dem darin enthaltenen Chromium unter Node.js~26.5.0 und pnpm~11.1.2. Alle Tests liefen nacheinander gegen die unter \url{http://localhost:5173/ba-webgis-llm-e2e/} lokal laufende Demo-Anwendung.
 
-Die semantische Bewertung nach Kapitel~4.5.2 wurde zwischen dem 31. Juli und dem 3. August 2026 mit Claude Opus~5 über Claude Code~2.1.220 durchgeführt.
+Die semantische Bewertung nach Kapitel~4.6.2 wurde zwischen dem 31. Juli und dem 3. August 2026 mit Claude Opus~5 über Claude Code~2.1.220 durchgeführt.
 
 Die Kennzahlen dieses Kapitels wurden skriptgestützt berechnet\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/tree/qwen/test-generation/src/app/llm/eval_extract}} und beinhalten die Auswertungen der beiden Evaluationsphasen aus den Ergebnisdateien sowie die Auszählung wiederkehrender Codemuster durch reguläre Ausdrücke über alle generierten Testdateien. Die Skripte wurden ebenfalls mit einem Prompt\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/phase2_judge_evaluation_prompt.md}} in Claude Code direkt im Repository mit Opus~5 erstellt. In dieser Arbeit werden nur die wichtigsten Befunde dargestellt. Die vollständigen Auswertungsberichte\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/tree/qwen/test-generation/docs/eval}} liegen im Repository.
 
@@ -19,7 +19,7 @@ Die vier Stufen unterscheiden sich, wie in Kapitel~4.3 beschrieben, nicht nur im
 
 \subsection{Ergebnisse der Ausführung (Phase 1)}
 
-Grundlage der Auswertung sind 1.999 Testdateien der Stufen 1 bis 4. Die Ergebnisse der Bonus-Stufe~5 werden wegen des abweichenden Ausführungsmodells getrennt in Kapitel~6.4 dargestellt. Jede Datei wurde einer der sechs Kategorien aus Kapitel~4.5.1 zugeordnet. Zehn Dateien entsprachen keinem Muster der regelbasierten Zuordnung, weil sie wegen ihrer Fehler nicht richtig ausgeführt werden konnten, und wurden daher vorläufig als \texttt{TIMEOUT} klassifiziert. Die manuelle Prüfung ergab in neun Fällen einen Syntaxfehler (\texttt{COMPILE\_ERROR}) und in einem Fall eine Wiederholung ganzer Codeblöcke (\texttt{GENERATION\_ERROR}).
+Grundlage der Auswertung sind 1.999 Testdateien der Stufen 1 bis 4. Die Ergebnisse der Bonus-Stufe~5 werden wegen des abweichenden Ausführungsmodells getrennt in Kapitel~6.4 dargestellt. Jede Datei wurde einer der sechs Kategorien aus Kapitel~4.6.1 zugeordnet. Zehn Dateien entsprachen keinem Muster der regelbasierten Zuordnung, weil sie wegen ihrer Fehler nicht richtig ausgeführt werden konnten, und wurden daher vorläufig als \texttt{TIMEOUT} klassifiziert. Die manuelle Prüfung ergab in neun Fällen einen Syntaxfehler (\texttt{COMPILE\_ERROR}) und in einem Fall eine Wiederholung ganzer Codeblöcke (\texttt{GENERATION\_ERROR}).
 
 Tabelle~\ref{tab:phase1_kategorien} zeigt die Ausführungsergebnisse. Die PASS-Rate steigt monoton von 20,0\,\% in Stufe~1 auf 38,6\,\% in Stufe~4. Der größte Einzelschritt liegt mit 13,7 Prozentpunkten zwischen Stufe~2 und Stufe~3, also bei der Einführung der \ac{UI}-Map mit Informationen über die gesamte Web-Anwendung und der Map-Model-Helfer. Die Übergänge von Stufe~1 zu 2 (+2,0 Prozentpunkte) und von Stufe~3 zu 4 (+2,9 Prozentpunkte) verändern die PASS-Rate dagegen kaum.
 
@@ -78,7 +78,7 @@ await expect.poll(() => getMapZoomLevel(page)).toBeGreaterThan(initialZoom as nu
 \end{minted}
 \end{listing}
 
-In den Stufen~1 und 2, in denen die Map-Model-Helfer nicht im Kontext stehen, prüfen die generierten Tests für UC-03 stattdessen nur Sichtbarkeiten im \ac{DOM}. Die Prüfung des Zoomlevels wird nur als Kommentar aufgeführt, und dadurch laufen die Tests häufiger durch. Die hohe PASS-Rate in Stufe~1 bei diesem Use Case belegt also keine höhere Testqualität. Die Tests müssen daher zusätzlich dahingehend bewertet werden, ob sie das geforderte Verhalten auch tatsächlich prüfen.
+In den Stufen~1 und 2, in denen die Map-Model-Helfer nicht im Kontext stehen, prüfen die generierten Tests für UC-03 stattdessen nur Sichtbarkeiten im \ac{DOM}. Die Prüfung des Zoomlevels wird nur als Kommentar aufgeführt, und dadurch laufen die Tests häufiger durch.
 
 Die übrigen Kategorien machen nur einen geringen Anteil aus. \texttt{COMPILE\_ERROR} und \texttt{GENERATION\_ERROR} machen zusammen je Stufe zwischen 0,8\,\% und 2,6\,\% aus. Abgeschnittene oder degenerierte Modellausgaben (\texttt{GENERATION\_ERROR}) treten fast nur in den Stufen 1 und 2 auf (9 und 12 Fälle) und gehen danach auf 1 (Stufe~3) und 4 (Stufe~4) zurück. Die vier Kompilierfehler in Stufe~4 gehen alle auf einen falschen relativen Importpfad der Helferdatei in UC-06 zurück.
 
@@ -105,13 +105,11 @@ Grundlage sind je Stufe die 488 bis 498 Dateien, die nach Abzug der \texttt{GENE
 
 Die Dimensionen \emph{coverage} und \emph{assertion} haben über alle vier Stufen den Median 4. Der Mittelwert steigt bei \emph{coverage} nur geringfügig von 3,68 auf 3,91 und bei \emph{assertion} von 3,29 auf 3,59. Ob ein Test die geforderten Schritte abdeckt und inhaltlich sinnvoll prüft, hängt demnach stärker vom Verständnis des Use Cases ab als vom bereitgestellten \ac{UI}-Kontext.
 
-Ein deutlicher Stufenunterschied zeigt sich dagegen in \emph{selector} und \emph{map\_interaction}. Der Median von \emph{selector} steigt bereits zwischen Stufe~1 und 2 von 2 auf 3 und erreicht ab Stufe~3 den Wert 4. Der größte Sprung liegt hier beim Übergang zum Accessibility-Snapshot in Stufe~2 (Ø +0,52). Der Median von \emph{map\_interaction} bleibt in Stufe~2 noch bei 2 und steigt erst ab Stufe~3 mit der Einführung der Map-Model-Helfer auf 3 (Ø +1,09). Die Nutzung einer Helferfunktion springt im selben Schritt von einer auf 416 Dateien. Beide Dimensionen reagieren also auf unterschiedliche Bestandteile des Kontexts: \emph{selector} auf den erstmals bereitgestellten \ac{UI}-Kontext durch den Accessibility-Snapshot und \emph{map\_interaction} auf die Map-Model-Helfer.
+Ein deutlicher Stufenunterschied zeigt sich dagegen in \emph{selector} und \emph{map\_interaction}. Der Median von \emph{selector} steigt bereits zwischen Stufe~1 und 2 von 2 auf 3 und erreicht ab Stufe~3 den Wert 4. Der größte Sprung liegt hier beim Übergang zum Accessibility-Snapshot in Stufe~2 (Ø +0,52). Der Median von \emph{map\_interaction} bleibt in Stufe~2 noch bei 2 und steigt erst ab Stufe~3 mit der Einführung der Map-Model-Helfer auf 3 (Ø +1,09). Die Nutzung einer Helferfunktion springt im selben Schritt von keiner auf 416 Dateien. Beide Dimensionen reagieren also auf unterschiedliche Bestandteile des Kontexts: \emph{selector} auf den erstmals bereitgestellten \ac{UI}-Kontext durch den Accessibility-Snapshot und \emph{map\_interaction} auf die Map-Model-Helfer.
 
-In Stufe~1 sind 33 der 100 PASS-Fälle (33\,\%) als \texttt{vacuous\_pass} markiert, davon 31 allein bei UC-03. In den übrigen Stufen liegt der Anteil nur noch zwischen 2,7 und 7,8\,\% und betrifft vor allem UC-08. Der hohe Wert bei UC-03 in Stufe~1 bestätigt den beschriebenen Befund aus Abschnitt~6.2. Ohne Kenntnis der Map-Model-Helfer prüfen die generierten Tests dort nur Sichtbarkeiten im \ac{DOM} und haben dadurch eine höhere PASS-Rate, ohne das im Use Case geforderte Zoomverhalten tatsächlich zu verifizieren. Eigentlich wäre das auch in Ordnung, da sich der Maßstab über die Maßstabsanzeige im Footer prüfen lässt. Allerdings tut das in dieser Stufe kein einziger Test.
+In Stufe~1 sind 33 der 100 PASS-Fälle (33\,\%) als \texttt{vacuous\_pass} markiert, davon 31 allein bei UC-03. In den übrigen Stufen liegt der Anteil nur noch zwischen 2,7 und 7,8\,\% und betrifft vor allem UC-08. Der hohe Wert bei UC-03 in Stufe~1 bestätigt den beschriebenen Befund aus Abschnitt~6.2. Ohne Kenntnis der Map-Model-Helfer prüfen die generierten Tests dort nur Sichtbarkeiten im \ac{DOM} und haben dadurch eine höhere PASS-Rate, ohne das im Use Case geforderte Zoomverhalten tatsächlich zu verifizieren. Die im Footer angezeigte Maßstabsleiste bietet eine alternative Prüfmöglichkeit, die in dieser Stufe jedoch kein einziger Test nutzt.
 
 Auch innerhalb einer Stufe streuen die Dimensionswerte über die Use Cases (Abbildung~\ref{fig:score_heatmap}). Der Widerspruch aus hohem \emph{selector}- und niedrigem \emph{assertion}-Wert, der bei UC-03 in Stufe~1 auftritt, findet sich in gleicher Form auch in Stufe~4 wieder: \emph{coverage} und \emph{selector} erreichen dort 4,0, \emph{assertion} bleibt bei 2,3. Bei UC-07 schwankt \emph{map\_interaction} über alle Stufen zwischen 1,4 und 2,3. Ein Anstieg durch die Map-Model-Helfer ist im Vergleich zu den anderen Use Cases nicht zu erkennen. Das liegt daran, dass die Helfer für diesen Fall keine Funktion bereitstellen, da es um einen gezielten Klick auf eine Koordinate in der Karte geht.
-
-Ein hoher \emph{coverage}- oder \emph{selector}-Wert belegt demnach noch keine inhaltlich verlässliche Prüfung. Erst das Zusammenspiel aller vier Dimensionen zeigt, ob ein Test das im Use Case geforderte Verhalten tatsächlich verifiziert.
 
 \begin{figure}[H]
     \centering
@@ -126,7 +124,7 @@ Die Kontrolle der 50 Dateien der Stichprobe mit 175 bewertbaren Einzelurteilen e
 
 \begin{table}[H]
     \centering
-    \caption{Ergebnis der Kontrolle je Stufe (Dimensionen zusammengefasst)}
+    \caption[Ergebnis der Kontrolle je Stufe]{Ergebnis der Kontrolle je Stufe (Dimensionen zusammengefasst)}
     \label{tab:review_by_stage}
     \begin{tabular}{lrrrr}
         \toprule
@@ -167,7 +165,7 @@ Den größten Teil dieses Zugewinns liefern die ersten beiden Iterationen (Abbil
     \label{fig:stufe5_loop_ergebnis}
 \end{figure}
 
-Zwischen den Iterationen bleibt die Fehlerklasse überwiegend erhalten. Von den 1.654 Korrekturaufrufen, die aus einem vorherigen Fehlschlag entstanden, führen 1.197 (72,4\,\%) in dieselbe Klasse zurück. Aus \texttt{ASSERTION\_FAIL} führen 83,3\,\% der Übergänge wieder zu \texttt{ASSERTION\_FAIL}, nur 9,2\,\% zu \texttt{PASS} und 7,4\,\% zu \texttt{INFRA\_FAIL} oder \texttt{COMPILE\_ERROR}. Bei \texttt{INFRA\_FAIL} bestehen die 484 Übergänge zum größten Teil aus einem Wechsel zu \texttt{ASSERTION\_FAIL} (30,8\,\%) oder direkt zu einem \texttt{PASS} (22,9\,\%). Die restlichen 46,3\,\% bleiben in derselben Klasse.
+Zwischen den Iterationen bleibt die Fehlerklasse überwiegend erhalten. Von den 1.654 Korrekturaufrufen, die aus einem vorherigen Fehlschlag entstanden, führen 1.197 (72,4\,\%) in dieselbe Klasse zurück. Aus \texttt{ASSERTION\_FAIL} führen 83,3\,\% der Übergänge wieder zu \texttt{ASSERTION\_FAIL}, nur 9,2\,\% zu \texttt{PASS} und 7,4\,\% zu \texttt{INFRA\_FAIL} oder \texttt{COMPILE\_ERROR}. Bei \texttt{INFRA\_FAIL} bleibt der größte Teil der 484 Übergänge in derselben Klasse (46,3\,\%), der Rest wechselt vor allem zu \texttt{ASSERTION\_FAIL} (30,8\,\%) oder direkt zu \texttt{PASS} (22,9\,\%).
 
 Die schlechte Performance von UC-03 ist auf denselben Fehler zurückzuführen, der schon in Abschnitt~6.2 beschrieben wurde. 40 der 41 Abbrüche gehen auch hier auf die Weiterverwendung von \code|expect.poll| zurück. Bei UC-07 und UC-08 dominieren kartenbezogene Fehler. Abgefangene Pointer-Events treten in 122 fehlgeschlagenen Iterationen auf, davon 74 bei UC-07 und 24 bei UC-08.
 
@@ -182,7 +180,7 @@ In der Qualitätsbewertung erreicht Stufe~5 mit 3,96 in \emph{coverage}, 3,77 in
 
 Von den bestandenen Tests sind 14 (3,8\,\%) als \texttt{vacuous\_pass} eingestuft. Sie treten ausschließlich bei UC-07 (8) und UC-08 (6) auf und entsprechen damit den Use Cases mit den kartenbezogenen Fehlern.
 
-Der Ressourcenaufwand unterscheidet sich deutlich gegenüber den anderen Stufen. Über alle Iterationen entstanden 2.154 Generierungsaufrufe gegenüber 500 je Stufe. Zudem ist die Gesamtdauer der Generierung mit 15 h 1 min im Vergleich zu Stufe~4 mit 3 h 46 min deutlich länger und aufwendiger. Angaben zum Token-Verbrauch liegen für keine Stufe vor.
+Der Ressourcenaufwand unterscheidet sich deutlich gegenüber den anderen Stufen. Über alle Iterationen entstanden 2.154 Generierungsaufrufe gegenüber 500 je Stufe. Zudem ist die Gesamtdauer der Generierung mit 15 h 1 min im Vergleich zu Stufe~4 mit 3 h 46 min deutlich länger und aufwendiger.
 
 \subsection{GIS-spezifische Besonderheiten}
 
@@ -212,9 +210,9 @@ Welchen Zugang die Tests zum Prüfen des Kartenzustands wählen, hängt davon ab
 
 In UC-04 wird erwartet, dass der Layer auf der Karte gerendert wird. Ohne Map-Model weichen die Tests auf Elemente im \ac{DOM} aus. In Stufe~1 prüfen alle 50 UC-04-Dateien den Zustand der Checkbox und sonst nichts. In Stufe~2 kommt in 49 Dateien der Legendeneintrag als zusätzliche Prüfung hinzu. Ab Stufe~3 nutzen alle UC-04-Dateien \code|isLayerRendered|, und der Legendeneintrag verschwindet wieder weitgehend, die Checkbox-Prüfung bleibt aber erhalten.
 
-Der Klick in die Karte bleibt in allen Stufen schwach. UC-06 und UC-07 verlangen beide eine Klick-Interaktion mit der Karte, einmal beliebig und einmal mit vorgegebener Koordinate. Playwright klickt jedoch Pixel relativ zur Elementecke, und für die Umrechnung stellt der Kontext keine Funktion bereit. Diese Lücke ist demnach auch in den PASS-Raten der Stufen wiederzuerkennen. In vielen Fällen rechnet das Modell die Koordinate in UC-07 nicht um, sondern übergibt die Kartenkoordinate einfach als Pixelposition. In Stufe~2 betrifft das 41 der 50 UC-07-Tests. Die Tests scheitern dann, da die Klickposition weit außerhalb des Elements liegt. In den bestandenen UC-07-Tests der Stufen~3 und 4 wird die Koordinate korrekt in Pixel umgerechnet.
+Der Klick in die Karte bleibt in allen Stufen schwach. UC-06 und UC-07 verlangen beide eine Klick-Interaktion mit der Karte, einmal beliebig und einmal mit vorgegebener Koordinate. Playwright klickt jedoch Pixel relativ zur Elementecke, und für die Umrechnung stellt der Kontext keine Funktion bereit. In vielen Fällen rechnet das Modell die Koordinate in UC-07 nicht um, sondern übergibt die Kartenkoordinate einfach als Pixelposition. In Stufe~2 betrifft das 41 der 50 UC-07-Tests. Die Tests scheitern dann, da die Klickposition weit außerhalb des Elements liegt. In den bestandenen UC-07-Tests der Stufen~3 und 4 wird die Koordinate korrekt in Pixel umgerechnet.
 
-UC-06 scheitert aus einem anderen Grund. In Stufe~3 rufen alle 50 UC-06-Dateien \code|getHighlightedCoordinate| auf und prüfen den Rückgabewert auf Existenz. Diese Prüfung schlägt in 32 der 50 Dateien fehl, weil der Wert \code|undefined| ist, was darauf schließen lässt, dass der Klick die Karte nie erreicht hat. Der beliebige Klick ist hier irreführend, da die Bedienpanels jeweils als \code|MapAnchor| auf dem \code|MapContainer| verankert sind. Links oben ist der Layer Switcher, rechts oben das Info Panel usw. (s. Abbildung~\ref{fig:demo_webgis_anwendung} in Kapitel~5.1). 24 der 50 Dateien in Stufe~3 klicken auf die Position (100, 100) und treffen damit das Layer-Switcher-Panel statt der Kartenfläche.
+UC-06 scheitert aus einem anderen Grund. In Stufe~3 rufen alle 50 UC-06-Dateien \code|getHighlightedCoordinate| auf und prüfen den Rückgabewert auf Existenz. Diese Prüfung schlägt in 32 der 50 Dateien fehl, weil der Wert \code|undefined| ist, was darauf schließen lässt, dass der Klick die Karte nie erreicht hat. Die Bedienpanels sind jeweils als \code|MapAnchor| auf dem \code|MapContainer| verankert und liegen damit über der Kartenfläche. Links oben ist der Layer Switcher, rechts oben das Info Panel usw. (s. Abbildung~\ref{fig:demo_webgis_anwendung} in Kapitel~5.1). 24 der 50 Dateien in Stufe~3 klicken auf die Position (100, 100) und treffen damit das Layer-Switcher-Panel statt der Kartenfläche.
 
 Stufe~5 zeigt, dass der Loop diese Fehler teilweise selbst behebt. Die kartenbezogenen Use Cases starten in der initialen Iteration nahe bei null: UC-06 besteht 1 von 50 Läufen, UC-07 und UC-08 keinen einzigen. In Abbildung~\ref{fig:stufe5_loop_ergebnis} ist zu erkennen, dass diese Use Cases, wenn sie erfolgreich sind, dies erst in späteren Iterationen erreichen. UC-07 benötigt im Schnitt 7,8 und UC-08 8,5 Iterationen, während die rein \ac{DOM}-basierten UC-01, UC-02 und UC-05 mit 1,0 bis 1,3 Iterationen auskommen.
 

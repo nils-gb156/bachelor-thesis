@@ -11,7 +11,7 @@ Was dem \ac{LLM} im Prompt mitgeteilt wird, beschreibt der \ac{UI}-Kontext. Davo
 
 Generiert werden die Tests aus den fachlichen Anforderungen des jeweiligen Use Case und nicht aus dem Quellcode der Anwendung. Die Struktur des Prompts wird dabei über alle vier Stufen konstant gehalten. Es ändert sich nur der enthaltene \ac{UI}-Kontext. Verschiedene Prompting-Strategien sind nicht Teil dieser Untersuchung. Da die Generierung nicht deterministisch erfolgt, wird jeder Use Case pro Stufe mehrfach generiert (N=50). Verglichen werden dadurch Verteilungen der Testqualität je nach Stufe, nicht einzelne Ausgaben.
 
-Technische Details zur Erstellung der Tests werden in einem \ac{OPT}-Playwright-Skill festgehalten. Der Skill wird bei jeder Generierung als Teil des Prompts mitgegeben und bleibt über alle Stufen unverändert. Genauere Informationen zum Inhalt des Skills werden in Kapitel~4.4 beschrieben.
+Technische Details zur Erstellung der Tests werden in einem \ac{OPT}-Playwright-Skill festgehalten, der in Kapitel~4.5 beschrieben wird.
 
 Die vier Stufen unterscheiden sich im Umfang und in der Strukturierung des bereitgestellten \ac{UI}-Kontexts. Stufe~1 gibt dem \ac{LLM} keine Informationen über die Oberfläche, während die höheren Stufen den Kontext schrittweise erweitern und strukturieren. Abbildung~\ref{fig:ui_kontext_stufen} stellt die vier Ausprägungen dar.
 
@@ -22,7 +22,7 @@ Die vier Stufen unterscheiden sich im Umfang und in der Strukturierung des berei
     \includegraphics[width=0.5\textwidth]{ui_kontext_stufen}
 \end{figure}
 
-Wie ein einzelner Generierungsvorgang abläuft, zeigt Abbildung~\ref{fig:methodik_pipeline}. Use Case, \ac{OPT}-Playwright-Skill und der \ac{UI}-Kontext der jeweiligen Stufe bilden zusammen den Prompt für das \ac{LLM}. Die daraus erzeugten Playwright-Tests durchlaufen ein zweiphasiges Evaluationsverfahren. In der ersten Phase werden sie gegen die laufende Demo-Anwendung ausgeführt und ihr Ausführungsergebnis klassifiziert. In der zweiten Phase bewertet ein zweites \ac{LLM} die Testqualität anhand fester Kriterien, wobei die manuellen Referenztests aus Kapitel~5.3 als Vergleichsmaßstab dienen. Beide Phasen werden in Kapitel~4.5 beschrieben.
+Wie ein einzelner Generierungsvorgang abläuft, zeigt Abbildung~\ref{fig:methodik_pipeline}. Use Case, \ac{OPT}-Playwright-Skill und der \ac{UI}-Kontext der jeweiligen Stufe bilden zusammen den Prompt für das \ac{LLM}. Die daraus erzeugten Playwright-Tests durchlaufen ein zweiphasiges Evaluationsverfahren. In der ersten Phase werden sie gegen die laufende Demo-Anwendung ausgeführt und ihr Ausführungsergebnis klassifiziert. In der zweiten Phase bewertet ein zweites \ac{LLM} die Testqualität anhand fester Kriterien, wobei die manuellen Referenztests aus Kapitel~5.3 als Vergleichsmaßstab dienen. Beide Phasen werden in Kapitel~4.6 beschrieben.
 
 \begin{figure}[H]
     \centering
@@ -49,7 +49,7 @@ In Stufe~1\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qw
 
 \subsubsection{Stufe 2: Automatischer Accessibility-Snapshot}
 
-Stufe~2\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/generate_tests_stage_2.py}} erhält den \ac{UI}-Kontext automatisch aus der laufenden Anwendung. Ein Headless-Browser lädt die Demo-App und erfasst alle im \ac{DOM} vorhandenen data-testid-Werte sowie den in Abschnitt 2.2.2 beschriebenen Accessibility-Snapshot von Playwright, der Rollen, Attribute, Werte und Textinhalt der Elemente als Baumstruktur ausgibt. Der Snapshot wird einmal vor dem Generierungslauf erfasst und für alle Use Cases identisch verwendet.
+Stufe~2\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/generate_tests_stage_2.py}} erhält den \ac{UI}-Kontext automatisch aus der laufenden Anwendung. Ein Headless-Browser lädt die Demo-App und erfasst alle im \ac{DOM} vorhandenen data-testid-Werte sowie den in Abschnitt 2.2.2 beschriebenen Accessibility-Snapshot von Playwright. Der Snapshot wird einmal vor dem Generierungslauf erfasst und für alle Use Cases identisch verwendet.
 
 Der Ansatz benötigt keinen manuellen Pflegeaufwand und wäre damit in der Praxis ein günstiges Szenario. Erfasst wird allerdings nur der initiale Seitenzustand. Elemente, die erst nach Interaktionen erscheinen, fehlen im Snapshot. Auch das Kartenmodell taucht in diesem Kontext nicht auf, da \texttt{\_\_openPioneerMap} ein globales JavaScript-Objekt ist und weder im \ac{DOM} noch im Accessibility-Tree vorhanden ist.
 
@@ -84,13 +84,15 @@ Der Failure-Snapshot hält den Zustand der Anwendung zum Zeitpunkt des Fehlschla
 
 Jede Iteration verwendet einen eigenständigen Prompt ohne Konversationshistorie. Alle Informationen aus dem vorherigen Durchlauf werden ausschließlich über den vorherigen Testcode, die Fehlermeldung und den Snapshot übergeben. Für die Aufnahme des Failure-Snapshots wird eine Playwright-Fixture\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/tests/failure-snapshot-fixture.ts}} benötigt, die in einer Ausführungskopie des Tests eingebunden wird. Die vom \ac{LLM} generierte Originaldatei bleibt dabei unverändert und ist Grundlage der Bewertung.
 
-\subsection{LLM-Konfiguration (Modell, Temperatur, Prompt-Struktur, Skill)}
+\subsection{Modell und Infrastruktur}
 
 Für alle Generierungen wird Qwen3.6-35B-A3B als \ac{LLM} verwendet. Es ist ein offenes Sprachmodell des Qwen-Teams von Alibaba und wird in der FP8-quantisierten Variante eingesetzt. Das Modell verwendet eine Sparse-Mixture-of-Experts-Architektur mit 35 Milliarden Parametern insgesamt, von denen pro Token nur etwa 3 Milliarden aktiv sind. Zudem ist es multimodal, verarbeitet also neben Text auch Bilder. Insgesamt unterstützt es eine Kontextlänge von 262.144 Token (\cite{hugging_face_qwenqwen36-35b-a3b-fp8_2026, qwen_team_alibaba_qwen36-35b-a3b_2026}).
 
 Das Modell wird auf einem NVIDIA-DGX-Spark im Netzwerk der con terra GmbH betrieben und dort über vLLM bereitgestellt, das mithilfe der Docker-Konfiguration \texttt{eugr/spark-vllm-docker}\footnote{\url{https://github.com/eugr/spark-vllm-docker}} auf dem Spark eingerichtet wurde. Die Generierungsskripte greifen darauf über die OpenAI-kompatible \ac{REST}-\ac{API} von vLLM zu.
 
-Die Temperatur ist auf 0.6 gesetzt, da dieser Wert vom Hersteller für präzise Coding-Aufgaben im Thinking-Mode empfohlen wird (\cite{hugging_face_qwenqwen36-35b-a3b-fp8_2026}). Damit Reasoning und Testcode zusammen ausreichend Platz haben, beträgt die maximale Ausgabelänge 65.536 (64 \times 1024) Token. Diese Konfiguration ist über alle Stufen und Use Cases identisch. Der vollständige Generierungsdurchlauf wird pro Stufe 50-mal wiederholt. Jeder Durchlauf erzeugt alle zehn Use Cases in einem eigenen Verzeichnis, sodass pro Stufe 500 Tests generiert werden.
+Die Temperatur ist auf 0{,}6 gesetzt, da dieser Wert vom Hersteller für präzise Coding-Aufgaben im Thinking-Mode empfohlen wird (\cite{hugging_face_qwenqwen36-35b-a3b-fp8_2026}). Damit Reasoning und Testcode zusammen ausreichend Platz haben, beträgt die maximale Ausgabelänge 65.536 ($64 \times 1024$) Token. Diese Konfiguration ist über alle Stufen und Use Cases identisch. Der vollständige Generierungsdurchlauf wird pro Stufe 50-mal wiederholt. Jeder Durchlauf erzeugt alle zehn Use Cases in einem eigenen Verzeichnis, sodass pro Stufe 500 Tests generiert werden.
+
+\subsection{Prompt-Aufbau und OPT-Playwright-Skill}
 
 Der Prompt besteht aus zwei Teilen. Der User-Prompt enthält die Anweisung, aus dem Use Case mit dem jeweiligen \ac{UI}-Kontext einen Playwright-\ac{E2E}-Test zu generieren, den Use Case selbst, die \ac{URL} der Anwendung und den \ac{UI}-Kontext-Block der jeweiligen Stufe. Im System-Prompt ist der \ac{OPT}-Playwright-Skill enthalten.
 
@@ -113,7 +115,7 @@ In Phase~1 werden alle generierten Testdateien mit Playwright gegen die lokal la
     \item[PASS] Der Test läuft vollständig und erfolgreich durch.
 \end{description}
 
-Die Zuordnung erfolgt regelbasiert über Muster in den Fehlermeldungen des Playwright-Reports. Fälle, die keinem Muster eindeutig entsprechen, werden für eine manuelle Nachklassifikation markiert.
+Die Zuordnung erfolgt regelbasiert über Muster in den Fehlermeldungen des Playwright-Reports. Fälle, die keinem Muster eindeutig entsprechen, werden vorläufig als \texttt{TIMEOUT} klassifiziert und im Nachgang manuell geprüft und korrigiert.
 
 Für Stufe~5 entfällt eine separate Ausführung, da die generierten Tests schon in jeder Iteration des Loops gegen die Anwendung ausgeführt werden. Das Ausführungsergebnis der letzten Iteration wird im Loop-Protokoll gespeichert, sodass ein Abbildungsskript\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/map_stage5_phase1.py}} mit identischer Klassifikationslogik die Tests aus dieser Stufe in dasselbe Kategorieschema überführt.
 
