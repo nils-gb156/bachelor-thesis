@@ -49,9 +49,9 @@ In Stufe~1\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qw
 
 \subsubsection{Stufe 2: Automatischer Accessibility-Snapshot}
 
-Stufe~2\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/generate_tests_stage_2.py}} erhält den \ac{UI}-Kontext automatisch aus der laufenden Anwendung. Ein Headless-Browser lädt die Demo-App und erfasst alle im \ac{DOM} vorhandenen data-testid-Werte und den Accessibility-Snapshot von Playwright, der Rollen, Namen und Zustände der Elemente als Baumstruktur ausgibt. Der Snapshot wird einmal vor dem Generierungslauf erfasst und für alle Use Cases identisch verwendet.
+Stufe~2\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/generate_tests_stage_2.py}} erhält den \ac{UI}-Kontext automatisch aus der laufenden Anwendung. Ein Headless-Browser lädt die Demo-App und erfasst alle im \ac{DOM} vorhandenen data-testid-Werte sowie den in Abschnitt 2.2.2 beschriebenen Accessibility-Snapshot von Playwright, der Rollen, Attribute, Werte und Textinhalt der Elemente als Baumstruktur ausgibt. Der Snapshot wird einmal vor dem Generierungslauf erfasst und für alle Use Cases identisch verwendet.
 
-Der Ansatz benötigt keinen manuellen Pflegeaufwand und wäre damit in der Praxis ein günstiges Szenario. Erfasst wird allerdings nur der initiale Seitenzustand. Elemente, die erst nach Interaktionen erscheinen, fehlen im Snapshot. Auch das Kartenmodell taucht in diesem Kontext nicht auf, da \texttt{\_\_openPioneerMap} ein globales JavaScript-Objekt ist und weder im \ac{DOM} noch im Accessibility Tree vorhanden ist.
+Der Ansatz benötigt keinen manuellen Pflegeaufwand und wäre damit in der Praxis ein günstiges Szenario. Erfasst wird allerdings nur der initiale Seitenzustand. Elemente, die erst nach Interaktionen erscheinen, fehlen im Snapshot. Auch das Kartenmodell taucht in diesem Kontext nicht auf, da \texttt{\_\_openPioneerMap} ein globales JavaScript-Objekt ist und weder im \ac{DOM} noch im Accessibility-Tree vorhanden ist.
 
 \subsubsection{Stufe 3: Automatisch generierte UI-Map}
 
