@@ -4,7 +4,7 @@
 \subsection{Map-Model-Helfer}
 \label{app:map-model-helpers}
 
-Das folgende Listing zeigt die Map-Model-Helfer\footnote{Vollständige, unveränderte Originaldatei: \url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/map-model-helpers.ts}} für den Zugriff auf den Kartenzustand. Die Kommentare sind zur besseren Lesbarkeit gekürzt, die Funktionslogik ist unverändert.
+Das folgende Listing zeigt die Map-Model-Helfer (\texttt{map-model-helpers.ts}) für den Zugriff auf den Kartenzustand. Die Kommentare sind zur besseren Lesbarkeit gekürzt, die Funktionslogik ist unverändert.
 
 \begingroup
 \captionof{listing}[Map-Model-Helfer]{Map-Model-Helfer für den Zugriff auf den Kartenzustand (\texttt{map-model-helpers.ts})}
@@ -16,7 +16,7 @@ Das folgende Listing zeigt die Map-Model-Helfer\footnote{Vollständige, unverän
 \subsection{OPT-Playwright-Skill}
 \label{app:opt-playwright-skill}
 
-Das folgende Listing zeigt den OPT-Playwright-Skill\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/SKILL.md}}, der dem \ac{LLM} im System-Prompt mitgegeben wird.
+Das folgende Listing zeigt den OPT-Playwright-Skill (\texttt{SKILL.md}), der dem \ac{LLM} im System-Prompt mitgegeben wird.
 
 \begingroup
 \captionof{listing}[OPT-Playwright-Skill]{OPT-Playwright-Skill im System-Prompt (\texttt{SKILL.md})}
@@ -28,7 +28,7 @@ Das folgende Listing zeigt den OPT-Playwright-Skill\footnote{\url{https://github
 \subsection{Vollständige Use-Case-Beschreibungen}
 \label{app:use-cases}
 
-Die Use Cases\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/gpt/test-generation/src/app/llm/use_cases.md}} sind in ihrer originalen englischen Fassung wiedergegeben.
+Die Use Cases (\texttt{use\_cases.md}) sind in ihrer originalen englischen Fassung wiedergegeben.
 
 \begingroup
 % Kompakte Listen und tabellarische Use-Case-Darstellung
@@ -110,7 +110,7 @@ Die Use Cases\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob
 \subsubsection{Stufen 1 bis 4}
 \label{app:judge-prompt-base}
 
-Das folgende Listing zeigt den Bewertungsprompt\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/phase2_judge_prompt.md}} der Phase~2 für die Stufen 1 bis 4.
+Das folgende Listing zeigt den Bewertungsprompt (\texttt{phase2\_judge\_prompt.md}) der Phase~2 für die Stufen 1 bis 4.
 
 \begingroup
 \captionof{listing}{Prompt der LLM-Judge-Bewertung (Stufen 1 bis 4)}
@@ -122,10 +122,10 @@ Das folgende Listing zeigt den Bewertungsprompt\footnote{\url{https://github.com
 \subsubsection{Stufe 5 (Self-Improvement-Loop)}
 \label{app:judge-prompt-stage5}
 
-Der Bewertungsprompt\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/phase2_judge_prompt_stage5.md}} für Stufe~5 (Self-Improvement-Loop) ist mit dem Prompt der Stufen~1 bis 4 (Anhang~\ref{app:judge-prompt-base}) identisch. Die Bewertungsskalen und der Output bleiben unverändert. Abweichend sind lediglich die folgenden Punkte:
+Der Bewertungsprompt für Stufe~5 (\texttt{phase2\_judge\_prompt\_stage5.md}) ist mit dem Prompt der Stufen~1 bis 4 (Anhang~\ref{app:judge-prompt-base}) nahe zu identisch. Die Bewertungsskalen und der Output bleiben unverändert. Abweichend sind lediglich die folgenden Punkte:
 
 \begin{itemize}
-	\item In der Rolle wird der Ausführungskontext angepasst: Die Ausführung erfolgte während des Self-Improvement-Loops und wurde über \code|stage5_to_phase1.py| in die \code|exec_category|-Taxonomie überführt.
+	\item In der Rolle wird der Ausführungskontext angepasst: Die Ausführung erfolgte während des Self-Improvement-Loops und wurde über \code|map_stage5_phase1.py| in die \code|exec_category|-Taxonomie überführt.
 	\item In den \emph{Wichtigen Regeln} wird ergänzt, dass auch der Loop-Verlauf nicht bewertet wird sowie eine Regel zur stufenübergreifenden Vergleichbarkeit der Maßstäbe.
 	\item Neu hinzugefügt werden ein Abschnitt zur Besonderheit der Stufe sowie ein Hinweis zur besonderen Aufmerksamkeit beim \code|assertion_score| (siehe folgende Auszüge).
 \end{itemize}
@@ -197,7 +197,7 @@ assertion & 1 & Keine oder ausschließlich triviale Assertions \\
 \subsection{Stichprobe der manuellen Bewertungskontrolle}
 \label{app:review}
 
-Tabelle~\ref{tab:review_full} führt die Einzelurteile auf. Angegeben sind der vom Bewertungsmodell vergebene Punktwert und das Ergebnis der Kontrolle: $\bullet$ bestätigt, $\circ$ grenzwertig, aber vertretbar, $\times$ abweichend. Die vollständige Fassung\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/blob/qwen/test-generation/src/app/llm/tests/_review_sample.csv}} mit den Begründungstexten des Modells und den Prüfnotizen liegt im Repository.
+Tabelle~\ref{tab:review_full} führt die Einzelurteile auf. Angegeben sind der vom Bewertungsmodell vergebene Punktwert und das Ergebnis der Kontrolle: $\bullet$ bestätigt, $\circ$ grenzwertig, aber vertretbar, $\times$ abweichend. Die vollständige Fassung (\texttt{\_review\_sample.md}) mit den Begründungstexten des Modells und den Prüfnotizen liegt im Repository.
 
 \begin{longtable}{@{}rrrl rrrr@{}}
 \caption{Ergebnis der manuellen Kontrolle je Testdatei und Dimension}
@@ -280,7 +280,7 @@ Nr. & Stufe & Lauf & UC & coverage & selector & map\_int. & assertion \\
 
 \subsection{Durchführung}
 
-Der gesamte Generierungsablauf\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/tree/gpt/test-generation/src/app/llm}} wurde ein zweites Mal mit GPT-5.4 anstelle von Qwen3.6-35B-A3B durchgeführt. Verwendet wurde das Modell \texttt{deployment\_gpt-5.4} über die OpenAI-kompatible Schnittstelle von Azure AI Foundry mit \texttt{reasoning\_effort="medium"} und einem Ausgabebudget von 65.536 Token, wie im Hauptlauf. Der Temperatur-Parameter kann bei diesem Modell nicht eingestellt werden. Use Cases, OPT-Playwright-Skill, Prompt-Aufbau, die Zahl von 50 Durchläufen und der Aufbau der Demo-Anwendung sind unverändert übernommen worden.
+Der gesamte Generierungsablauf\footnote{\url{https://github.com/nils-gb156/ba-webgis-llm-e2e/tree/gpt-v1.0}} wurde ein zweites Mal mit GPT-5.4 anstelle von Qwen3.6-35B-A3B durchgeführt. Verwendet wurde das Modell \texttt{deployment\_gpt-5.4} über die OpenAI-kompatible Schnittstelle von Azure AI Foundry mit \texttt{reasoning\_effort="medium"} und einem Ausgabebudget von 65.536 Token, wie im Hauptlauf. Der Temperatur-Parameter kann bei diesem Modell nicht eingestellt werden. Use Cases, OPT-Playwright-Skill, Prompt-Aufbau, die Zahl von 50 Durchläufen und der Aufbau der Demo-Anwendung sind unverändert übernommen worden.
 
 Insgesamt wurden 2.500 Testdateien generiert, je Stufe 500 aus 50 Durchläufen mit zehn Use Cases. Eine Datei in Stufe~1 wurde als \texttt{GENERATION\_ERROR} klassifiziert und wird für die Phase~2-Bewertung ausgelassen, weshalb die Score-Grundmenge dieser Stufe 499 beträgt.
 
@@ -408,3 +408,64 @@ UC-08 erreicht in den Stufen 3 und 4 keinen einzigen \texttt{PASS}, obwohl das Z
 Bei UC-07 in Stufe~2 übernehmen 94\,\% der Dateien die Zielkoordinate aus dem Use Case und rechnen sie über eine eigene Formel in Bildschirmpixel um. Die Elemente werden korrekt adressiert, der Fehler liegt in der Umrechnung auf die Kartenposition. Ab Stufe~3 steigt die \texttt{PASS}-Rate auf 56\,\% und in Stufe~4 auf 78\,\%. Der Import der Helfer-Funktion \texttt{getHighlightedCoordinate} erklärt dies allein nicht. Über die zusätzliche Information zum Zugriff auf \texttt{\_\_openPioneerMap} wird die Zielkoordinate über \texttt{map.olMap.getPixelFromCoordinate} korrekt in Pixel umgerechnet. Der in Tabelle~\ref{tab:anhang_gpt54_codemuster} aufgeführte Anteil von rund 10\,\% direkter Kartenzugriffe geht damit fast vollständig auf UC-07 zurück.
 
 Die übrigen Auffälligkeiten gehen nicht auf die Bedienung der Karte, sondern auf falsche Annahmen in den Bedienelementen zurück. UC-02 prüft den Hintergrundkartenwechsel in Stufe~2 durchgängig als Combobox mit der Annahme, dahinter stehe ein einfaches \texttt{<select>}. Es handelt sich aber um einen Auswahl-Trigger, auf dem weder \texttt{selectOption} noch \texttt{selectedOptions} funktioniert. In Stufe~3 wird stattdessen eine Radiogruppe angenommen, was in 82\,\% der Fälle zu einem nicht gefundenen Element führt und den \emph{selector}-Score auf 1,12 drückt. In Stufe~4 rufen alle 50 Dateien \texttt{selectOption} auf, und bestanden haben genau die 19, die zusätzlich einen Klick auf \texttt{getByRole('option')} durchführen. Der Einbruch von UC-05 in Stufe~4 geht darauf zurück, dass die Tests den Legendeneintrag über eine exakte Textgleichheit mit \enquote{Precipitation} prüfen. In der Legende steht jedoch \enquote{Precipitation (mm)} mit der Einheit dahinter.
+
+\newpage
+
+\section{Referenzierte Dateien des Repositories}
+\label{app:dateien}
+
+Die folgende Übersicht listet alle referenzierten Dateien mit ihrem Pfad im Repository \url{https://github.com/nils-gb156/ba-webgis-llm-e2e}. Grundlage ist der Tag \texttt{qwen-v1.0}; die Dateien des ergänzenden Durchlaufs aus \ref{app:results-gpt} liegen unter denselben Pfaden im Tag \texttt{gpt-v1.0}.
+
+\begingroup
+\begin{longtable}{lll}
+\caption[Referenzierte Dateien des Repositories]{Referenzierte Dateien des Repositories mit Pfad und Fundstelle in der Arbeit}
+\label{tab:repo_dateien} \\
+\toprule
+Datei & Pfad \\
+\midrule
+\endfirsthead
+\multicolumn{2}{@{}l}{\footnotesize\itshape Fortsetzung von
+  Tabelle~\ref{tab:repo_dateien}} \\
+\toprule
+Datei & Pfad \\
+\midrule
+\endhead
+\midrule
+\multicolumn{2}{r@{}}{\footnotesize\itshape Fortsetzung nächste Seite} \\
+\endfoot
+\bottomrule
+\endlastfoot
+\multicolumn{2}{l}{\textit{Eingaben der Generierung}} \\
+\texttt{use\_cases.md}                 & \texttt{src/app/llm/} \\
+\texttt{SKILL.md}                      & \texttt{src/app/llm/} \\
+\texttt{generated-ui-map.md}           & \texttt{src/app/llm/} \\
+\texttt{manual-ui-map.json}            & \texttt{src/app/llm/} \\
+\addlinespace
+\multicolumn{2}{l}{\textit{Generierung}} \\
+\texttt{generate\_tests\_stage\_1.py}  & \texttt{src/app/llm/} \\
+\texttt{generate\_tests\_stage\_2.py}  & \texttt{src/app/llm/} \\
+\texttt{generate\_tests\_stage\_3.py}  & \texttt{src/app/llm/} \\
+\texttt{generate\_tests\_stage\_4.py}  & \texttt{src/app/llm/} \\
+\texttt{generate\_tests\_stage\_5.py}  & \texttt{src/app/llm/} \\
+\texttt{generate-ui-map.ts}            & \texttt{src/app/llm/} \\
+\addlinespace
+\multicolumn{2}{l}{\textit{Anwendung und Testbarkeit}} \\
+\texttt{services.ts}                   & \texttt{src/app/}    \\
+\texttt{map-model-helpers.ts}          & \texttt{src/app/llm/}   \\
+\texttt{failure-snapshot-fixture.ts}   & \texttt{src/app/llm/tests/} \\
+\addlinespace
+\multicolumn{2}{l}{\textit{Evaluation}} \\
+\texttt{run\_phase1\_eval.py}          & \texttt{src/app/llm/}      \\
+\texttt{map\_stage5\_phase1.py}        & \texttt{src/app/llm/}      \\
+\texttt{phase2\_judge\_prompt.md}      & \texttt{src/app/llm/}      \\
+\texttt{phase2\_judge\_prompt\_stage5.md} & \texttt{src/app/llm/}   \\
+\texttt{\_review\_sample.csv}          & \texttt{src/app/llm/tests/} \\
+\addlinespace
+\multicolumn{2}{l}{\textit{Auswertung und Ergebnisse}} \\
+\texttt{phase2\_judge\_evaluation\_prompt.md} & \texttt{src/app/llm/} \\
+\texttt{eval\_extract/}                & \texttt{src/app/llm/}       \\
+\texttt{plot\_stage.py}                & \texttt{src/app/llm/}      \\
+\texttt{plot\_all.py}                  & \texttt{src/app/llm/}      \\
+\texttt{eval/}                         & \texttt{docs/}              \\
+\end{longtable}
+\endgroup
