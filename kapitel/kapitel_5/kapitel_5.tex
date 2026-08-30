@@ -25,7 +25,7 @@ Tabelle~\ref{tab:phase1_kategorien} zeigt die Ausführungsergebnisse. Die PASS-R
 
 \begin{table}[H]
     \centering
-    \caption[Ausführungsergebnisse je Stufe]{Ausführungsergebnisse der Stufen 1 bis 4 nach Kategorien (Phase 1), absolut und in Prozent der Stufengrundmenge}
+    \caption[Ausführungsergebnisse je Stufe]{Ausführungsergebnisse der Stufen~1 bis 4 nach den in Kapitel~4.6.1 definierten Kategorien, absolut und in Prozent der Stufengrundmenge. Erkennbar sind die monoton ansteigende PASS-Rate und die Verschiebung der \texttt{INFRA\_FAIL}- und \texttt{ASSERTION\_FAIL}-Anteile.}
     \label{tab:phase1_kategorien}
     \begin{tabular}{lrrrr}
         \toprule
@@ -48,7 +48,7 @@ Zwischen Stufe~1 und 2 sinkt der \texttt{INFRA\_FAIL}-Anteil von 69,0\,\% auf 42
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{exec_category_by_uc_grid}
-    \caption[Ausführungskategorien je Use Case und Stufe]{Ausführungskategorien je Use Case, Stufen 1 bis 4 (Phase 1)}
+    \caption[Ausführungskategorien je Use Case und Stufe]{Verteilung der Ausführungskategorien je Use Case für die Stufen~1 bis 4, je Use Case und Stufe 50 Testdateien. Der in Stufe~1 dominierende \texttt{INFRA\_FAIL}-Anteil wandelt sich ab Stufe~2 überwiegend in \texttt{ASSERTION\_FAIL}, während die karteninteraktiven Use Cases in allen Stufen niedrige PASS-Anteile behalten.}
     \label{fig:exec_by_uc}
 \end{figure}
 
@@ -88,7 +88,7 @@ Grundlage sind je Stufe die 488 bis 498 Dateien, die nach Abzug der \texttt{GENE
 
 \begin{table}[H]
     \centering
-    \caption[Bewertungsdimensionen je Stufe]{Median und Mittelwert der vier Bewertungsdimensionen je Stufe (Phase 2, Skala 1--4)}
+    \caption[Bewertungsdimensionen je Stufe]{Median (Md) und Mittelwert (Ø) der vier Bewertungsdimensionen je Stufe (Phase 2, Skala 1--4). Grundlage sind je Stufe die 488 bis 498 Dateien, die nach Abzug der \texttt{GENERATION\_ERROR}-Fälle bewertet wurden. \emph{map\_interaction} ist nur für die kartenrelevanten UC-04, UC-06, UC-07, UC-08 und UC-10 anwendbar.}
     \label{tab:phase2_dimensionen}
     \begin{tabular}{lrrrrrrrr}
         \toprule
@@ -114,7 +114,7 @@ Auch innerhalb einer Stufe streuen die Dimensionswerte über die Use Cases (Abbi
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{score_heatmap_grid}
-    \caption[Mittlerer Judge-Score je Use Case und Dimension]{Mittlerer Judge-Score je Use Case und Dimension, Stufen 1 bis 4 (Phase 2)}
+    \caption[Mittlerer Judge-Score je Use Case und Dimension]{Mittlerer Judge-Score je Use Case und Bewertungsdimension für die Stufen~1 bis 4. Graue Felder (n/a) kennzeichnen Use Cases ohne Kartenrelevanz, für die \emph{map\_interaction} nicht bewertet wird.}
     \label{fig:score_heatmap}
 \end{figure}
 
@@ -124,7 +124,7 @@ Die Kontrolle der 50 Dateien der Stichprobe mit 175 bewertbaren Einzelurteilen e
 
 \begin{table}[H]
     \centering
-    \caption[Ergebnis der Kontrolle je Stufe]{Ergebnis der Kontrolle je Stufe (Dimensionen zusammengefasst)}
+    \caption[Ergebnis der Kontrolle je Stufe]{Ergebnis der manuellen Kontrolle der maschinellen Bewertung je Stufe, über die vier Dimensionen zusammengefasst. Grundlage sind 50 stichprobenartig gezogene Testdateien mit 175 bewertbaren Einzelurteilen, eingeordnet als bestätigt, grenzwertig, aber vertretbar und abweichend. Anhang~\ref{app:review} enthält die vollständige Aufstellung der Einzelurteile.}
     \label{tab:review_by_stage}
     \begin{tabular}{lrrrr}
         \toprule
@@ -152,7 +152,7 @@ Von den 500 Läufen erreichen 366 (73,2\,\%) ein bestandenes Ausführungsergebni
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{exec_category_by_uc_stage5}
-    \caption[Ausführungskategorien je Use Case der Bonus-Stufe 5]{Ausführungskategorien je Use Case der Bonus-Stufe 5 (Phase 1)}
+    \caption[Ausführungskategorien je Use Case der Bonus-Stufe 5]{Verteilung der Ausführungskategorien je Use Case in der Bonus-Stufe 5 (Phase 1, je Use Case 50 Läufe). Gewertet ist das Ergebnis eines Laufs nach maximal 10 Iterationen. Die verbleibenden Fehlschläge sind fast ausschließlich \texttt{ASSERTION\_FAIL}.}
     \label{fig:exec_category_by_uc_stage5}
 \end{figure}
 
@@ -161,7 +161,7 @@ Den größten Teil dieses Zugewinns liefern die ersten beiden Iterationen (Abbil
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{stufe5_loop_grid}
-    \caption[Konvergenz des Self-Improvement-Loops]{Kumulierte PASS-Rate nach Iteration (links) und Iteration des Bestehens je Use Case (rechts), Bonus-Stufe~5}
+    \caption[Konvergenz des Self-Improvement-Loops]{Konvergenz des Self-Improvement-Loops der Bonus-Stufe~5. Links die kumulierte PASS-Rate über die Iterationen, rechts die Iteration, in der ein Lauf besteht, je Use Case. Die nur \ac{DOM}-basierten Use Cases bestehen überwiegend in den ersten Iterationen, die karteninteraktiven erst deutlich später.}
     \label{fig:stufe5_loop_ergebnis}
 \end{figure}
 
@@ -174,7 +174,7 @@ In der Qualitätsbewertung erreicht Stufe~5 mit 3,96 in \emph{coverage}, 3,77 in
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\textwidth]{stufe5_score_heatmap}
-    \caption[Mittlerer Judge-Score je Use Case und Dimension der Bonus-Stufe 5]{Mittlerer Judge-Score je Use Case und Dimension der Bonus-Stufe~5 (Phase~2)}
+    \caption[Mittlerer Judge-Score je Use Case und Dimension der Bonus-Stufe 5]{Mittlerer Judge-Score je Use Case und Dimension der Bonus-Stufe~5. Über alle Stufen gemittelt erreicht Stufe~5 in allen vier Dimensionen die besten Werte aller Stufen.}
     \label{fig:stufe5_score_heatmap}
 \end{figure}
 
@@ -194,7 +194,7 @@ Welchen Zugang die Tests zum Prüfen des Kartenzustands wählen, hängt davon ab
 
 \begin{table}[H]
     \centering
-    \caption[Prüfung des Kartenzustands je Stufe]{Anteil der Testdateien mit Canvas-Selektor, map-container-Selektor, Canvas-Assertion und Map-Model-Helfer-Nutzung}
+    \caption[Prüfung des Kartenzustands je Stufe]{Anteil der Testdateien je Stufe, die auf die Karte mit einem Canvas-Selektor, map-container-Selektor, Canvas-Assertion und Map-Model-Helfer-Nutzung zugreifen. Die Muster schließen sich nicht gegenseitig aus, die Spalten summieren sich daher nicht auf 100\,\%.}
     \label{tab:kartenzustand}
     \begin{tabular}{lrrrr}
         \toprule

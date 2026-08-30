@@ -17,7 +17,7 @@ Die vier Stufen unterscheiden sich im Umfang und in der Strukturierung des berei
 
 \begin{figure}[H]
     \centering
-    \caption[Ausprägungen der Variable UI-Kontext]{Die vier Ausprägungen der Variable UI-Kontext mit steigendem Informationsgehalt}
+    \caption[Ausprägungen der Variable UI-Kontext]{Die vier Ausprägungen der unabhängigen Variable \ac{UI}-Kontext mit steigendem Informationsgehalt von Stufe~1 bis 4.}
     \label{fig:ui_kontext_stufen}
     \includegraphics[width=0.5\textwidth]{ui_kontext_stufen}
 \end{figure}
@@ -26,7 +26,7 @@ Wie ein einzelner Generierungsvorgang abläuft, zeigt Abbildung~\ref{fig:methodi
 
 \begin{figure}[H]
     \centering
-    \caption[Generierungs- und Evaluationspipeline]{Generierungs- und Evaluationspipeline. Der UI-Kontext variiert als unabhängige Variable (Stufen 1 bis 4), alle übrigen Eingaben sind konstant}
+    \caption[Generierungs- und Evaluationspipeline]{Generierungs- und Evaluationspipeline eines Durchlaufs. Use Case, \ac{OPT}-Playwright-Skill und der \ac{UI}-Kontext bilden gemeinsam den Prompt. Je Use Case und Stufe entstehen 50 Testdateien. Phase~1 führt die Tests gegen die laufende Demo-Anwendung aus und klassifiziert das Ergebnis, Phase~2 bewertet die Testqualität per \ac{LLM}-as-a-Judge mit den manuellen Referenztests als Vergleichsmaßstab.}
     \label{fig:methodik_pipeline}
     \includegraphics[width=0.9\textwidth]{methodik_pipeline}
 \end{figure}
@@ -77,7 +77,7 @@ Als Ausgangspunkt dient der Kontext aus dem automatischen Snapshot des initialen
 
 \begin{figure}[H]
     \centering
-    \caption[Self-Improvement-Loop (Stufe 5)]{Self-Improvement-Loop der Bonus-Stufe 5: Fehlermeldung und Failure-Snapshot inkl. Screenshot fließen in den nächsten Generierungsprompt zurück (max. 10 Iterationen)}
+    \caption[Self-Improvement-Loop (Stufe 5)]{Self-Improvement-Loop der Bonus-Stufe 5. Nach jedem fehlgeschlagenen Testlauf fließen Testcode, Playwright-Fehlermeldung und Failure-Snapshot inkl. Screenshot in den nächsten Generierungsprompt mit ein. Die Schleife endet mit dem ersten bestandenen Testlauf oder nach maximal 10 Iterationen.}
     \label{fig:stufe5_loop}
     \includegraphics[width=0.7\textwidth]{stufe_5_loop}
 \end{figure}

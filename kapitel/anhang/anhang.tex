@@ -97,6 +97,10 @@ Die Use Cases (\texttt{use\_cases.md}) sind in ihrer originalen englischen Fassu
 {\begin{itemize}\item The Precipitation overlay layer toggle is in the disabled state.\item The Temperature overlay layer toggle is in the enabled state.\item After selecting the search result, the map navigates to the searched location.\item The info panel displays a weather forecast section with 24 entries.\end{itemize}}
 \bottomrule
 \end{longtable}
+% Die captionlose longtable erhoeht (durch das caption-Paket) trotzdem den
+% Tabellenzaehler. Ohne Korrektur wird die Nummer im Tabellenverzeichnis
+% uebersprungen, daher hier wieder zuruecksetzen.
+\addtocounter{table}{-1}
 \endgroup
 
 \newpage
@@ -154,7 +158,7 @@ BESONDERE AUFMERKSAMKEIT in dieser Stufe: Der Loop optimiert auf PASS. Auch wenn
 \begingroup
 \small
 \begin{longtable}{@{}lcp{9.5cm}@{}}
-\caption{Skalenstufen der vier Bewertungsdimensionen}
+\caption[Skalenstufen der vier Bewertungsdimensionen]{Skalenstufen der Bewertungsdimensionen \emph{coverage}, \emph{selector}, \emph{map\_interaction} und \emph{assertion} mit den Kriterien für die Werte 1 bis 4, wie sie dem Bewertungsmodell im Prompt mitgegeben wurden.}
 \label{tab:judge-rubrik} \\
 \toprule
 Dimension & Stufe & Beschreibung \\
@@ -200,7 +204,7 @@ assertion & 1 & Keine oder ausschließlich triviale Assertions \\
 Tabelle~\ref{tab:review_full} führt die Einzelurteile auf. Angegeben sind der vom Bewertungsmodell vergebene Punktwert und das Ergebnis der Kontrolle: $\bullet$ bestätigt, $\circ$ grenzwertig, aber vertretbar, $\times$ abweichend. Die vollständige Fassung (\texttt{\_review\_sample.md}) mit den Begründungstexten des Modells und den Prüfnotizen liegt im Repository.
 
 \begin{longtable}{@{}rrrl rrrr@{}}
-\caption{Ergebnis der manuellen Kontrolle je Testdatei und Dimension}
+\caption[Ergebnis der manuellen Kontrolle je Testdatei und Dimension]{Ergebnis der manuellen Kontrolle der maschinellen Bewertung je Testdatei und Dimension. Angegeben sind der vom Bewertungsmodell vergebene Score und die Einordnung der Kontrolle als bestätigt, grenzwertig, aber vertretbar und abweichend. Grundlage sind die 50 Dateien mit 175 bewertbaren Einzelurteilen.}
 \label{tab:review_full} \\
 \toprule
 Nr. & Stufe & Lauf & UC & coverage & selector & map\_int. & assertion \\
@@ -290,7 +294,7 @@ Tabelle~\ref{tab:anhang_gpt54_phase1_kategorien} zeigt die Ausführungsergebniss
 
 \begin{table}[H]
     \centering
-    \caption[Ausführungsergebnisse je Stufe (GPT-5.4)]{Ausführungsergebnisse der Stufen 1 bis 4 nach Kategorien (Phase 1, GPT-5.4), absolut und in Prozent der Stufengrundmenge}
+    \caption[Ausführungsergebnisse je Stufe (GPT-5.4)]{Ausführungsergebnisse der Stufen~1 bis 4 nach Kategorien, absolut und in Prozent der Stufengrundmenge (GPT-5.4). Kategorien und Zuordnung entsprechen dem Hauptlauf.}
     \label{tab:anhang_gpt54_phase1_kategorien}
     \begin{tabular}{lrrrr}
         \toprule
@@ -312,7 +316,7 @@ Tabelle~\ref{tab:anhang_gpt54_phase1_kategorien} zeigt die Ausführungsergebniss
 
 \begin{table}[H]
     \centering
-    \caption[PASS-Rate je Use Case und Stufe (GPT-5.4)]{PASS-Rate je Use Case und Stufe (GPT-5.4), je Zelle 50 Generierungen}
+    \caption[PASS-Rate je Use Case und Stufe (GPT-5.4)]{PASS-Rate je Use Case und Stufe (GPT-5.4), je Zelle 50 Generierungen. Die Zeile \enquote{Gesamt} gibt die gerundete Rate über alle zehn Use Cases an.}
     \label{tab:anhang_gpt54_pass_matrix}
     \begin{tabular}{lrrrrr}
         \toprule
@@ -340,7 +344,7 @@ Median und Mittelwert von \emph{coverage} und \emph{assertion} liegen bereits in
 
 \begin{table}[H]
     \centering
-    \caption[Median und Mittelwert je Dimension und Stufe (GPT-5.4)]{Median und Mittelwert der vier Bewertungsdimensionen je Stufe (Phase 2, GPT-5.4, Skala 1--4)}
+    \caption[Median und Mittelwert je Dimension und Stufe (GPT-5.4)]{Median (Md) und Mittelwert (Ø) der vier Bewertungsdimensionen je Stufe (GPT-5.4, Skala 1--4).}
     \label{tab:anhang_gpt54_dimensionen}
     \begin{tabular}{lrrrrrrrr}
         \toprule
@@ -358,7 +362,7 @@ Median und Mittelwert von \emph{coverage} und \emph{assertion} liegen bereits in
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{score_heatmap_grid_gpt}
-    \caption[Mittlerer Judge-Score je Use Case und Dimension (GPT-5.4)]{Mittlerer Judge-Score je Use Case und Dimension, Stufen 1 bis 4 (Phase 2, GPT-5.4)}
+    \caption[Mittlerer Judge-Score je Use Case und Dimension (GPT-5.4)]{Mittlerer Judge-Score je Use Case und Dimension für die Stufen 1 bis 4 (GPT-5.4). Graue Felder kennzeichnen Use Cases ohne Kartenrelevanz, für die \emph{map\_interaction} nicht bewertet wird.}
     \label{fig:score_heatmap_gpt}
 \end{figure}
 
@@ -369,7 +373,7 @@ Von den 500 Läufen bestehen 495 (99,0\,\%), 4 (0,8\,\%) enden als \texttt{ASSER
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{stufe5_loop_grid_gpt}
-    \caption[Loop-Konvergenz und PASS-Iteration je Use Case (GPT-5.4)]{Kumulierte PASS-Rate nach Iteration (links) und Iteration des Bestehens je Use Case (rechts), Bonus-Stufe~5, GPT-5.4}
+    \caption[Loop-Konvergenz und PASS-Iteration je Use Case (GPT-5.4)]{Konvergenz des Self-Improvement-Loops der Bonus-Stufe~5 (GPT-5.4). Links die kumulierte PASS-Rate über die Iterationen, rechts die Iteration, in der ein Lauf besteht, je Use Case.}
     \label{fig:anhang_gpt54_loop_konvergenz}
 \end{figure}
 
@@ -378,7 +382,7 @@ In der Qualitätsbewertung erreicht Stufe~5 bei \emph{selector} (3,87) und \emph
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\textwidth]{stufe5_score_heatmap_gpt}
-    \caption[Judge-Score je Use Case und Dimension (GPT-5.4, Stufe 5)]{Mittlerer Judge-Score je Use Case und Dimension der Bonus-Stufe~5 (Phase 2, GPT-5.4)}
+    \caption[Judge-Score je Use Case und Dimension (GPT-5.4, Stufe 5)]{Mittlerer Judge-Score je Use Case und Dimension der Bonus-Stufe~5 (GPT-5.4).}
     \label{fig:anhang_gpt54_stufe5_heatmap}
 \end{figure}
 
@@ -388,7 +392,7 @@ Die Auswertung basiert auf demselben Vorgehen wie in Abschnitt~6.5. In Stufe~1 v
 
 \begin{table}[H]
     \centering
-    \caption[Kartenbezogene Codemuster je Stufe (GPT-5.4)]{Anteil der Testdateien mit CSS-Lokator, Assertion auf \texttt{map-container}, Map-Model-Helfer-Nutzung und halluzinierten Test-IDs (GPT-5.4)}
+    \caption[Kartenbezogene Codemuster je Stufe (GPT-5.4)]{Anteil der Testdateien je Stufe mit CSS-Lokator, Assertion auf \texttt{map-container}, Map-Model-Helfer-Nutzung, direktem Zugriff auf \texttt{\_\_openPioneerMap} und halluzinierten Test-IDs (GPT-5.4).}
     \label{tab:anhang_gpt54_codemuster}
     \begin{tabular}{lrrrrr}
         \toprule
@@ -414,11 +418,11 @@ Die übrigen Auffälligkeiten gehen nicht auf die Bedienung der Karte, sondern a
 \section{Referenzierte Dateien des Repositories}
 \label{app:dateien}
 
-Die folgende Übersicht listet alle referenzierten Dateien mit ihrem Pfad im Repository \url{https://github.com/nils-gb156/ba-webgis-llm-e2e}. Grundlage ist der Tag \texttt{qwen-v1.0}; die Dateien des ergänzenden Durchlaufs aus \ref{app:results-gpt} liegen unter denselben Pfaden im Tag \texttt{gpt-v1.0}.
+Die folgende Übersicht listet alle referenzierten Dateien mit ihrem Pfad im Repository \url{https://github.com/nils-gb156/ba-webgis-llm-e2e}. Grundlage ist der Tag \texttt{qwen-v1.0}. die Dateien des ergänzenden Durchlaufs aus \ref{app:results-gpt} liegen unter denselben Pfaden im Tag \texttt{gpt-v1.0}.
 
 \begingroup
 \begin{longtable}{lll}
-\caption[Referenzierte Dateien des Repositories]{Referenzierte Dateien des Repositories mit Pfad in der Arbeit}
+\caption[Referenzierte Dateien des Repositories]{Referenzierte Dateien des Repositories.}
 \label{tab:repo_dateien} \\
 \toprule
 Datei & Pfad \\

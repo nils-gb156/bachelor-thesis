@@ -10,7 +10,7 @@ Abbildung~\ref{fig:demo_webgis_anwendung} zeigt die Oberfläche der Anwendung. D
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{demo_webgis_anwendung}
-    \caption[Demo-WebGIS-Anwendung]{Oberfläche der Demo-WebGIS-Anwendung mit geklickter Koordinate}
+    \caption[Demo-WebGIS-Anwendung]{Oberfläche der Demo-WebGIS-Anwendung nach einem Klick in die Karte. Links Layersteuerung und Legende, oben mittig die Freitextsuche des Geocoders, rechts das Infopanel mit der Wettervorhersage der geklickten Koordinate und Feature-Informationen.}
     \label{fig:demo_webgis_anwendung}
 \end{figure}
 
@@ -38,7 +38,28 @@ Diese Maßnahmen sind Eigenschaften der Anwendung und keine Bestandteile des \ac
 
 Für das Experiment wurden zehn Use Cases (\texttt{use\_cases.md}) erstellt, die typische Nutzerinteraktionen mit der Demo-WebGIS-Anwendung abbilden. Sie folgen dem in Kapitel~4.2 beschriebenen Format und verteilen sich auf drei einfache, zwei mittlere und fünf schwere Use Cases. Tabelle~\ref{tab:use-cases} zeigt eine Übersicht, die vollständigen Beschreibungen sind in Anhang~\ref{app:use-cases} hinterlegt.
 
-\input{kapitel/kapitel_4/use_cases_tabelle}
+\begin{table}[htbp]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabularx}{\textwidth}{@{}c >{\hsize=1.2\hsize}X c >{\hsize=0.8\hsize}X@{}}
+        \toprule
+        \textbf{Nr} & \textbf{Titel} & \textbf{Komplexität} & \textbf{Kernfunktion} \\
+        \midrule
+        01  & Layer Switcher ein-/ausblenden          & easy   & Panel-Sichtbarkeit   \\
+        02  & Hintergrundkarte wechseln               & easy   & Basemap-Wechsel      \\
+        03  & Zoom-Buttons verwenden                  & easy   & Zoom-Steuerung       \\
+        04  & UV-Index-Overlay aktivieren             & medium & Layer-Rendering      \\
+        05  & Niederschlags-Overlay + Legende         & medium & Layer + Legende      \\
+        06  & Wettervorhersage per Kartenklick        & hard   & Kartenklick-Abfrage  \\
+        07  & Stations-Info abfragen (WMS + WFS)      & hard   & GetFeatureInfo, GetFeature \\
+        08  & Distanz messen                          & hard   & Messwerkzeug         \\
+        09  & Karte als PNG exportieren               & hard   & Druckfunktion        \\
+        10 & Layer konfigurieren, Suche + Vorhersage & hard   & Geocoder + Workflow  \\
+        \bottomrule
+    \end{tabularx}
+    \caption[Übersicht der Use Cases mit Komplexität und getesteter Kernfunktion]{Übersicht der zehn Use Cases mit Komplexitätsstufe und der jeweils getesteten Kernfunktion der Demo-Anwendung. Die vollständigen Beschreibungen mit Vorbedingungen, Schritten und erwarteten Ergebnissen stehen in Anhang~\ref{app:use-cases}.}
+    \label{tab:use-cases}
+\end{table}
 
 Die einfachen Use Cases prüfen einzelne Bedienelemente über den \ac{DOM}, etwa das Ein- und Ausblenden der Layersteuerung, den Wechsel der Hintergrundkarte oder die Bedienung der Zoom-Buttons. Die mittleren Use Cases aktivieren zunächst ausgeblendete Layer und prüfen anschließend einen daraus resultierenden Zustand. Bei UC-04 ist es das tatsächliche Rendern der Kacheln auf der Karte und bei UC-05 die Aktualisierung der Legende.
 
