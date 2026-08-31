@@ -425,11 +425,16 @@
 %-----------------------------------
 % Abbildungsverzeichnis
 %-----------------------------------
+% \phantomsection setzt einen hyperref-Anker an dieser Stelle, damit der
+% Verzeichnis-Link im Inhaltsverzeichnis hierher springt und nicht auf die
+% Titelseite (letzter gesetzter Anker) verweist.
+\phantomsection
 \listoffigures
 \newpage
 %-----------------------------------
 % Tabellenverzeichnis
 %-----------------------------------
+\phantomsection
 \listoftables
 \newpage
 %-----------------------------------
@@ -437,6 +442,7 @@
 %-----------------------------------
 % Falls das Abkürzungsverzeichnis nicht im Inhaltsverzeichnis angezeigt werden soll
 % dann folgende Zeile auskommentieren.
+\phantomsection
 \addcontentsline{toc}{section}{\abbreHeadingName}
 \input{abkuerzungen/acronyms}
 \newpage
