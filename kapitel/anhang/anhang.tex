@@ -126,7 +126,7 @@ Das folgende Listing zeigt den Bewertungsprompt (\texttt{phase2\_judge\_prompt.m
 \subsubsection{Stufe 5 (Self-Improvement-Loop)}
 \label{app:judge-prompt-stage5}
 
-Der Bewertungsprompt für Stufe~5 (\texttt{phase2\_judge\_prompt\_stage5.md}) ist mit dem Prompt der Stufen~1 bis 4 (Anhang~\ref{app:judge-prompt-base}) nahe zu identisch. Die Bewertungsskalen und der Output bleiben unverändert. Abweichend sind lediglich die folgenden Punkte:
+Der Bewertungsprompt für Stufe~5 (\texttt{phase2\_judge\_prompt\_stage5.md}) ist mit dem Prompt der Stufen~1 bis 4 (Anhang~\ref{app:judge-prompt-base}) nahezu identisch. Die Bewertungsskalen und der Output bleiben unverändert. Abweichend sind lediglich die folgenden Punkte:
 
 \begin{itemize}
 	\item In der Rolle wird der Ausführungskontext angepasst: Die Ausführung erfolgte während des Self-Improvement-Loops und wurde über \code|map_stage5_phase1.py| in die \code|exec_category|-Taxonomie überführt.
@@ -201,7 +201,7 @@ assertion & 1 & Keine oder ausschließlich triviale Assertions \\
 \subsection{Stichprobe der manuellen Bewertungskontrolle}
 \label{app:review}
 
-Tabelle~\ref{tab:review_full} führt die Einzelurteile auf. Angegeben sind der vom Bewertungsmodell vergebene Punktwert und das Ergebnis der Kontrolle: $\bullet$ bestätigt, $\circ$ grenzwertig, aber vertretbar, $\times$ abweichend. Die vollständige Fassung (\texttt{\_review\_sample.md}) mit den Begründungstexten des Modells und den Prüfnotizen liegt im Repository.
+Tabelle~\ref{tab:review_full} führt die Einzelurteile auf. Angegeben sind der vom Bewertungsmodell vergebene Punktwert und das Ergebnis der Kontrolle: $\bullet$ bestätigt, $\circ$ grenzwertig, aber vertretbar, $\times$ abweichend. Die vollständige Fassung (\texttt{\_review\_sample.csv}) mit den Begründungstexten des Modells und den Prüfnotizen liegt im Repository.
 
 \begin{longtable}{@{}rrrl rrrr@{}}
 \caption[Ergebnis der manuellen Kontrolle je Testdatei und Dimension]{Ergebnis der manuellen Kontrolle der maschinellen Bewertung je Testdatei und Dimension. Angegeben sind der vom Bewertungsmodell vergebene Score und die Einordnung der Kontrolle als bestätigt, grenzwertig, aber vertretbar und abweichend. Grundlage sind die 50 Dateien mit 175 bewertbaren Einzelurteilen.}
@@ -388,7 +388,7 @@ In der Qualitätsbewertung erreicht Stufe~5 bei \emph{selector} (3,87) und \emph
 
 \subsection{GIS-spezifische Besonderheiten}
 
-Die Auswertung basiert auf demselben Vorgehen wie in Abschnitt~6.5. In Stufe~1 verwenden 30 Dateien (6,0\,\%) mindestens eine Test-ID, die in der Webanwendung nicht existiert. Ab Stufe~2 wird keine einzige Test-ID mehr halluziniert. Der Anteil der Dateien mit \texttt{page.locator} und \ac{CSS}-Ausdrücken sinkt von 52,0\,\% in Stufe~1 auf 2,2\,\% in Stufe~2; ab Stufe~3 wird dieses Muster gar nicht mehr verwendet. Die Nutzung der Map-Model-Helfer liegt ab Stufe~3 bei mindestens 90\,\%. Ein direkter Zugriff auf \texttt{\_\_openPioneerMap} bleibt in den Stufen~1 und 2 bei 0\,\% und liegt ab Stufe~3 zwischen 9,8 und 10,2\,\%.
+Die Auswertung basiert auf demselben Vorgehen wie in Abschnitt~5.5. In Stufe~1 verwenden 30 Dateien (6,0\,\%) mindestens eine Test-ID, die in der Webanwendung nicht existiert. Ab Stufe~2 wird keine einzige Test-ID mehr halluziniert. Der Anteil der Dateien mit \texttt{page.locator} und \ac{CSS}-Ausdrücken sinkt von 52,0\,\% in Stufe~1 auf 2,2\,\% in Stufe~2; ab Stufe~3 wird dieses Muster gar nicht mehr verwendet. Die Nutzung der Map-Model-Helfer liegt ab Stufe~3 bei mindestens 90\,\%. Ein direkter Zugriff auf \texttt{\_\_openPioneerMap} bleibt in den Stufen~1 und 2 bei 0\,\% und liegt ab Stufe~3 zwischen 9,8 und 10,2\,\%.
 
 \begin{table}[H]
     \centering
@@ -418,7 +418,7 @@ Die übrigen Auffälligkeiten gehen nicht auf die Bedienung der Karte, sondern a
 \section{Referenzierte Dateien des Repositories}
 \label{app:dateien}
 
-Die folgende Übersicht listet alle referenzierten Dateien mit ihrem Pfad im Repository \url{https://github.com/nils-gb156/ba-webgis-llm-e2e}. Grundlage ist der Tag \texttt{qwen-v1.0}. die Dateien des ergänzenden Durchlaufs aus \ref{app:results-gpt} liegen unter denselben Pfaden im Tag \texttt{gpt-v1.0}.
+Die folgende Übersicht listet alle referenzierten Dateien mit ihrem Pfad im Repository \url{https://github.com/nils-gb156/ba-webgis-llm-e2e}. Grundlage ist der Tag \texttt{qwen-v1.0}. Die Dateien des ergänzenden Durchlaufs aus \ref{app:results-gpt} liegen unter denselben Pfaden im Tag \texttt{gpt-v1.0}.
 
 \begingroup
 \begin{longtable}{lll}
