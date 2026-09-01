@@ -95,7 +95,7 @@
   \ifentrytype{online}
     {\setunit*{\addspace}%
      \iffieldundef{year}
-       {\printtext[date]{keine Datumsangabe }}
+       {}% kein Datum -> nichts ausgeben (Label zeigt bereits 'o. J.')
        {\usebibmacro{date}}%
        \setunit*{\addspace}%
        \usebibmacro{urldate}}%

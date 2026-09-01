@@ -137,7 +137,8 @@
 
 % Inline-Code im Stil der Listings (verbatim, kein manuelles Escapen noetig).
 % Verwendung: \code|getByRole("checkbox")|  (Trennzeichen frei waehlbar)
-\newcommand{\code}{\lstinline[language=TypeScript,basicstyle=\ttfamily]}
+% Ohne Sprache -> nur Monospace, kein stoerendes Syntax-Highlighting im Fliesstext.
+\newcommand{\code}{\lstinline[basicstyle=\ttfamily]}
 
 % Schlichter Stil fuer Markdown-Prompts (verbatim, Umlaute via literate).
 \lstdefinelanguage{Markdown}{
