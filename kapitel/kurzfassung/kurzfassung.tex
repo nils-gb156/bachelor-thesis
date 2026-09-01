@@ -1,0 +1,9 @@
+\section*{%
+	\langde{Kurzfassung}
+	\langen{Abstract}}
+
+Der Kartenzustand von WebGIS-Anwendungen wird in ein Canvas-Element gerendert und ist damit für DOM-basierte End-to-End-Tests (E2E) nicht direkt zugänglich. Zudem ist das manuelle Schreiben solcher Tests aufwendig. Die vorliegende Arbeit untersucht, welchen Einfluss der im Prompt bereitgestellte UI-Kontext auf die Qualität von Playwright-E2E-Tests hat, die ein Large Language Model (LLM) aus fachlichen Use-Case-Beschreibungen generiert. Untersuchungsgegenstand ist eine WebGIS-Anwendung auf Basis von Open Pioneer Trails.
+
+Untersucht wurden vier Kontextstufen: ohne Kontext, mit Accessibility-Snapshot, mit automatisch generierter und mit manuell erzeugter UI-Map sowie eine ergänzende Selbstverbesserungsschleife. Alle Stufen wurden über zehn Use Cases mit je 50 Generierungen verglichen. Die Bewertung erfolgte zweiphasig durch eine deterministische Ausführung mit Ergebnisklassifikation und anschließender inhaltlicher Bewertung durch ein zweites LLM.
+
+Die PASS-Rate bestandener Tests stieg von 20,0\,\% ohne Kontext auf 38,6\,\% mit manueller UI-Map. Der Kontexteffekt wirkt sich dabei auf zwei Aspekte aus. Der Accessibility-Snapshot verbessert die Selektoren und damit die Ausführbarkeit, während erst der Zugriff auf das Kartenmodell inhaltlich korrekte Prüfung des Kartenzustands ermöglicht. Die ergänzende Selbstverbesserungsschleife steigert die Ausführbarkeit noch einmal deutlich auf 73,2\,\%. Ein bestandener Test belegt zudem nicht, dass er das im Use Case geforderte Verhalten prüft. Gerade ohne Kontext beruhte ein großer Teil der bestandenen Tests auf einer unzureichenden Prüfung. Eine vollständig automatische Testgenerierung bleibt daher auch mit umfangreichem UI-Kontext nicht zuverlässig.

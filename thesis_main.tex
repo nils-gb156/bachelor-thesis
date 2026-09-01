@@ -407,6 +407,15 @@
 \input{kapitel/titelseite}
 
 %-----------------------------------
+% Kurzfassung / Abstract
+%-----------------------------------
+\setcounter{page}{2}
+\phantomsection
+\addcontentsline{toc}{section}{\langde{Kurzfassung}\langen{Abstract}}
+\input{kapitel/kurzfassung/kurzfassung}
+\newpage
+
+%-----------------------------------
 % Vorwort (optional; bei Verwendung beide Zeilen entkommentieren und unter Inhaltsverzeichnis setcounter entsprechend anpassen)
 %-----------------------------------
 %\input{kapitel/vorwort/vorwort}
@@ -416,7 +425,7 @@
 % Inhaltsverzeichnis
 %-----------------------------------
 % Um das Tabellen- und Abbbildungsverzeichnis zu de/aktivieren ganz oben in Documentclass schauen
-\setcounter{page}{2}
+\setcounter{page}{3}
 \addtocontents{toc}{\protect\enlargethispage{-20mm}}% Die Zeile sorgt dafür, dass das Inhaltsverzeichnisseite auf die zweite Seite gestreckt wird und somit schick aussieht. Das sollte eigentlich automatisch funktionieren. Wer rausfindet wie, kann das gern ändern.
 \setcounter{tocdepth}{4}
 \tableofcontents
