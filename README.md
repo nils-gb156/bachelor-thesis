@@ -5,7 +5,7 @@
 **Studiengang:** Geoinformatik | Universität Münster  
 **Betreuer (Hochschule):** Dr. Christian Knoth  
 **Betreuer (Firma):** Dr. Thore Fechner  
-**Abgabe:** 31. August 2026
+**Abgabe:** ... 2026
 
 ## Kompilieren
 

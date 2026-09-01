@@ -107,9 +107,11 @@
 
 %Verhindern, dass bei mehreren Quellen des gleichen Autors im gleichen Jahr
 %Buchstaben nach der Jahreszahl angezeigt werden wenn sich das Keyword in usera unterscheidet.
+% Nur \field{year} (aus echtem date), nicht \field{labelyear}: sonst wuerde
+% labelyear bei datumslosen Eintraegen auf urldate zurueckfallen und diese
+% faelschlich mit echt datierten Quellen desselben Autors kollidieren lassen.
 \DeclareExtradate{
   \scope{
-    \field{labelyear}
     \field{year}
     }
     \scope{
@@ -218,8 +220,10 @@
     {} %{\printtext{\langde{o.S\adddot}\langen{no page number}}}
     {\printfield{postnote}}}
 
-% Abstand bei Änderung Anfangsbuchstabe ca. 1.5 Zeilen
-\setlength{\bibinitsep}{0.75cm}
+% Einheitlicher Abstand zwischen allen Eintraegen (auch bei Wechsel des
+% Anfangsbuchstabens): \bibitemsep und \bibinitsep auf denselben Wert.
+\setlength{\bibitemsep}{0.5cm}
+\setlength{\bibinitsep}{0.5cm}
 
 % nur in den Zitaten/Fussnoten den Vornamen abkürzen (nicht im
 % Literaturverzeichnis)
